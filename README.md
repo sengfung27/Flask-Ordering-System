@@ -29,7 +29,7 @@ source venv/Scripts/activate
 
 #### Lastly, install packages
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 #### If you want to exit the virtual environment
 ```
