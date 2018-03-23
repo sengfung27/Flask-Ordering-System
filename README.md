@@ -4,7 +4,10 @@
 ### Make sure you have Python and PyCharm in your local machine
 
 #### Go to command prompt and try
-`python'
+```
+python
+```
+
 #### Then type these lines
 ```
 >>> import os
@@ -29,9 +32,11 @@ source venv/Scripts/activate
 pip install -r requirements.txt
 ```
 #### If you want to exit the virtual environment
-`deactivate`
+```
+deactivate
+```
 
-### Git Command
+## Git Command
 #### Reset local repository branch like the remote repository HEAD:
 ```
 git fetch origin
