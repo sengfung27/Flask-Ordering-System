@@ -2,6 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.pyc
+.idea
+
+# Mac 
+.DS_Store
 
 # C extensions
 *.so
@@ -57,6 +62,8 @@ local_settings.py
 # Flask stuff:
 instance/
 .webassets-cache
+logs/
+.db
 
 # Scrapy stuff:
 .scrapy
