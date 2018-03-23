@@ -1,34 +1,35 @@
 # Flask-Ordering-System
 
 ## Getting Started 
-### Make sure you have at least Python 2.7 in you local machine
+### Make sure you have Python and PyCharm in your local machine
+
+#### Go to command prompt and try
+`python'
+#### Then type these lines
 ```
-pip install virtualenv
-virtualenv venv
-pip install flask
-pip install flask_sqlalchemy
-pip install flask_migrate
-pip install flask_login
-pip install flask_wtf
+>>> import os
+>>> import sys
+>>> os.path.dirname(sys.executable)
+```
+#### Copy the given path
+#### Go to your PyCharm, go to
+```
+File -> Settings -> Project Interpreter -> Add Local -> New Environment -> Basic Interpreter -> 'Paste the Path' -> OK
+```
+![](img/img_1.JPG)
+
+#### Change directory to project
+#### Now Activate virtual environment
+```
+source venv/Scripts/activate
 ```
 
-### Activate virtual environment
+#### Lastly, install packages
 ```
-source venv/bin/activate
-export FLASK_APP=microblog.py
+pip install -r requirements.txt
 ```
-
-### Running Flask without debug mode
-```
-export FLASK_DEBUG=0
-flask run
-```
-
-### Running Flask with debug mode
-```
-export FLASK_DEBUG=1
-flask run
-```
+#### If you want to exit the virtual environment
+`deactivate`
 
 ### Git Command
 #### Reset local repository branch like the remote repository HEAD:
