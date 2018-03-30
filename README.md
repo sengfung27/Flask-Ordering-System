@@ -1,6 +1,6 @@
 # Flask-Ordering-System
 
-## Getting Started 
+## Getting Started
 ### Make sure you have Python and PyCharm in your local machine
 
 #### Go to command prompt and try
@@ -49,7 +49,7 @@ git push origin name_branch
 ```
 #### Delete branch on local and remote
 ```
-git checkout master 
+git checkout master
 git branch -d name_branch_local
 git push origin --delete name_branch_remote
 
@@ -103,5 +103,5 @@ How to work?
 	3. `git merge your_branch`
 
 	4. `git push`. If conflict happen, solve conflict and commit, then do `git push`
-	
+
 
