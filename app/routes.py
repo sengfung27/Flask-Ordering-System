@@ -1,4 +1,3 @@
-
 from app import app  # db
 from flask import render_template, flash, redirect, request, url_for
 #from app.forms import EditProfileForm, LoginForm, RegistrationForm
@@ -10,9 +9,6 @@ from functools import wraps
 
 
 # from flask_login import LoginManager
-
-
-
 
 
 @app.route('/')
