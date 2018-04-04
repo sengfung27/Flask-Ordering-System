@@ -41,12 +41,13 @@ deactivate
 git fetch origin
 git reset --hard origin/branch_name
 ```
-![](app/static/img/git.JPG)
+
 #### Create branch on local and remote
 ```
 git checkout -b name_branch
 git push origin name_branch
 ```
+![](app/static/img/git.JPG)
 #### Delete branch on local and remote
 ```
 git checkout master
