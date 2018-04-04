@@ -19,7 +19,7 @@ python
 ```
 File -> Settings -> Project Interpreter -> Add Local -> New Environment -> Basic Interpreter -> 'Paste the Path' -> OK
 ```
-![](img/img_1.JPG)
+![](app/static/img/git.JPG)
 
 #### Change directory to project
 #### Now Activate virtual environment
