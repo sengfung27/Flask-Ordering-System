@@ -19,7 +19,6 @@ python
 ```
 File -> Settings -> Project Interpreter -> Add Local -> New Environment -> Basic Interpreter -> 'Paste the Path' -> OK
 ```
-![](app/static/img/git.JPG)
 
 #### Change directory to project
 #### Now Activate virtual environment
@@ -42,6 +41,7 @@ deactivate
 git fetch origin
 git reset --hard origin/branch_name
 ```
+![](app/static/img/git.JPG)
 #### Create branch on local and remote
 ```
 git checkout -b name_branch
