@@ -3,6 +3,7 @@
 <title>Cake</title>
 <head>
 	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 <!-- Optional theme -->
@@ -16,55 +17,66 @@
 	<title>Welcome - Cake</title>
 	{% endif %}
 
-
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/base.css')}}">
 </head>
+
 <body>
-		<div class = "options" align = "right">
 
-			<a href="{{ url_for('complaints')}}">Complaints</a>
-			<a href="{{ url_for('payroll')}}">Payrolls</a>
-
-
-			<a href="{{ url_for('prices')}}">Prices</a>
-			<a href="{{ url_for('cookcustorder')}}">My Customer Orders</a>
-
-
-			<a href="{{ url_for('map')}}">Map</a>
-
-
-			<a href="{{ url_for('index')}}">Home</a>
-
-
-
-			<a href="{{ url_for('menu')}}">Menu</a>
+<div class="header">
+  <a href="{{url_for('index')}}" class="logo"><img src="/static/img/cmonster.png" alt="logo" style="width:60px;height:60px;border:0;"></a>
+  <div class="header-right">
+      <a href="{{ url_for('index')}}">Home</a>
+      <a href="{{ url_for('menu')}}">Menu</a>
+      <a href="{{ url_for('map')}}">Map</a>
+      <a href="{{ url_for('complaints')}}">Complaints</a>
+      <a href="{{ url_for('payroll')}}">Payrolls</a>
+      <a href="{{ url_for('prices')}}">Prices</a>
+      <a href="{{ url_for('cookcustorder')}}">My Customer Orders</a>
+      <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+  </div>
+</div>
 
 
 
+<div id="id01" class="modal">
 
+  <form class="modal-content animate" action="#">
+      <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="/static/img/login.png" alt="Avatar" class="avatar">
+    </div>
+    <div class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
 
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
 
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
 
+    <div class="container" style="background-color:#f1f1f1">
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+  </form>
+</div>
 
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
 
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
 
-		</div>
-		<div class = "logo"> <!-- logo-->
-
-
-				<a href="{{ url_for('manager')}}"><img src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo" style="width:60px;height:60px;border:0;"></a>
-
-
-				<a href="{{ url_for('cook')}}"><img src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo" style="width:60px;height:60px;border:0;"></a>
-
-
-				<a href="{{ url_for('delivery')}}"><img src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo" style="width:60px;height:60px;border:0;"></a>
-
-
-				<a href="{{ url_for('index')}}"><img src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo" style="width:60px;height:60px;border:0;"></a>
-
-
-
-    	</div>
 
 	<hr>
 		{% with messages = get_flashed_messages() %}
