@@ -7,28 +7,18 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-        {% if title %}
-        <title>{{ title }} - Cake</title>
-        {% else %}
-        <title>Welcome - Cake</title>
-        {% endif %}
-
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/base.css')}}">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script>
         // Get the modal
-        var modal = document.getElementById('id01');
-
+            var modal = document.getElementById('id01');
         // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }};
         </script>
     </head>
-
     <body>
         <div class="header">
           <a href="{{url_for('index')}}" class="logo"><img src="/static/img/cmonster.png" alt="logo" style="width:60px;height:60px;border:0;"></a>
@@ -55,16 +45,13 @@
               <div class="container">
                 <label for="uname"><b>Username</b></label>
                 <input type="text" placeholder="Enter Username" name="uname" required>
-
                 <label for="psw"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="psw" required>
-
                 <button type="submit">Login</button>
                 <label>
                 <input type="checkbox" checked="checked" name="remember"> Remember me
                 </label>
               </div>
-
               <div class="container" style="background-color:#f1f1f1">
                   <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
                   <span class="psw">Forgot <a href="#">password?</a></span>
