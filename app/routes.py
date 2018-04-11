@@ -22,6 +22,16 @@ def menu():
     return render_template('menu.html', title='Menu')
 
 
+@app.route('/checkout')
+def checkout():
+    return render_template('checkout.html', title='Menu')
+
+
+@app.route('/confirmation')
+def confirmation():
+    return render_template('confirmation.html', title='Menu')
+
+
 @app.route('/manager')
 def manager():
     return render_template('managers/manager.html', title='Manager')
