@@ -8,59 +8,47 @@
 
 <!-- NAVBAR
 ================================================== -->
-<style>
-    .col-centered
-    {
-        float: none;
-        margin-right: auto;
-        margin-left: auto;
-    }
-</style>
 
+<!--body-->
+<div class="pageTitle">
+	<div class="container">
+		<h2 style="text-align:center;">Registered Customers</h2>
+	</div>
+</div>
 
-
-<br><br><br><br>
-<!--Personal information table-->
+<br><br>
+<!--Registered customers table-->
 <div class="container">
-    <h3>Profile</h3>
-    <button type="button" class="btn btn-info" style="float: right">Submit</button>
-    <br>
-    <div class="row">
-        <div class="col-lg-6 col-centered">
-            <div class ="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>User ID</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-            <div class ="table-responsive">
-            <table class="table table-striped" style="width: 150px">
-                <thead>
-                <tr>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Manager</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
+    <div class ="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Customer ID</th>
+            <th>Customer Name</th>
+            <th>Telephone Number</th>
+            <th>Email</th>
+            <th>Address</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td name="id1234">1234</td>
+            <td>Example</td>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+        </tr>
+        <tr>
+            <td>5678</td>
+            <td>Example2</td>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+        </tr>
+        </tbody>
+    </table>
     </div>
+</div>
 
 	<div class="highlightSection">
 	<div class="container">
@@ -145,5 +133,4 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-</div>
 {% endblock %}

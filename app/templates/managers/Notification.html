@@ -8,59 +8,42 @@
 
 <!-- NAVBAR
 ================================================== -->
-<style>
-    .col-centered
-    {
-        float: none;
-        margin-right: auto;
-        margin-left: auto;
-    }
-</style>
 
 
 
-<br><br><br><br>
-<!--Personal information table-->
+<div class="pageTitle">
+	<div class="container">
+		<h2></h2>
+	</div>
+</div>
+
+<br><br>
+<!--Notification main page-->
 <div class="container">
-    <h3>Profile</h3>
-    <button type="button" class="btn btn-info" style="float: right">Submit</button>
-    <br>
-    <div class="row">
-        <div class="col-lg-6 col-centered">
-            <div class ="table-responsive">
-            <table class="table table-striped">
-                <thead>
+	<div class="row">
+		<!--Links Table-->
+		<div class="col-lg-2">
+			<div class ="table-responsive">
+			<table class="table table-bordered">
+				<tbody>
+				<tr>
+					<td><a href="CustomerApplication.html" style="color:black">Customer Application</a></td>
+				</tr>
+				<tr>
+					<td><a href="CustomerComplaint.html" style="color:black">Customer Complaint</a></td>
+				</tr>
                 <tr>
-                    <th>Name</th>
-                    <th>User ID</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-            <div class ="table-responsive">
-            <table class="table table-striped" style="width: 150px">
-                <thead>
-                <tr>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Manager</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
+					<td><a href="DeliverWarning.html" style="color:black">Deliver Men Warning</a></td>
+				</tr>
+				<tr>
+					<td><a href="CookWarning.html" style="color:black">Cook Warning</a></td>
+				</tr>
+				</tbody>
+			</table>
+			</div>
+		</div>
     </div>
+</div>
 
 	<div class="highlightSection">
 	<div class="container">
@@ -145,5 +128,4 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-</div>
 {% endblock %}

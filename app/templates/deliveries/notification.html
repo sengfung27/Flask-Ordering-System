@@ -6,118 +6,42 @@
     <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
 </head>
-<!-- NAVBAR
-================================================== -->
 
 <div class="pageTitle">
     <div class="container">
-        <h2>Welcome {delivery man (name)} !</h2>
+        <h2>Notification</h2>
     </div>
 </div>
 
 <div class="container">
     <div class="bodyInner">
-        <div class="deliveredBottom" style="float: right;">
-            <button type="button" class="btn btn-primary">Delivered</button>
+        <div class="submitBottom" style="float: right;">
+            <button type="button" class="btn btn-primary">Delete</button>
         </div>
-        <table id="delivery" class="table table-striped">
+        <table id="notification" class="table table-striped">
             <thead>
             <tr>
-                <th class="col-sm-2">Order ID</th>
-                <th class="col-sm-2">Customer Name</th>
-                <th class="col-sm-2">Address</th>
-                <th class="col-sm-2">Route</th>
-                <th class="col-sm-3">Rate</th>
+                <th class="col-xs-2">Date</th>
+                <th>Message</th>
             </tr>
             </thead>
 
             <!--class="" OR id=""-->
-
             <tbody>
             <tr>
-                <td>Odr2343441</td>
-                <td>John Jay</td>
-                <td>< 3, 2 ></td>
-                <td>
-                    <a href="route.html" target="_blank" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate">Select (select one):</label>
-                            <select class="form-control" id="rate" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
+                <td>3/12/2018</td>
+                <td>You received 1 warning, you received total of (# warnings) warning(s)</td>
             </tr>
 
             <tr>
-                <td>Odr2343442</td>
-                <td>John Jay Jay</td>
-                <td>< 3, 3 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate1">Select (select one):</label>
-                            <select class="form-control" id="rate1" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment1">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment1"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
+                <td>3/13/2018</td>
+                <td>You received 1 warning, you received total of (# warnings) warning(s)</td>
             </tr>
 
             <tr>
-                <td>Odr2343443</td>
-                <td>John Jay Jay Jay</td>
-                <td>< 3, 4 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate2">Select (select one):</label>
-                            <select class="form-control" id="rate2" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment2">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment2"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
+                <td>3/13/2018</td>
+                <td>You received 1 warning, you received total of (# warnings) warning(s)</td>
             </tr>
-
 
             </tbody>
 
@@ -218,6 +142,4 @@
 </footer>
 
 {% endblock %}
-
-
 

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{%  block content %}
+<head>
+    <link href="static/themes/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/themes/assets/css/carousel.css" rel="stylesheet">
+</head>
+
+<div class="container">
+    <h2>Add new item</h2>
+    <br><br>
+    <form>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Cake Name:</label>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter Cake Name">
+                    </div>
+                </div>
+                <br><br><br>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Catagory:</label>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option value="Cheesecake">Cheesecake</option>
+                            <option value="..">..</option>
+                            <option value="other">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <br><br><br>
+
+                <!--if other is not selected, this will not enable-->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>New Catagory Name:</label>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <fieldset disabled>
+                        <div class="form-group">
+                            <input class="form-control" id="disabledInput" type="text"
+                                   placeholder="Input your new catagory item"
+                                   disabled>
+                        </div>
+                    </fieldset>
+                </div>
+                <br><br><br>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Upload Photos:</label>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <button type="button" class="btn">Select</button>
+                    </div>
+                </div>
+                <br><br><br>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Description:</label>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input type="text" class="form-control" style="height: 100px" placeholder="Enter description">
+                    </div>
+                </div>
+                <br><br><br>
+
+            </div>
+        </div>
+
+        <a href="index.html" class="btn btn-default" role="button">Submit</a>
+    </form>
+
+</div>
+
+
+<!-- Carousel
+================================================== -->
+<div class="container">
+    <br><br><br><br><br>
+</div>
+
+{% endblock %}
+
+

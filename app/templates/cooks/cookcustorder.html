@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 
-{% block content %}
-
-    <head>
-        
+{%  block content %}
+<head>
         <!-- for table-->
         <style>
             table {
@@ -22,9 +20,9 @@
                 background-color: #dddddd;
             }
         </style>
-    </head>
-
-    <body>
+    <link href="static/themes/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/themes/assets/css/carousel.css" rel="stylesheet">
+</head>
 
     <div class = "welcome" align = "left"> <!--welcome message-->
         <h2> Welcome Cook!</h2>
@@ -87,7 +85,5 @@
             </tr>
     </table>
     </div>
-
-    </body>
 
 {% endblock %}

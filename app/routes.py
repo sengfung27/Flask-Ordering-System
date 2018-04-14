@@ -21,20 +21,19 @@ def index():
 def menu():
     return render_template('menu.html', title='Menu')
 
+########################################################################################################################
+
 
 @app.route('/checkout')
 def checkout():
-    return render_template('checkout.html', title='Menu')
+    return render_template('customers/checkout.html', title='Menu')
 
 
 @app.route('/confirmation')
 def confirmation():
-    return render_template('confirmation.html', title='Menu')
+    return render_template('customers/confirmation.html', title='Menu')
 
-
-@app.route('/manager')
-def manager():
-    return render_template('managers/manager.html', title='Manager')
+########################################################################################################################
 
 
 @app.route('/cook')
@@ -42,31 +41,85 @@ def cook():
     return render_template('cooks/cook.html', title='Cook')
 
 
+@app.route('/cook/additem')
+def additem():
+    return render_template('cooks/cookadditem.html', title='Cook')
+
+########################################################################################################################
+
+
 @app.route('/delivery')
 def delivery():
     return render_template('deliveries/delivery.html', title='Delivery')
 
 
-@app.route('/map')
-def map():
-    return render_template('deliveries/map.html')
+@app.route('/delivery/notification')
+def notification():
+    return render_template('deliveries/notification.html', title='Delivery')
 
 
-@app.route('/prices')
-def prices():
-    return render_template('cooks/prices.html')
+@app.route('/delivery/profile')
+def delivery_profile():
+    return render_template('deliveries/profile.html', title='Delivery')
 
 
-@app.route('/cookcustorder')
-def cookcustorder():
-    return render_template('cooks/cookcustorder.html')
+@app.route('/delivery/route')
+def delivery_route():
+    return render_template('deliveries/route.html', title='Delivery')
+
+########################################################################################################################
 
 
-@app.route('/complaints')
-def complaints():
-    return render_template('managers/complaints.html')
+@app.route('/manager')
+def manager():
+    return render_template('managers/manager.html', title='Manager')
 
 
-@app.route('/payroll')
-def payroll():
-    return render_template('managers/payroll.html')
+@app.route('/manager/CookWarning')
+def CookWarning():
+    return render_template('managers/CookWarning.html')
+
+
+@app.route('/manager/CustomerApplication')
+def application():
+    return render_template('managers/CustomerApplication.html')
+
+
+@app.route('/manager/CustomerComplaint')
+def complaint():
+    return render_template('managers/CustomerComplaint.html')
+
+
+@app.route('/manager/DecideDelivery')
+def decidedelivery():
+    return render_template('managers/DecideDelivery.html')
+
+
+@app.route('/manager/DeliverWarning')
+def deliverwarning():
+    return render_template('managers/DeliverWarning.html')
+
+
+@app.route('/manager/ManageCustomers')
+def managecustomers():
+    return render_template('managers/ManageCustomers.html')
+
+
+@app.route('/manager/Notification')
+def notification_manager():
+    return render_template('managers/Notification.html')
+
+
+@app.route('/manager/PayWage')
+def paywage():
+    return render_template('managers/PayWage.html')
+
+
+
+
+
+
+
+
+
+

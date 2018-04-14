@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
+</head>
+
+
+
+<div class="pageTitle">
+	<div class="container">
+		<h2>Cooks Warning</h2>
+	</div>
+</div>
+
+<br><br>
+<!--body-->
+<div class="container">
+	<div class="row">
+		<!--Links Table-->
+		<div class="col-lg-2">
+			<div class ="table-responsive">
+			<table class="table table-bordered">
+				<tbody>
+				<tr>
+                    <td><a href="CustomerApplication.html" style="color:black">Customer Application</a></td>
+				</tr>
+				<tr>
+					<td><a href="CustomerComplaint.html" style="color:black">Customer Complaint</a></td>
+				</tr>
+                <tr>
+                    <td><a href="DeliverWarning.html" style="color:black">Deliver Men Warning</a></td>
+				</tr>
+				<tr>
+					<td><a href="CookWarning.html" style="color:black"><strong>Cook Warning</strong></a></td>
+				</tr>
+				</tbody>
+			</table>
+			</div>
+		</div>
+        <div class="col-lg-10">
+			<div class ="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+				<tr>
+					<th>Cook ID</th>
+                    <th>Cook Name</th>
+                    <th># Warning(s)</th>
+                    <th></th>
+				</tr>
+				</thead>
+                <tbody>
+				<tr>
+					<td>/</td>
+                    <td>/</td>
+                    <td>/</td>
+                    <td><button type="button" class="btn btn-info">Erase</button></td>
+				</tr>
+				<tr>
+					<td>/</td>
+                    <td>/</td>
+                    <td>/</td>
+                    <td><button type="button" class="btn btn-info">Erase</button></td>
+				</tr>
+				</tbody>
+			</table>
+			</div>
+		</div>
+    </div>
+</div>
+
+
+{% endblock %}

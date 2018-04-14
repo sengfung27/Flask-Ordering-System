@@ -8,59 +8,58 @@
 
 <!-- NAVBAR
 ================================================== -->
-<style>
-    .col-centered
-    {
-        float: none;
-        margin-right: auto;
-        margin-left: auto;
-    }
-</style>
 
 
+<!--body-->
+<div class="pageTitle">
+	<div class="container">
+		<h2 style="text-align:center;">Employees Salary Information</h2>
+	</div>
+</div>
 
-<br><br><br><br>
-<!--Personal information table-->
+<br><br>
+<!--Employees Salary Information table-->
 <div class="container">
-    <h3>Profile</h3>
-    <button type="button" class="btn btn-info" style="float: right">Submit</button>
-    <br>
-    <div class="row">
-        <div class="col-lg-6 col-centered">
-            <div class ="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>User ID</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-            <div class ="table-responsive">
-            <table class="table table-striped" style="width: 150px">
-                <thead>
-                <tr>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Manager</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
+	<form>
+    <div class ="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Position</th>
+            <th>Hour</th>
+            <th>Rate</th>
+            <th>Total Salary</th>
+			<th>Select</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>/</td>
+            <td>/</td>
+            <td>Cooker/Deli.men</td>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+			<td><label><input type="checkbox" value=""></label></td>
+        </tr>
+        <tr>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+			<td><label><input type="checkbox" value=""></label></td>
+        </tr>
+        </tbody>
+    </table>
     </div>
+	</form>
+	<!-- Submit Button -->
+	<button type="button" class="btn btn-info" style="float: right">Submit</button>
+</div>
 
 	<div class="highlightSection">
 	<div class="container">
@@ -145,5 +144,4 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-</div>
 {% endblock %}
