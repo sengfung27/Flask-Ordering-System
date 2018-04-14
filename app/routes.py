@@ -22,6 +22,7 @@ def menu():
     return render_template('menu.html', title='Menu')
 
 ########################################################################################################################
+#Customer
 
 
 @app.route('/checkout')
@@ -34,6 +35,7 @@ def confirmation():
     return render_template('customers/confirmation.html', title='Menu')
 
 ########################################################################################################################
+#Cook
 
 
 @app.route('/cook')
@@ -45,8 +47,24 @@ def cook():
 def additem():
     return render_template('cooks/cookadditem.html', title='Cook')
 
-########################################################################################################################
 
+@app.route('/cook/cook_profile')
+def cook_profile():
+    return render_template('cooks/cook_profile.html', title='Cook')
+
+
+@app.route('/cook/dropped_notification')
+def dropped_notification():
+    return render_template('cooks/dropped_noti.html', title='Cook')
+
+
+@app.route('/cook/warning_notification')
+def warning_notification():
+    return render_template('cooks/warning_noti.html', title='Cook')
+
+
+########################################################################################################################
+#Delivery
 
 @app.route('/delivery')
 def delivery():
@@ -68,6 +86,7 @@ def delivery_route():
     return render_template('deliveries/route.html', title='Delivery')
 
 ########################################################################################################################
+#Manager
 
 
 @app.route('/manager')
