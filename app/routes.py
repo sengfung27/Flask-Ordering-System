@@ -34,6 +34,21 @@ def checkout():
 def confirmation():
     return render_template('customers/confirmation.html', title='Menu')
 
+
+@app.route('/customer/customer_profile')
+def customer_profile():
+    return render_template('customers/customer_profile.html', title='Menu')
+
+
+@app.route('/customer/order_history')
+def order_history():
+    return render_template('customers/order_history.html', title='Menu')
+
+
+@app.route('/customer/rating')
+def rating():
+    return render_template('customers/rating.html', title='Menu')
+
 ########################################################################################################################
 #Cook
 

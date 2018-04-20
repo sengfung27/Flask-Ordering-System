@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <head>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -10,58 +9,87 @@
     <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
 </head>
 
+
+
+
 <div class="pageTitle">
     <div class="container">
-        <h2>Dropped</h2>
+        <h2>Order History</h2>
     </div>
 </div>
 
-<br><br>
-<!--body-->
 <div class="container">
-    <div class="row">
-        <!--Links Table-->
-        <div class="col-lg-2">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr>
-                        <td><a href="dropped_noti.html" style="color:black"><strong>Dropped</strong></a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="warning_noti.html" style="color:black">Warning</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-lg-10">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th class="col-xs-2">Date</th>
-                        <th class="col-xs-7">Message</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>4/11/2018</td>
-                        <td>(Cake) dropped once, you received (# drop) drop(s) for this cake</td>
-                    </tr>
-                    <tr>
-                        <td>4/13/2018</td>
-                        <td>(Cake) dropped once, you received (# drop) drop(s) for this cake</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="submitBottom" style="float: right;">
-            <button type="button" class="btn btn-primary">Delete</button>
-        </div>
+    <div class="bodyInner">
+        <table id="delivery" class="table table-striped">
+            <thead>
+            <tr>
+                <th class="col-sm-2">Order Number</th>
+                <th class="col-sm-2">Purchase Date</th>
+                <th class="col-sm-3">Order Detail</th>
+                <th class="col-sm-2">Price</th>
+                <th class="col-sm-2">Rate</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Odr2343441</td>
+                <td>4/1/2018</td>
+                <td>
+                    <ul>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                    </ul>
+                </td>
+                <td>$100</td>
+                <td>
+                    <a href="route.html" target="_blank" class="btn btn-primary" type="button" aria-pressed="true">Rate</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Odr2343442</td>
+                <td>4/2/2018</td>
+                <td>
+                    <ul>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                    </ul>
+                </td>
+                <td>$100</td>
+                <td>
+                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Rate</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Odr2343443</td>
+                <td>4/3/2018</td>
+                <td>
+                    <ul>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                        <li>Green Tea Crepe Cake</li>
+                    </ul>
+                </td>
+                <td>$100</td>
+                <td>
+                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Rate</a>
+                </td>
+            </tr>
+
+
+            </tbody>
+
+        </table>
     </div>
 </div>
+
 
 <div class="highlightSection">
     <div class="container">
@@ -153,11 +181,9 @@
         <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
     </div>
 </footer>
+
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
     <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
-
-
-
 
 {% endblock %}
