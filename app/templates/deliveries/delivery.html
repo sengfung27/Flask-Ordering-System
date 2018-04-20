@@ -2,226 +2,145 @@
 
 {% block content %}
 
-<head>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
-    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
 
 
-</head>
-<!-- NAVBAR
-================================================== -->
-
-<div class="pageTitle">
-    <div class="container">
-        <h2>Welcome {delivery man (name)} !</h2>
-    </div>
-</div>
-
-<div class="container">
-    <div class="bodyInner">
-        <table id="delivery" class="table table-striped">
-            <thead>
-            <tr>
-                <th class="col-sm-2">Order ID</th>
-                <th class="col-sm-2">Customer Name</th>
-                <th class="col-sm-2">Address</th>
-                <th class="col-sm-2">Route</th>
-                <th class="col-sm-3">Rate</th>
-            </tr>
-            </thead>
-
-            <!--class="" OR id=""-->
-
-            <tbody>
-            <tr>
-                <td>Odr2343441</td>
-                <td>John Jay</td>
-                <td>< 3, 2 ></td>
-                <td>
-                    <a href="route.html" target="_blank" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate">Select (select one):</label>
-                            <select class="form-control" id="rate" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Odr2343442</td>
-                <td>John Jay Jay</td>
-                <td>< 3, 3 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate1">Select (select one):</label>
-                            <select class="form-control" id="rate1" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment1">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment1"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Odr2343443</td>
-                <td>John Jay Jay Jay</td>
-                <td>< 3, 4 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate2">Select (select one):</label>
-                            <select class="form-control" id="rate2" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment2">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment2"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-
-
-            </tbody>
-
-        </table>
-    </div>
-</div>
-
-
-<div class="highlightSection">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="media">
-                    <a href="menu/"><img src="http://dev.bombaytakeawayclub.com/assets/img/nepali-momo.png"
-                                         alt="nepali-momo"> </a>
-                    <h3 class="media-heading text-primary-theme">NEPALESE LAMB MOMO</h3>
-                    <p>Steamed dumplings filled with slightly spiced minced meat served with special sauce.</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="media"><a href="menu/"><img
-                        src="http://dev.bombaytakeawayclub.com/assets/img/gorkha-special-chicken.png"
-                        alt="GURKHA SPECIAL CHICKEN"> </a>
-                    <h3 class="media-heading text-danger-theme">GURKHA SPECIAL CHICKEN</h3>
-                    <p>Boneless chicken marinated in mustard, smoked chilli, herbs and spices slowly cooked in
-                        tandoor. </p>
-
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="media">
-                    <a href="menu/"><img src="http://dev.bombaytakeawayclub.com/assets/img/lam-tikka.png"
-                                         alt="Lam Tikka"> </a>
-                    <h3 class="media-heading">LAMB TIKKA SPECIAL</h3>
-                    <p>Tender pieces of lamb mixed with our own spices and gently cooked in clay oven. </p>
-                </div>
-            </div>
+    </head>
+    <!-- NAVBAR
+    ================================================== -->
+    <div class="pageTitle">
+        <div class="container">
+            <h2>Welcome {delivery man (name)} !</h2>
         </div>
     </div>
-</div>
 
-
-<div class="introSection">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-5">
-                <h3>Welcome to restaurent</h3>
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy
-                    text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
-                    essentially unchanged. <br><br>
-                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
-                    Ipsum.
-                </p>
+        <div class="bodyInner">
+            <div class="deliveredBottom" style="float: right;">
+                <button type="button" class="btn btn-primary">Delivered</button>
             </div>
+            <table id="delivery" class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="col-sm-2">Order ID</th>
+                    <th class="col-sm-2">Customer Name</th>
+                    <th class="col-sm-2">Address</th>
+                    <th class="col-sm-2">Route</th>
+                    <th class="col-sm-3">Rate</th>
+                </tr>
+                </thead>
 
-            <div class="col-lg-4">
-                <h3>Welcome to restaurent</h3>
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy
-                    text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
-                    essentially unchanged. <br><br>
+                <!--class="" OR id=""-->
 
-                </p>
+                <tbody>
+                <tr>
+                    <td>Odr2343441</td>
+                    <td>John Jay</td>
+                    <td>< 3, 2 ></td>
+                    <td>
+                        <a href="route.html" target="_blank" class="btn btn-primary" type="button" aria-pressed="true">Show
+                            Route</a>
+                    </td>
+                    <td>
+                        <form>
+                            <div class="form-group">
+                                <label for="rate">Select (select one):</label>
+                                <select class="form-control" id="rate" style="width: 130px" ;>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
 
-            </div>
+                                <div class="form-group">
+                                    <label for="comment">Comment:</label>
+                                    <textarea class="form-control" rows="3" id="comment"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
 
-            <div class="col-lg-3">
-                <h3>Welcome to restaurent</h3>
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy
-                    text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-                    type specimen book.
+                <tr>
+                    <td>Odr2343442</td>
+                    <td>John Jay Jay</td>
+                    <td>< 3, 3 ></td>
+                    <td>
+                        <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
+                    </td>
+                    <td>
+                        <form>
+                            <div class="form-group">
+                                <label for="rate1">Select (select one):</label>
+                                <select class="form-control" id="rate1" style="width: 130px" ;>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
 
-                </p>
+                                <div class="form-group">
+                                    <label for="comment1">Comment:</label>
+                                    <textarea class="form-control" rows="3" id="comment1"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
 
-            </div>
+                <tr>
+                    <td>Odr2343443</td>
+                    <td>John Jay Jay Jay</td>
+                    <td>< 3, 4 ></td>
+                    <td>
+                        <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
+                    </td>
+                    <td>
+                        <form>
+                            <div class="form-group">
+                                <label for="rate2">Select (select one):</label>
+                                <select class="form-control" id="rate2" style="width: 130px" ;>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
 
+                                <div class="form-group">
+                                    <label for="comment2">Comment:</label>
+                                    <textarea class="form-control" rows="3" id="comment2"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+
+
+                </tbody>
+
+            </table>
         </div>
     </div>
-</div>
 
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </div>
+    </footer>
 
-<!-- FOOTER -->
-<footer>
-    <div class="container">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </div>
-</footer>
-
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
-    <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 
 
 
