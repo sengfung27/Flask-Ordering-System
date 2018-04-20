@@ -1,132 +1,72 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <head>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
     <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
-
-
 </head>
-<!-- NAVBAR
-================================================== -->
+
+
 
 <div class="pageTitle">
     <div class="container">
-        <h2>Welcome {delivery man (name)} !</h2>
+        <h2>Profile</h2>
     </div>
 </div>
 
 <div class="container">
     <div class="bodyInner">
-        <div class="deliveredBottom" style="float: right;">
-            <button type="button" class="btn btn-primary">Delivered</button>
+        <div class="submitBottom" style="float: right">
+            <button type="button" class="btn btn-primary">Edit</button>
         </div>
-        <table id="delivery" class="table table-striped">
-            <thead>
-            <tr>
-                <th class="col-sm-2">Order ID</th>
-                <th class="col-sm-2">Customer Name</th>
-                <th class="col-sm-2">Address</th>
-                <th class="col-sm-2">Route</th>
-                <th class="col-sm-3">Rate</th>
-            </tr>
-            </thead>
 
-            <!--class="" OR id=""-->
+        <br>
 
-            <tbody>
-            <tr>
-                <td>Odr2343441</td>
-                <td>John Jay</td>
-                <td>< 3, 2 ></td>
-                <td>
-                    <a href="route.html" target="_blank" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate">Select (select one):</label>
-                            <select class="form-control" id="rate" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
+        <div class="profile" style="width: 900px; margin: auto">
+            <table id="profileInfo" class="table" style="width: 900px;">
+                <thead>
+                <tr>
+                    <th class="col-xs-1">Name</th>
+                    <th class="col-xs-1">User ID</th>
+                    <th class="col-xs-1">Email</th>
+                    <th class="col-xs-3">Address</th>
+                    <th class="col-xs-2">Default Payment</th>
+                </tr>
+                </thead>
 
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
+                <tbody>
+                <tr>
+                    <td>Johnny Lee</td>
+                    <td>dv334455</td>
+                    <td>johnny@gmail.com</td>
+                    <td>123 4th ST, New York, NY, 12345</td>
+                    <td>123-123-123-1234</td>
+                </tr>
+                </tbody>
+            </table>
 
-            <tr>
-                <td>Odr2343442</td>
-                <td>John Jay Jay</td>
-                <td>< 3, 3 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate1">Select (select one):</label>
-                            <select class="form-control" id="rate1" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
+            <br>
 
-                            <div class="form-group">
-                                <label for="comment1">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment1"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
+            <table id="profileStatus" class="table" style="width: 300px;">
+                <thead>
+                <tr>
+                    <th class="col-xs-2">Status</th>
+                    <th class="col-xs-2">Average Rate</th>
+                </tr>
+                </thead>
 
-            <tr>
-                <td>Odr2343443</td>
-                <td>John Jay Jay Jay</td>
-                <td>< 3, 4 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate2">Select (select one):</label>
-                            <select class="form-control" id="rate2" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
+                <tbody>
+                <tr>
+                    <td>Customer</td>
+                    <td>2</td>
 
-                            <div class="form-group">
-                                <label for="comment2">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment2"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-
-
-            </tbody>
-
-        </table>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -222,13 +162,8 @@
     </div>
 </footer>
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
     <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
 
-
-
 {% endblock %}
-
-
-

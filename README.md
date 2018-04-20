@@ -61,6 +61,19 @@ On your local branch
 On your master branch
 `git branch --set-upstream-to origin/master`
 
+#### Merge Conflict with branch
+Step 1: From your project repository, bring in the changes and test.
+```
+git fetch origin
+git checkout -b name_branch origin/name_branch
+git merge master
+```
+Step 2: Merge the changes and update on GitHub.
+```
+git checkout master
+git merge --no-ff name_branch
+git push origin master
+```
 ## Workflow
 
 Setup:

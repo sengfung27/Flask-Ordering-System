@@ -1,132 +1,146 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <head>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
     <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
-
-
 </head>
-<!-- NAVBAR
-================================================== -->
+
+
 
 <div class="pageTitle">
     <div class="container">
-        <h2>Welcome {delivery man (name)} !</h2>
+        <h2>Welcome {blabla} !</h2>
     </div>
 </div>
 
 <div class="container">
     <div class="bodyInner">
-        <div class="deliveredBottom" style="float: right;">
-            <button type="button" class="btn btn-primary">Delivered</button>
+        <div class="profile" style="width: 700px; margin: auto">
+            <table id="storeRate" class="table" style="width: 700px;">
+                <thead>
+                <tr>
+                    <th class="col-sm-2">Store Rating</th>
+                    <th class="col-sm-2">Comment</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>
+                        <form>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">2
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">3
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">4
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">5
+                            </label>
+                        </form>
+                    </td>
+                    <td>
+                        <form>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table id="cakeRate" class="table" style="width: 700px;">
+                <thead>
+                <tr>
+                    <th class="col-sm-2">Cake Rating</th>
+                    <th class="col-sm-2">Comment</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>
+                        <form>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">2
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">3
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">4
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">5
+                            </label>
+                        </form>
+                    </td>
+                    <td>
+                        <form>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table id="deliveryRate" class="table" style="width: 700px;">
+                <thead>
+                <tr>
+                    <th class="col-sm-2">Delivery Rating</th>
+                    <th class="col-sm-2">Comment</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>
+                        <form>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">2
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">3
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">4
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">5
+                            </label>
+                        </form>
+                    </td>
+                    <td>
+                        <form>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
         </div>
-        <table id="delivery" class="table table-striped">
-            <thead>
-            <tr>
-                <th class="col-sm-2">Order ID</th>
-                <th class="col-sm-2">Customer Name</th>
-                <th class="col-sm-2">Address</th>
-                <th class="col-sm-2">Route</th>
-                <th class="col-sm-3">Rate</th>
-            </tr>
-            </thead>
-
-            <!--class="" OR id=""-->
-
-            <tbody>
-            <tr>
-                <td>Odr2343441</td>
-                <td>John Jay</td>
-                <td>< 3, 2 ></td>
-                <td>
-                    <a href="route.html" target="_blank" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate">Select (select one):</label>
-                            <select class="form-control" id="rate" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Odr2343442</td>
-                <td>John Jay Jay</td>
-                <td>< 3, 3 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate1">Select (select one):</label>
-                            <select class="form-control" id="rate1" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment1">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment1"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Odr2343443</td>
-                <td>John Jay Jay Jay</td>
-                <td>< 3, 4 ></td>
-                <td>
-                    <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                </td>
-                <td>
-                    <form>
-                        <div class="form-group">
-                            <label for="rate2">Select (select one):</label>
-                            <select class="form-control" id="rate2" style="width: 130px" ;>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <div class="form-group">
-                                <label for="comment2">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment2"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-
-
-            </tbody>
-
-        </table>
     </div>
 </div>
 
@@ -222,13 +236,8 @@
     </div>
 </footer>
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
     <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
 
-
-
 {% endblock %}
-
-
-

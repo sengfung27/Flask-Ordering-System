@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/base.css')}}">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
         <script>
         // Get the modal
             var modal = document.getElementById('id01');
@@ -42,6 +43,9 @@
               <a href="{{ url_for('additem')}}">Add Item</a>
               <a href="{{ url_for('dropped_notification')}}">Dropped Notification</a>
               <a href="{{ url_for('warning_notification')}}">Warning Notification</a>
+              <a href="{{ url_for('customer_profile')}}">Customer Profile</a>
+              <a href="{{ url_for('order_history')}}">Customer Order History</a>
+              <a href="{{ url_for('rating')}}">Customer Rating</a>
               <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
           </div>
         </div>
