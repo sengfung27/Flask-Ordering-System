@@ -25,6 +25,10 @@ def menu():
 #Customer
 
 
+@app.route('/customer/description')
+def description():
+    return render_template('customers/description.html')
+
 @app.route('/checkout')
 def checkout():
     return render_template('customers/checkout.html', title='Menu')
