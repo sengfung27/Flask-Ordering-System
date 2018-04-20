@@ -61,6 +61,19 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
+                            <label>Price($):</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="$">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
                             <label>Upload Photos:</label>
                         </div>
                     </div>
@@ -71,6 +84,7 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
@@ -79,8 +93,7 @@
                     </div>
                     <div class="col-md-10">
                         <div class="form-group">
-                            <input type="text" class="form-control" style="height: 100px"
-                                   placeholder="Enter description">
+                            <textarea class="form-control" rows="5"></textarea>
                         </div>
                     </div>
 
@@ -92,24 +105,24 @@
             </div>
 
 
-        <a href="#" class="btn btn-primary" role="button">Submit</a>
-    </form>
+            <a href="#" class="btn btn-primary" role="button">Submit</a>
+        </form>
 
-</div>
-
-
-<!-- Carousel
-================================================== -->
-<div class="container">
-    <br><br><br><br><br>
-</div>
+    </div>
 
 
+    <!-- Carousel
+    ================================================== -->
+    <div class="container">
+        <br><br><br><br><br>
+    </div>
 
-</footer>
+
+
+    </footer>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
-    <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 
 {% endblock %}
 
