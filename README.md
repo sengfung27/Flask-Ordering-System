@@ -108,6 +108,16 @@ How to work?
 	 To switch to your branch. Use `git checkout your_branch`
 	 Use `git branch` to see where you are.
 
+- When you want to get the newest updates, you have to pull the code from the develop branch by doing the following things:
+
+    1. `git branch` You should be at your own branch
+
+    2. `git checkout master` Get into the master branch
+
+    3. `git pull` Pull down the newest updates
+
+    4. `git checkout your_branch` Go back to your own branch
+
 - When you finish a model (design and implementation, including testing), you have to merge your code to the develop branch, by doing the following things:
 
 	1. `git checkout master`
