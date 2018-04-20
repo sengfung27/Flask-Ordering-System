@@ -139,11 +139,6 @@ def managecustomers():
     return render_template('managers/ManageCustomers.html')
 
 
-@app.route('/manager/Notification')
-def notification_manager():
-    return render_template('managers/Notification.html')
-
-
 @app.route('/manager/PayWage')
 def paywage():
     return render_template('managers/PayWage.html')
