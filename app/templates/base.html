@@ -44,6 +44,7 @@
               <a href="{{ url_for('customer_profile')}}">Customer Profile</a>
               <a href="{{ url_for('order_history')}}">Customer Order History</a>
               <a href="{{ url_for('rating')}}">Customer Rating</a>
+              <a href="{{ url_for('registration')}}">Registration</a>
               <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
           </div>
         </div>
@@ -68,6 +69,7 @@
               <div class="container" style="background-color:#f1f1f1">
                   <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
                   <span class="psw">Forgot <a href="#">password?</a></span>
+                  <a href="{{ url_for('registration')}}" style="color: greenyellow">Create Account</a>
               </div>
           </form>
         </div>

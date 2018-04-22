@@ -29,6 +29,12 @@ def menu():
 def description():
     return render_template('customers/description.html')
 
+
+@app.route('/customer/registration')
+def registration():
+    return render_template('customers/registerform.html')
+
+
 @app.route('/checkout')
 def checkout():
     return render_template('customers/checkout.html', title='Menu')
