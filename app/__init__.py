@@ -1,12 +1,61 @@
 from flask import Flask
-#from instance.config import Config
+# from instance.config import Config
+from flask_sqlalchemy import SQLAlchemy
+from sshtunnel import SSHTunnelForwarder
+from flask_login import LoginManager
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
-#app.config.from_object(Config)
+server = SSHTunnelForwarder(
+    ('134.74.126.104', 22),
+    ssh_username='huan2077',
+    ssh_password='23242077',
+    remote_bind_address=('134.74.146.21', 3306))
+server.start()
+engine = create_engine('mysql+mysqldb://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port)
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+login_manager = LoginManager(app)
+db = SQLAlchemy(app)
+app.config.update(dict(
+    SECRET_KEY="powerful secretkey",
+    WTF_CSRF_SECRET_KEY="a csrf secret key"
+))
+from app import routes, models
+from app.models import User, Role
 
-from app import routes
+# check for correctness
+# me = db.session.query(User).filter_by(email="seng@example.com").first()
+# print(me)
+# role = me.role.role_type
+# print(role)
+# if role == "deliver":
+#     print("we did it")
 
-app.run()
+# create user
+# user = User(email="seng@example.com",role_id=5)
+# user.set_password("1234")
+
+# query.all
+# users = Testing.query.all()
+# for row in users:
+#     print("id", str(row.id))
+# our_user = db.session.query(Testing).filter_by(id='3').first()
+# if our_user.id == 3:
+#     print("we did it")
+# else:
+#     print("wtf")
 
 
-# tunnel then execute flask_sqlalchemy
+# add id
+# u = Testing(first='11', last='22')
+# print(u)
+# print (server.local_bind_port)
+# db.session.add (u)
+# db.session.commit()
+# print("ok")
+
+# delete id
+# Testing.query.filter_by(id='2').delete()
+# db.session.commit()
