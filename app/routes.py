@@ -6,6 +6,14 @@ from flask import render_template, flash, redirect, request, url_for
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
+from werkzeug.utils import secure_filename
+import os
+from flask import send_from_directory
+
+UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # from flask_login import LoginManager
@@ -21,8 +29,9 @@ def index():
 def menu():
     return render_template('menu.html', title='Menu')
 
+
 ########################################################################################################################
-#Customer
+# Customer
 
 
 @app.route('/customer/description')
@@ -33,6 +42,33 @@ def description():
 @app.route('/customer/registration')
 def registration():
     return render_template('customers/registerform.html')
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return "success"
+        else:
+            return "not valid"
+    return """
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    <p>%s</p>
+    """ % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'], ))
 
 
 @app.route('/checkout')
@@ -59,8 +95,9 @@ def order_history():
 def rating():
     return render_template('customers/rating.html', title='Menu')
 
+
 ########################################################################################################################
-#Cook
+# Cook
 
 
 @app.route('/cook')
@@ -89,7 +126,7 @@ def warning_notification():
 
 
 ########################################################################################################################
-#Delivery
+# Delivery
 
 @app.route('/delivery')
 def delivery():
@@ -110,8 +147,9 @@ def delivery_profile():
 def delivery_route():
     return render_template('deliveries/route.html', title='Delivery')
 
+
 ########################################################################################################################
-#Manager
+# Manager
 
 
 @app.route('/manager')
@@ -152,13 +190,3 @@ def managecustomers():
 @app.route('/manager/PayWage')
 def paywage():
     return render_template('managers/PayWage.html')
-
-
-
-
-
-
-
-
-
-

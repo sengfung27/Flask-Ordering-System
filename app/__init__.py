@@ -9,4 +9,4 @@ from app import routes
 app.run()
 
 
-# tunnel then execute flask_sqlalchemy
+# tunnel the n execute flask_sqlalchemy
