@@ -5,10 +5,13 @@ from app.models import User
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
+from app.forms import LoginForm, RegistrationForm
 
 from werkzeug.utils import secure_filename
 import os
 from flask import send_from_directory
+
 
 UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -17,6 +20,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, RegistrationForm
+
 
 
 def login_required(*roles):
@@ -49,16 +53,16 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        e = User.query.filter_by(email=form.email.data).first()
-        if e is not None and e.check_password(
-                form.password.data):
-            login_user(e, remember=form.remember_me.data)
+
+    if request.method == 'POST':
+        e = User.query.filter_by(email=request.values.get('email')).first()
+        if e is not None and e.check_password(request.values.get('password')):
+            login_user(e, remember=request.values.get('remember_me'))
             return redirect(url_for('index'))
         else:
             flash('Invalid email or password.')
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In')
+
 
 
 @app.route('/menu')
@@ -81,27 +85,6 @@ def logout():
     flash("You logged out")
     logout_user()
     return redirect(url_for('index'))
-
-
-@app.route('/registration', methods=['GET', 'POST'])
-def registration():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        employee = User(email=form.email.data,
-                        role_id='3')
-        employee.set_password(form.password.data)
-        # add employee to the database
-        db.session.add(employee)
-        db.session.commit()
-        flash('You have successfully registered! You may now login.')
-
-        # redirect to the login page
-        return redirect(url_for('login'))
-    # load registration template
-    return render_template('customers/registerform.html', form=form)
-
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -130,7 +113,31 @@ def upload_file():
     """ % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'], ))
 
 
-@app.route('/checkout')
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        employee = User(email= request.values.get('email'), role_id='3')
+        employee.set_password(request.values.get('password'))
+        # add employee to the database
+        db.session.add(employee)
+        db.session.commit()
+    # employee = User(email=form.email.data,
+    #                 role_id='3')
+    # employee.set_password(form.password.data)
+    # # add employee to the database
+    # db.session.add(employee)
+    # db.session.commit()
+        flash('You have successfully registered! You may now login.')
+    #
+    #     # redirect to the login page
+        return redirect(url_for('login'))
+    # load registration template
+    return render_template('customers/registerform.html') #, form=form
+
+
+@app.route('/signup')
 def checkout():
     return render_template('customers/checkout.html', title='Menu')
 
