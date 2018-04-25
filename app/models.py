@@ -5,11 +5,11 @@ from app import db, login_manager
 
 # Set up user_loader
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+def load_user(id):
+    return User.query.get(int(id))
 
 
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -19,13 +19,13 @@ class User(UserMixin, db.Model):
     gender = db.Column(db.VARCHAR(6))
     address = db.Column(db.VARCHAR(255))
     password_hash = db.Column(db.VARCHAR(255))
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'),index=True)
     blacklist = db.Column(db.Boolean)
 
     role = db.relationship("Role", back_populates="user")
 
-    def get_id(self):
-        return id
+    def get_role_id(self):
+        return self.role_id
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

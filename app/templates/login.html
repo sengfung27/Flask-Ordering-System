@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <h1>Sign In</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ wtf.form_field(form.email, class='form-control', placeholder='Email') }}<br>
+
+        </p>
+        <p>
+            {{ wtf.form_field(form.password, class='form-control col-xs-2', placeholder='Password') }}<br><br>
+
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>
+            {{ wtf.form_field(form.submit, class='btn btn-warning btn-block') }}
+        </p>
+    </form>
+{% endblock %}
