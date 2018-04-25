@@ -1,9 +1,9 @@
 from flask import Flask
-# from instance.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from sshtunnel import SSHTunnelForwarder
 from flask_login import LoginManager
 from sqlalchemy import create_engine
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 server = SSHTunnelForwarder(
@@ -12,11 +12,12 @@ server = SSHTunnelForwarder(
     ssh_password='23242077',
     remote_bind_address=('134.74.146.21', 3306))
 server.start()
-engine = create_engine('mysql+mysqldb://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port)
+engine = create_engine('mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port)
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 login_manager = LoginManager(app)
+Bootstrap(app)
 db = SQLAlchemy(app)
 app.config.update(dict(
     SECRET_KEY="powerful secretkey",
@@ -26,8 +27,10 @@ from app import routes, models
 from app.models import User, Role
 
 # check for correctness
-# me = db.session.query(User).filter_by(email="seng@example.com").first()
+# me = db.session.query(User).filter_by(email="poi@example.com").first()
 # print(me)
+
+
 # role = me.role.role_type
 # print(role)
 # if role == "deliver":
@@ -36,6 +39,12 @@ from app.models import User, Role
 # create user
 # user = User(email="seng@example.com",role_id=5)
 # user.set_password("1234")
+
+#loop
+# users = User.query.all()
+#
+# for u in users:
+#     print(u.id, u.username)
 
 # query.all
 # users = Testing.query.all()

@@ -13,7 +13,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
         // Get the modal
         var modal = document.getElementById('id01');
@@ -27,49 +27,78 @@
 </head>
 <body>
 <div class="header">
-    <a href="{{ url_for('index') }}" class="logo"><img src="/static/img/cmonster.png" alt="logo"
-                                                       style="width:60px;height:60px;border:0;"></a>
     <div class="header-right">
-        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.role_id == 7 and current_user.is_authenticated %}
+            <a href="{{ url_for('manager') }}" class="logo"><img
+                    src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo"
+                    style="width:60px;height:60px;border:0;"></a>
+
+        {% elif current_user.role_id == 6 and current_user.is_authenticated %}
+            <a href="{{ url_for('cook') }}" class="logo"><img
+                    src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo"
+                    style="width:60px;height:60px;border:0;"></a>
+
+        {% elif current_user.role_id == 5 and current_user.is_authenticated %}
+            <a href="{{ url_for('delivery') }}" class="logo"><img
+                    src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo"
+                    style="width:60px;height:60px;border:0;"></a>
+
+        {% else %}
+            <a href="{{ url_for('index') }}" class="logo"><img
+                    src="http://homecookingadventure.com/images/recipes/Chocolate_Mirror_Cake_main.jpg" alt="logo"
+                    style="width:60px;height:60px;border:0;"></a>
+
+        {% endif %}
         <a href="{{ url_for('menu') }}">Menu</a>
         <a href="{{ url_for('description') }}">Description</a>
         <a href="{{ url_for('checkout') }}">Checkout</a>
         <a href="{{ url_for('confirmation') }}">Confirmation</a>
-        <a href="{{ url_for('delivery') }}">Delivery</a>
-        <a href="{{ url_for('delivery_profile') }}">Delivery Profile</a>
-        <a href="{{ url_for('delivery_route') }}">Delivery Route</a>
-        <a href="{{ url_for('manager') }}">Manager</a>
-        <a href="{{ url_for('decidedelivery') }}">Decide Delivery</a>
-        <a href="{{ url_for('managecustomers') }}">Manage Customer</a>
-        <a href="{{ url_for('paywage') }}">Paywage</a>
-        <a href="{{ url_for('cook') }}">Cook</a>
-        <a href="{{ url_for('cook_profile') }}">Cook Profile</a>
-        <a href="{{ url_for('additem') }}">Add Item</a>
-        <a href="{{ url_for('dropped_notification') }}">Dropped Notification</a>
-        <a href="{{ url_for('warning_notification') }}">Warning Notification</a>
-        <a href="{{ url_for('customer_profile') }}">Customer Profile</a>
-        <a href="{{ url_for('order_history') }}">Customer Order History</a>
-        <a href="{{ url_for('rating') }}">Customer Rating</a>
-        <a href="{{ url_for('registration') }}">Registration</a>
-        <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+
+        {% if current_user.role_id == 5 and current_user.is_authenticated %}
+            <a href="{{ url_for('delivery') }}">Delivery</a>
+            <a href="{{ url_for('delivery_profile') }}">Delivery Profile</a>
+            <a href="{{ url_for('delivery_route') }}">Delivery Route</a>
+
+        {% elif current_user.role_id == 7 and current_user.is_authenticated %}
+            <a href="{{ url_for('manager') }}">Manager</a>
+            <a href="{{ url_for('decidedelivery') }}">Decide Delivery</a>
+            <a href="{{ url_for('managecustomers') }}">Manage Customer</a>
+            <a href="{{ url_for('paywage') }}">Paywage</a>
+
+        {% elif current_user.role_id == 6 and current_user.is_authenticated %}
+            <a href="{{ url_for('cook') }}">Cook</a>
+            <a href="{{ url_for('cook_profile') }}">Cook Profile</a>
+            <a href="{{ url_for('additem') }}">Add Item</a>
+            <a href="{{ url_for('dropped_notification') }}">Dropped Notification</a>
+            <a href="{{ url_for('warning_notification') }}">Warning Notification</a>
+
+        {% elif (current_user.role_id == 3 or current_user.role_id == 4) and current_user.is_authenticated %}
+            <a href="{{ url_for('customer_profile') }}">Customer Profile</a>
+            <a href="{{ url_for('order_history') }}">Customer Order History</a>
+            <a href="{{ url_for('rating') }}">Customer Rating</a>
+        {% else %}
+            <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+            <a href="{{ url_for('registration') }}">Registration</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
     </div>
 </div>
 
 <div id="id01" class="modal">
-    <form class="modal-content animate" action="#" style="width: 600px">
-        <!-- <div class="imgcontainer">
-           <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-           <img src="/static/img/login.png" alt="Avatar" class="avatar">
-         </div>-->
+    <form class="modal-content animate" method="post" action="{{ url_for('login') }}" style="width: 600px">
 
         <div class="modal-header">
             <h1>Login</h1>
         </div>
 
-        <!--<div class="container">-->
         <div class="modal-body">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter email" name="email" required>
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
             <button type="submit" style="font-weight: bold">Login</button>
@@ -80,10 +109,8 @@
             <div style="float: right; font-weight: bold;">
                 <a class="text-muted" href="#">Forgot password?</a>
             </div>
-
-
         </div>
-        <!--</div>-->
+
         <div class="modal-footer" style="background-color:lightgray">
             <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn"
                     style="float: left">Cancel
@@ -91,12 +118,10 @@
             <div style="float: right; margin-left: 10px; margin-top: 13px; font-weight: bold">
                 <a href="{{ url_for('registration') }}">Create Account</a>
             </div>
-
-            <!--<span class="psw">Forgot <a href="#">password?</a></span>-->
-
         </div>
     </form>
 </div>
+
 <hr>
 {% with messages = get_flashed_messages() %}
     {% if messages %}
