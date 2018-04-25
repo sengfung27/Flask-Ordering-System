@@ -5,22 +5,22 @@
 
     <form class="row" action="{{ url_for('login') }}" method="post" style="width: 600px">
 
-            <label for="uname"><b>Email</b></label>
-            <input type="text" placeholder="Enter Your Email" name="email" required>
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
-            <button type="submit" style="font-weight: bold">Login</button>
-            <label>
-                <input type="checkbox" checked="checked" name="remember_me"> Remember me
-            </label>
+        <label for="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Your Email" name="email" required>
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+        <button type="submit" style="font-weight: bold">Login</button>
+        <label>
+            <input type="checkbox" checked="checked" name="remember_me"> Remember me
+        </label>
 
-            <div style="float: right; font-weight: bold;">
-                <a class="text-muted" href="#">Forgot password?</a>
-            </div>
+        <div style="float: right; font-weight: bold;">
+            <a class="text-muted" href="#">Forgot password?</a>
+        </div>
 
-            <div style="float: right; margin-left: 10px; margin-top: 13px; font-weight: bold">
-                <a href="{{ url_for('registration') }}">Create Account</a>
-            </div>
+        <div style="float: right; margin-left: 10px; margin-top: 13px; font-weight: bold">
+            <a href="{{ url_for('registration') }}">Create Account</a>
+        </div>
 
     </form>
 {% endblock %}

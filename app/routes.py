@@ -76,23 +76,26 @@ def registration():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     if request.method == 'POST':
-        employee = User(email= request.values.get('email'), role_id='3')
-        employee.set_password(request.values.get('password'))
-        # add employee to the database
-        db.session.add(employee)
-        db.session.commit()
-    # employee = User(email=form.email.data,
-    #                 role_id='3')
-    # employee.set_password(form.password.data)
-    # # add employee to the database
-    # db.session.add(employee)
-    # db.session.commit()
-        flash('You have successfully registered! You may now login.')
-    #
-    #     # redirect to the login page
-        return redirect(url_for('login'))
-    # load registration template
-    return render_template('customers/registerform.html') #, form=form
+        if request.values.get('password') != request.values.get('password2'):
+            address = request.values.get('address1') + " " + \
+                      request.values.get('address2') + ", " + \
+                      request.values.get('city') + ", " + \
+                      request.values.get('state') + " " + \
+                      str(request.values.get('zip_code'))
+            employee = User(email=request.values.get('email'), address=address, role_id='3'
+                            , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+                            last_name=request.values.get('lastname'))
+            employee.set_password(request.values.get('password'))
+            db.session.add(employee)
+            db.session.commit()
+
+            flash('You have successfully registered! You may now login.')
+
+            return redirect(url_for('login'))
+        else:
+            flash('The specified passwords do not match')
+
+    return render_template('customers/registerform.html')  # , form=form
 
 
 @app.route('/signup')
