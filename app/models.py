@@ -13,16 +13,19 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email = db.Column(db.VARCHAR(255), unique=True)
+    email = db.Column(db.VARCHAR(255), unique=True, index=True)
     first_name = db.Column(db.VARCHAR(255))
     last_name = db.Column(db.VARCHAR(255))
     gender = db.Column(db.VARCHAR(6))
     address = db.Column(db.VARCHAR(255))
     password_hash = db.Column(db.VARCHAR(255))
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'),index=True)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), index=True)
     blacklist = db.Column(db.Boolean)
 
     role = db.relationship("Role", back_populates="user")
+
+    def set_role_id(self, rid):
+        self.role_id = rid
 
     def get_role_id(self):
         return self.role_id
