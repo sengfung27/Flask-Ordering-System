@@ -1,21 +1,57 @@
+{% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+
+{#% block content %#}
+<!--<div class="content-section">
+  <div class="center">
+    <h1>Register for an account</h1>
+    <br/>
+    {{# wtf.quick_form(form) #}}
+  </div>
+</div>-->
+{#% endblock %#}
+
+<!--
+             <div class="row">
+                    <div class="loginInfo">
+
+                        <div class="form-group col-md-12">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" id="email" required>
+                        </div>
+
+
+                        <div class="form-group col-md-6">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" class="form-control"
+                                   aria-describedby="passwordHelpBlock">
+                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                Your password must be 8-20 characters long, contain letters and numbers, and must not
+                                contain spaces, special characters, or emoji.
+                            </small>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="password2">Confirm Password</label>
+                            <input type="password" id="password2" class="form-control"
+                                   aria-describedby="passwordHelpBlock">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <button class="btn btn-primary" type="submit" style="float: right; width: 80px">Submit</button>
 
 {% block content %}
-    <head>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
-        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
-    </head>
 
 
-    <div class="pageTitle">
-        <div class="container">
-            <h2>Create an Account</h2>
-        </div>
-    </div>
+{% endblock %}
 
+
+<!--
     <div class="container">
         <div class="bodyInner">
             <div class="information" style="width: 900px; margin: auto">
@@ -84,7 +120,7 @@
                                 <small id="fileHelpBlock" class="form-text text-muted">
                                     Please upload a picture of your identification.
                                 </small>
-                            </div>-->
+                            </div>
 
 
                             <div class="col-md-12">
@@ -110,6 +146,7 @@
                 </div>
 
                 <hr>
+            <form action="/registration" method="post">
 
                 <h3>Login Information</h3>
                 <br>
@@ -121,10 +158,10 @@
                             <input type="text" class="form-control" id="email" required>
                         </div>
 
-
+#qwe
                         <div class="form-group col-md-6">
-                            <label for="inputPassword5">Password</label>
-                            <input type="password" id="inputPassword5" class="form-control"
+                            <label for="password">Password</label>
+                            <input type="password" id="password" class="form-control"
                                    aria-describedby="passwordHelpBlock">
                             <small id="passwordHelpBlock" class="form-text text-muted">
                                 Your password must be 8-20 characters long, contain letters and numbers, and must not
@@ -133,37 +170,58 @@
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <input type="password" id="confirmPassword" class="form-control"
+                            <label for="password2">Confirm Password</label>
+                            <input type="password" id="password2" class="form-control"
                                    aria-describedby="passwordHelpBlock">
                         </div>
                     </div>
                 </div>
 
-                <br>
+
 
                 <button class="btn btn-primary" type="submit" style="float: right; width: 80px">Submit</button>
 
-
-            </div>
-        </div>
-
-        <div class="container">
-            <br><br><br><br>
+            </form>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <p class="pull-right"><a href="#">Back to top</a></p>
-            <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-        </div>
-    </footer>
+    <div class="container">
+        <br><br><br><br>
+    </div>
+    </div>-->
 
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
+{#<form action="" method="post">#}
+{#        {{ form.hidden_tag() }}#}
+{#        <p>#}
+{#            {{ form.email.label }}<br>#}
+{#            {{ form.email(size=32) }}<br>#}
+{#            {% for error in form.email.errors %}#}
+{#            <span style="color: red;">[{{ error }}]</span>#}
+{#            {% endfor %}#}
+{#        </p>#}
+{#        <p>#}
+{#            {{ form.email.label }}<br>#}
+{#            {{ form.email(size=64) }}<br>#}
+{#            {% for error in form.email.errors %}#}
+{#            <span style="color: red;">[{{ error }}]</span>#}
+{#            {% endfor %}#}
+{#        </p>#}
+{#        <p>#}
+{#            {{ form.password.label }}<br>#}
+{#            {{ form.password(size=32) }}<br>#}
+{#            {% for error in form.password.errors %}#}
+{#            <span style="color: red;">[{{ error }}]</span>#}
+{#            {% endfor %}#}
+{#        </p>#}
+{#        <p>#}
+{#            {{ form.password2.label }}<br>#}
+{#            {{ form.password2(size=32) }}<br>#}
+{#            {% for error in form.password2.errors %}#}
+{#            <span style="color: red;">[{{ error }}]</span>#}
+{#            {% endfor %}#}
+{#        </p>#}
+{#        <p>{{ form.submit() }}</p>#}
+{#    </form>#}
 
-{% endblock %}
+
 
