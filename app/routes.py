@@ -53,7 +53,6 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
         if e is not None and e.check_password(request.values.get('password')):
