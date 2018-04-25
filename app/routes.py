@@ -39,16 +39,14 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        e = User.query.filter_by(email=form.email.data).first()
-        if e is not None and e.check_password(
-                form.password.data):
-            login_user(e, remember=form.remember_me.data)
+    if request.method == 'POST':
+        e = User.query.filter_by(email=request.values.get('email')).first()
+        if e is not None and e.check_password(request.values.get('password')):
+            login_user(e, remember=request.values.get('remember_me'))
             return redirect(url_for('index'))
         else:
             flash('Invalid email or password.')
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In')
 
 
 @app.route('/menu')
@@ -77,23 +75,27 @@ def logout():
 def registration():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        employee = User(email=form.email.data,
-                        role_id='3')
-        employee.set_password(form.password.data)
+    if request.method == 'POST':
+        employee = User(email= request.values.get('email'), role_id='3')
+        employee.set_password(request.values.get('password'))
         # add employee to the database
         db.session.add(employee)
         db.session.commit()
+    # employee = User(email=form.email.data,
+    #                 role_id='3')
+    # employee.set_password(form.password.data)
+    # # add employee to the database
+    # db.session.add(employee)
+    # db.session.commit()
         flash('You have successfully registered! You may now login.')
-
-        # redirect to the login page
+    #
+    #     # redirect to the login page
         return redirect(url_for('login'))
     # load registration template
-    return render_template('customers/registerform.html', form=form)
+    return render_template('customers/registerform.html') #, form=form
 
 
-@app.route('/checkout')
+@app.route('/signup')
 def checkout():
     return render_template('customers/checkout.html', title='Menu')
 
