@@ -11,105 +11,75 @@
     </head>
 
     <div class="container">
-        <h2>Add new item</h2>
-        <br><br>
-        <form>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Cake Name:</label>
-                        </div>
-                    </div>
+    <h2>Add New Item</h2>
+        <form action="{{ url_for('additem') }}" method="post" class="form-horizontal">
+            <div class="bodyInner">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="cakeName">Cake Name:</label>
                     <div class="col-md-10">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Enter Cake Name">
-                        </div>
+                        <input type="text" class="form-control" placeholder="Enter Cake Name" name="cakeName"
+                               id="cakeName" required>
                     </div>
-                    <br><br><br>
+                </div>
 
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Catagory:</label>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="category">Catagory:</label>
                     <div class="col-md-10">
-                        <div class="form-group">
-                            <select class="form-control">
-                                <option value="Cheesecake">Cheesecake</option>
-                                <option value="..">..</option>
-                                <option value="other">Others</option>
-                            </select>
-                        </div>
+                        <select class="form-control" name="category" id="category" required>
+                            <option value="Cheesecake">Cheesecake</option>
+                            <option value="..">..</option>
+                            <option value="other">Others</option>
+                        </select>
                     </div>
-                    <br><br><br>
+                </div>
 
-                    <!--if other is not selected, this will not enable-->
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>New Catagory Name:</label>
-                        </div>
-                    </div>
+                <!--if other is not selected, this will not enable-->
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="newCategory">New Category Name:</label>
                     <div class="col-md-10">
                         <fieldset disabled>
-                            <div class="form-group">
-                                <input class="form-control" id="disabledInput" type="text"
-                                       placeholder="Input your new catagory item"
-                                       disabled>
-                            </div>
+                            <input class="form-control" id="newCategory" name="newCategory" type="text"
+                                   placeholder="Input your new category item" disabled>
                         </fieldset>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Price($):</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="$">
-                        </div>
-                    </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Upload Photos:</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                            <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                        </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="price">Price($):</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" placeholder="$" name="price" id="price" required>
                     </div>
                 </div>
 
 
-                <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-md-2">Upload Photos:</label>
                     <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Description:</label>
-                        </div>
+                        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                        <input type="file" class="custom-file-input" name="validatedCustomFile" id="validatedCustomFile"
+                               required>
                     </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="description">Description:</label>
                     <div class="col-md-10">
-                        <div class="form-group">
-                            <textarea class="form-control" rows="5"></textarea>
-                        </div>
+                        <textarea class="form-control" rows="5" name="description" id="description" required></textarea>
                     </div>
-
-                    <br><br><br>
-
                 </div>
-                <br><br><br>
 
+                <div class="form-group">
+                    <div class="col-md-offset-11 col-md-1">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
             </div>
-
-
-            <a href="#" class="btn btn-primary" role="button" style="float: right">Submit</a>
         </form>
 
     </div>
+
 
 
     <!-- Carousel
