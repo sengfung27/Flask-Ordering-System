@@ -1,95 +1,68 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
-    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
 
-</head>
+    </head>
 
-<!-- NAVBAR
-================================================== -->
+    <!-- NAVBAR
+    ================================================== -->
 
 
-<div class="pageTitle">
-	<div class="container">
-		<h2>Customers Application</h2>
-	</div>
-</div>
-
-<br><br>
-<!--body-->
-<div class="container">
-	<div class="row">
-		<!--Links Table-->
-		<div class="col-lg-2">
-			<div class ="table-responsive">
-			<table class="table table-bordered">
-				<tbody>
-				<tr>
-					<td><a href="{{ url_for('application')}}" style="color:black"><strong>Customer Application</strong></a></td>
-				</tr>
-				<tr>
-					<td><a href="{{ url_for('complaint')}}" style="color:black">Customer Complaint</a></td>
-				</tr>
-                <tr>
-					<td><a href="{{ url_for('deliverwarning')}}" style="color:black">Delivery Men Warning</a></td>
-				</tr>
-				<tr>
-					<td><a href="{{ url_for('CookWarning')}}" style="color:black">CookWarning</a></td>
-				</tr>
-				</tbody>
-			</table>
-			</div>
-		</div>
-        <div class="col-lg-10">
-			<div class ="table-responsive">
-			<table class="table table-bordered">
-				<thead>
-				<tr>
-					<th>Customer ID</th>
-                    <th>Customer Name</th>
-                    <th>Photo ID</th>
-                    <th>Telephone Number</th>
-                    <th>Email</th>
-                    <th>Address</th>
-				</tr>
-				</thead>
-                <tbody>
-				<tr>
-					<td>/</td>
-                    <td>/</td>
-                    <td>link</td>
-                    <td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-				</tr>
-				<tr>
-					<td>/</td>
-                    <td>/</td>
-                    <td>link</td>
-                    <td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-				</tr>
-				</tbody>
-			</table>
-			</div>
-            <!-- button -->
-            <input type="submit" class="btn btn-info" style="float: right" value="Submit">
-		</div>
+    <div class="pageTitle">
+        <div class="container">
+            <h2>Customers Application</h2>
+        </div>
     </div>
-</div>
-      <!-- FOOTER -->
-      <footer>
-		<div class="container">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-		</div>
-      </footer>
+
+    <br><br>
+    <!--body-->
+    <div class="container">
+        <div class="row">
+            <!--Links Table-->
+        </div>
+        <div class="col-lg-10">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>Customer Name</th>
+                        <!-- <th>Photo ID</th> -->
+                        <th>Email</th>
+                        <th>Address</th>
+                    </tr>
+
+                    {% for user in me %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.first_name }}{{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.address }}</td>
+                        </tr>
+                    {% endfor %}
+
+
+                </table>
+            </div>
+            <!-- button -->
+            <form action = "{{ url_for('application') }}" method = "post">
+                <input type="submit" name="change" class="btn btn-info" style="float: right" value="Submit">
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </div>
+    </footer>
 
 
 
@@ -97,8 +70,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
-    <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 
 
 {% endblock %}

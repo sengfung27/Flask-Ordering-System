@@ -32,15 +32,15 @@ from app import routes, models
 from app.models import User, Role
 
 
-# me = db.session.query(User).filter_by(email="ms@example.com").first()
+# me = User.query.filter_by(email="ii@example.com")
 # print(me)
 # if me is None:
 #     print("nothing")
-#
-# role = me.role.role_type
-# print(role)
-# if role == "deliver":
-#     print("we did it")
+# for i in me:
+#     print("User {} {}".format(i.email, i.first_name))
+# User.update().va
+# db.session.update()
+
 
 # create user
 # user = User(email="delivery@example.com",role_id=5)

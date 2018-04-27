@@ -16,9 +16,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-from app.forms import LoginForm, RegistrationForm
-
+from flask_login import LoginManager, current_user, login_user, logout_user
 
 
 def login_required(*roles):
@@ -50,16 +48,32 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        if current_user.role_id == 7:
+            return redirect(url_for('manager'))
+        if current_user.role_id == 6:
+            return redirect(url_for('cook'))
+        if current_user.role_id == 5:
+            return redirect(url_for('delivery'))
+        else:
+            return redirect(url_for('index'))
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
         if e is not None and e.check_password(request.values.get('password')):
             login_user(e, remember=request.values.get('remember_me'))
-            return redirect(url_for('index'))
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                if current_user.role_id == 7:
+                    next_page = url_for('manager')
+                elif current_user.role_id == 6:
+                    next_page = url_for('cook')
+                elif current_user.role_id == 5:
+                    next_page = url_for('delivery')
+                else:
+                    next_page = url_for('index')
+            return redirect(next_page)
         else:
             flash('Invalid email or password.')
     return render_template('login.html', title='Sign In')
-
 
 
 @app.route('/menu')
@@ -77,11 +91,12 @@ def description():
 
 
 @app.route('/logout')
-@login_required(3, 4, 5, 6, 7)
+@login_required(1, 3, 4, 5, 6, 7)
 def logout():
     flash("You logged out")
     logout_user()
     return redirect(url_for('index'))
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -122,7 +137,7 @@ def registration():
                       request.values.get('state') + " " + \
                       str(request.values.get('zip_code'))
             try:
-                employee = User(email=request.values.get('email'), address=address, role_id='3'
+                employee = User(email=request.values.get('email'), address=address, role_id='1'
                                 , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
                                 last_name=request.values.get('lastname'))
                 employee.set_password(request.values.get('password'))
@@ -151,19 +166,19 @@ def confirmation():
 
 
 @app.route('/customer/customer_profile')
-@login_required(3, 4)
+@login_required(1, 3, 4)
 def customer_profile():
     return render_template('customers/customer_profile.html', title='Menu')
 
 
 @app.route('/customer/order_history')
-@login_required(3, 4)
+@login_required(1, 3, 4)
 def order_history():
     return render_template('customers/order_history.html', title='Menu')
 
 
 @app.route('/customer/rating')
-@login_required(3, 4)
+@login_required(1, 3, 4)
 def rating():
     return render_template('customers/rating.html', title='Menu')
 
@@ -247,14 +262,21 @@ def manager():
 
 @app.route('/manager/CookWarning')
 @login_required(7)
-def CookWarning():
+def cookwarning():
     return render_template('managers/CookWarning.html')
 
 
-@app.route('/manager/CustomerApplication')
+@app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-    return render_template('managers/CustomerApplication.html')
+    me = User.query.filter_by(role_id=1)
+    if request.method == 'POST':
+        for i in me:
+            # visitor become customer, 1 to 3
+            i.role_id = 3
+            db.session.commit()
+        flash("Success to update all visitor to customer")
+    return render_template('managers/CustomerApplication.html', me=me)
 
 
 @app.route('/manager/CustomerComplaint')
