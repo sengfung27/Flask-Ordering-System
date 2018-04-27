@@ -10,8 +10,6 @@ from app.forms import LoginForm, RegistrationForm
 
 from werkzeug.utils import secure_filename
 import os
-from flask import send_from_directory
-
 
 UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
