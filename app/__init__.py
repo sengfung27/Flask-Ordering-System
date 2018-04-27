@@ -31,7 +31,7 @@ app.config.update(dict(
 from app import routes, models
 from app.models import User, Role
 
-# check for correctness
+
 # me = db.session.query(User).filter_by(email="ms@example.com").first()
 # print(me)
 # if me is None:
@@ -78,3 +78,4 @@ from app.models import User, Role
 # delete id
 # Testing.query.filter_by(id='2').delete()
 # db.session.commit()
+

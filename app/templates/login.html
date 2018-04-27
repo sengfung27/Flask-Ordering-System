@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
+
     <h1>Sign in</h1>
 
     <form class="row" action="{{ url_for('login') }}" method="post" style="width: 600px">
@@ -21,6 +22,7 @@
         <div style="float: right; margin-left: 10px; margin-top: 13px; font-weight: bold">
             <a href="{{ url_for('registration') }}">Create Account</a>
         </div>
+
 
     </form>
 {% endblock %}

@@ -8,6 +8,18 @@ from functools import wraps
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, RegistrationForm
 
+from werkzeug.utils import secure_filename
+import os
+
+UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
+from app.forms import LoginForm, RegistrationForm
+
+
 
 def login_required(*roles):
     def wrapper(fn):
@@ -49,6 +61,7 @@ def login():
     return render_template('login.html', title='Sign In')
 
 
+
 @app.route('/menu')
 def menu():
     return render_template('menu.html', title='Menu')
@@ -69,6 +82,32 @@ def logout():
     flash("You logged out")
     logout_user()
     return redirect(url_for('index'))
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return "success"
+        else:
+            return "not valid"
+    return """
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    <p>%s</p>
+    """ % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'], ))
 
 
 @app.route('/registration', methods=['GET', 'POST'])

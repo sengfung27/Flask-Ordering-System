@@ -1,4 +1,6 @@
+{% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
+
 {% block content %}
 
 
@@ -16,6 +18,7 @@
             <h2>Create an Account</h2>
         </div>
     </div>
+
 
     <div class="container">
         <form action="{{ url_for('registration') }}" method="post" enctype="multipart/form-data">
@@ -43,63 +46,61 @@
                                     <input type="text" class="form-control" name="dateofbirth"id="dateOfBirth" required>
                                 </div>
                             -->
-                                <div class="form-group col-md-2">
-                                    <label for="gender">Gender</label>
-                                    <select id="gender" name="gender" class="form-control" required>
-                                        <option selected>Choose...</option>
-                                        <option>Female</option>
-                                        <option>Male</option>
-                                    </select>
-                                </div>
+                            <div class="form-group col-md-2">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender" class="form-control" required>
+                                    <option selected>Choose...</option>
+                                    <option>Female</option>
+                                    <option>Male</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label for="inputAddress">Address</label>
+                            <input type="text" class="form-control" name="address1" id="inputAddress"
+                                   placeholder="1234 Main St"
+                                   required>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label for="inputAddress2">Address 2</label>
+                            <input type="text" class="form-control" name="address2" id="inputAddress2"
+                                   placeholder="Apartment, studio, or floor">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">City</label>
+                                <input type="text" class="form-control" name="city" id="inputCity" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputState">State</label>
+                                <input type="text" class="form-control" name="state" id="inputState" required>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="inputZip">Zip</label>
+                                <input type="text" class="form-control" name="zip_code" id="inputZip" required>
                             </div>
 
-                            <div class="form-group col-md-12">
-                                <label for="inputAddress">Address</label>
-                                <input type="text" class="form-control" name="address1" id="inputAddress" placeholder="1234 Main St"
-                                       required>
-                            </div>
 
-                            <div class="form-group col-md-12">
-                                <label for="inputAddress2">Address 2</label>
-                                <input type="text" class="form-control" name="address2" id="inputAddress2"
-                                       placeholder="Apartment, studio, or floor">
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputCity">City</label>
-                                    <input type="text" class="form-control" name="city"id="inputCity" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="inputState">State</label>
-                                    <input type="text" class="form-control" name="state" id="inputState" required>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label for="inputZip">Zip</label>
-                                    <input type="text" class="form-control" name="zip_code" id="inputZip" required>
-                                </div>
-
-
-                                <div class="col-md-12">
-                                    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                    <div class="col-md-4">
-                                        <small id="fileHelpBlock" class="form-text text-muted">
-                                            Please upload a picture of your identification.
-                                        </small>
-                                    <div class="col-md-4">
-                                        <input type="file" name="file"/></div>
-                                    </div>
-                                </div>
-
+                            <div class="col-md-12">
+                                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                                <input type="file" name="file"/>
+                                <small id="uploadHelpBlock" class="form-text text-muted">
+                                    Please upload a picture of you identification
+                                </small>
                             </div>
                         </div>
                     </div>
+
+
                     <hr>
+
                     <h3>Login Information</h3>
                     <br>
                     <div class="row">
                         <div class="loginInfo">
-
                             <div class="form-group col-md-12">
                                 <label for="email">Email</label>
                                 <input type="text" class="form-control" id="email" name="email" required>
@@ -110,8 +111,7 @@
                                        aria-describedby="passwordHelpBlock" required>
                                 <small id="passwordHelpBlock" class="form-text text-muted">
                                     Your password must be 8-20 characters long, contain letters and numbers, and must
-                                    not
-                                    contain spaces, special characters, or emoji.
+                                    not contain spaces, special characters, or emoji.
                                 </small>
                             </div>
 
@@ -131,12 +131,14 @@
                     <br>
                 </div>
             </div>
-
-            <div class="container">
-                <br><br><br><br>
-            </div>
         </form>
     </div>
+
+    <div class="container">
+        <br><br><br><br>
+    </div>
+
+
 
     <!-- FOOTER -->
     <footer>
@@ -150,4 +152,8 @@
     <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 
+
 {% endblock %}
+
+
+

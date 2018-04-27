@@ -2,84 +2,85 @@
 
 {% block content %}
 
-<head>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
-    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
-</head>
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
+    </head>
 
-<div class="pageTitle">
+    <!--body-->
     <div class="container">
         <h2>Warning</h2>
-    </div>
-</div>
+        <div class="bodyInner">
+            <div class="row">
+                <!--Links Table-->
+                <div class="col-lg-2">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td><a href="dropped_notification" style="color:black">Dropped</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="warning_notification" style="color:black"><strong>Warning</strong></a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-2">Date</th>
+                                <th class="col-xs-7">Message</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>4/11/2018</td>
+                                <td>(Cake) received 3 drops, which count as 1 warning, you received total of (#
+                                    warnings)
+                                    warning(s)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4/13/2018</td>
+                                <td>(Cake) received 3 drops, which count as 1 warning, you received total of (#
+                                    warnings)
+                                    warning(s)
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-<br><br>
-<!--body-->
-<div class="container">
-    <div class="row">
-        <!--Links Table-->
-        <div class="col-lg-2">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr>
-                        <td><a href="dropped_notification" style="color:black">Dropped</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="warning_notification" style="color:black"><strong>Warning</strong></a></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="form-group">
+                    <div class="col-md-offset-11 col-md-1">
+                        <button type="button" class="btn btn-primary">Delete</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-lg-10">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th class="col-xs-2">Date</th>
-                        <th class="col-xs-7">Message</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>4/11/2018</td>
-                        <td>(Cake) received 3 drops, which count as 1 warning, you received total of (# warnings)
-                            warning(s)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4/13/2018</td>
-                        <td>(Cake) received 3 drops, which count as 1 warning, you received total of (# warnings)
-                            warning(s)
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="submitBottom" style="float: right;">
-            <button type="button" class="btn btn-primary">Delete</button>
-        </div>
     </div>
-</div>
 
 
 
-<!-- FOOTER -->
-<footer>
-    <div class="container">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </div>
-</footer>
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
-    <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 
 {% endblock %}
 
