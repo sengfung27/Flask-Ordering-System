@@ -1,159 +1,159 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
-    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
-</head>
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
+    </head>
 
 
-<div class="container">
-    <div class="bodyInner">
-         <div class="submitBottom" style="float: right;">
-            <button type="button" class="btn btn-primary">Submit</button>
-        </div>
-
-        <br><br>
-
-        <div class="profile" style="width: 700px; margin: auto">
-            <table id="storeRate" class="table" style="width: 700px;">
-                <thead>
-                <tr>
-                    <th class="col-sm-2">Store Rating</th>
-                    <th class="col-sm-2">Comment</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr>
-                    <td>
-                        <form>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">1
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">2
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">3
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">4
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">5
-                            </label>
-                        </form>
-                    </td>
-                    <td>
-                        <form>
-                            <div class="form-group">
-                                <textarea class="form-control" rows="5" id="comment"></textarea>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <table id="cakeRate" class="table" style="width: 700px;">
-                <thead>
-                <tr>
-                    <th class="col-sm-2">Cake Rating</th>
-                    <th class="col-sm-2">Comment</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr>
-                    <td>
-                        <form>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">1
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">2
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">3
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">4
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">5
-                            </label>
-                        </form>
-                    </td>
-                    <td>
-                        <form>
-                            <div class="form-group">
-                                <textarea class="form-control" rows="5" id="comment"></textarea>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <table id="deliveryRate" class="table" style="width: 700px;">
-                <thead>
-                <tr>
-                    <th class="col-sm-2">Delivery Rating</th>
-                    <th class="col-sm-2">Comment</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr>
-                    <td>
-                        <form>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">1
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">2
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">3
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">4
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optradio">5
-                            </label>
-                        </form>
-                    </td>
-                    <td>
-                        <form>
-                            <div class="form-group">
-                                <textarea class="form-control" rows="5" id="comment"></textarea>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-</div>
-
-
-<!-- FOOTER -->
-<footer>
     <div class="container">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <div class="bodyInner">
+            <div class="submitBottom" style="float: right;">
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+
+            <br><br>
+
+            <div class="profile" style="width: 700px; margin: auto">
+                <table id="storeRate" class="table" style="width: 700px;">
+                    <thead>
+                    <tr>
+                        <th class="col-sm-2">Store Rating</th>
+                        <th class="col-sm-2">Comment</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            <form>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">1
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">2
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">3
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">4
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">5
+                                </label>
+                            </form>
+                        </td>
+                        <td>
+                            <form>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table id="cakeRate" class="table" style="width: 700px;">
+                    <thead>
+                    <tr>
+                        <th class="col-sm-2">Cake Rating</th>
+                        <th class="col-sm-2">Comment</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            <form>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">1
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">2
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">3
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">4
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">5
+                                </label>
+                            </form>
+                        </td>
+                        <td>
+                            <form>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table id="deliveryRate" class="table" style="width: 700px;">
+                    <thead>
+                    <tr>
+                        <th class="col-sm-2">Delivery Rating</th>
+                        <th class="col-sm-2">Comment</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            <form>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">1
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">2
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">3
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">4
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio">5
+                                </label>
+                            </form>
+                        </td>
+                        <td>
+                            <form>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     </div>
-</footer>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
-    <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 
 {% endblock %}

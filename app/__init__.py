@@ -16,6 +16,11 @@ engine = create_engine('mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F173
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 login_manager = LoginManager(app)
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -27,20 +32,25 @@ from app import routes, models
 from app.models import User, Role
 
 # check for correctness
-# me = db.session.query(User).filter_by(email="seng@example.com").first()
+# me = db.session.query(User).filter_by(email="ms@example.com").first()
 # print(me)
-
-
+# if me is None:
+#     print("nothing")
+#
 # role = me.role.role_type
 # print(role)
 # if role == "deliver":
 #     print("we did it")
 
 # create user
-# user = User(email="seng@example.com",role_id=5)
+# user = User(email="delivery@example.com",role_id=5)
 # user.set_password("1234")
-
-#loop
+# db.session.add(user)
+# print(user)
+# db.session.commit()
+# me = db.session.query(User).filter_by(email="delivery@example.com").first()
+# print(me)
+# loop
 # users = User.query.all()
 #
 # for u in users:

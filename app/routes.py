@@ -46,7 +46,7 @@ def login():
             return redirect(url_for('index'))
         else:
             flash('Invalid email or password.')
-    return render_template('base.html', title='Sign In')
+    return render_template('login.html', title='Sign In')
 
 
 @app.route('/menu')
