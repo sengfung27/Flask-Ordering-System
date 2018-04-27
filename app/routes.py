@@ -1,5 +1,5 @@
 from app import app, db, login_manager
-from flask import render_template, flash, redirect, request, url_for, jsonify
+from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
 from app.models import User
 from werkzeug.urls import url_parse
