@@ -33,9 +33,7 @@ def login_required(*roles):
             if not boo:
                 return login_manager.unauthorized()
             return fn(*args, **kwargs)
-
         return decorated_view
-
     return wrapper
 
 
