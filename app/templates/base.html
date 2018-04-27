@@ -14,16 +14,6 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        // Get the modal
-        var modal = document.getElementById('id01');
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        };
-    </script>
 </head>
 <body>
 <div class="header">
@@ -50,6 +40,7 @@
             <a href="{{ url_for('delivery') }}">Delivery</a>
             <a href="{{ url_for('delivery_profile') }}">Delivery Profile</a>
             <a href="{{ url_for('delivery_route') }}">Delivery Route</a>
+            <a href="{{ url_for('delivery_notification') }}">Delivery Notification</a>
 
         {% elif current_user.role_id == 7 and current_user.is_authenticated %}
             <a href="{{ url_for('manager') }}">Manager</a>
@@ -69,7 +60,6 @@
             <a href="{{ url_for('order_history') }}">Customer Order History</a>
             <a href="{{ url_for('rating') }}">Customer Rating</a>
         {% else  %}
-            <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
             <a href="{{ url_for('registration') }}">Registration</a>
             <a href="{{ url_for('login') }}">Login</a>
         {% endif %}
@@ -80,50 +70,6 @@
     </div>
 </div>
 
-<div id="id01" class="modal">
-    <form class="modal-content animate" method="post" action="{{ url_for('login') }}" style="width: 600px">
-
-        <div class="imgcontainer">
-           <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-           <img src="/static/img/login.png" alt="Avatar" class="avatar">
-         </div>
-
-        <div class="modal-header">
-            <h1>Login</h1>
-        </div>
-
-        <div class="container">
-        <div class="modal-body">
-
-            <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter email" name="email" required>
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-            <button type="submit" style="font-weight: bold">Login</button>
-            <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
-
-            <div style="float: right; font-weight: bold;">
-                <a class="text-muted" href="#">Forgot password?</a>
-            </div>
-
-
-        </div>
-        </div>
-        <div class="modal-footer" style="background-color:lightgray">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn"
-                    style="float: left">Cancel
-            </button>
-            <div style="float: right; margin-left: 10px; margin-top: 13px; font-weight: bold">
-                <a href="{{ url_for('registration') }}">Create Account</a>
-            </div>
-
-            <span class="psw">Forgot <a href="#">password?</a></span>
-
-        </div>
-    </form>
-</div>
 
 <hr>
 {% with messages = get_flashed_messages() %}
