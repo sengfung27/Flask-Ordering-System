@@ -58,7 +58,7 @@ def login():
             return redirect(url_for('index'))
         else:
             flash('Invalid email or password.')
-    return render_template('login.html', title='Sign In')
+    return render_template('base.html', title='Sign In')
 
 
 
@@ -115,22 +115,25 @@ def registration():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     if request.method == 'POST':
-        if request.values.get('password') != request.values.get('password2'):
+        if request.values.get('password') == request.values.get('password2'):
             address = request.values.get('address1') + " " + \
                       request.values.get('address2') + ", " + \
-                      request.values.get('city') + ", " + \
+                      request.values.get('city').upper() + ", " + \
                       request.values.get('state') + " " + \
                       str(request.values.get('zip_code'))
-            employee = User(email=request.values.get('email'), address=address, role_id='3'
-                            , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-                            last_name=request.values.get('lastname'))
-            employee.set_password(request.values.get('password'))
-            db.session.add(employee)
-            db.session.commit()
+            try:
+                employee = User(email=request.values.get('email'), address=address, role_id='3'
+                                , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+                                last_name=request.values.get('lastname'))
+                employee.set_password(request.values.get('password'))
+                db.session.add(employee)
+                db.session.commit()
 
-            flash('You have successfully registered! You may now login.')
+                flash('You have successfully registered! You may now login.')
 
-            return redirect(url_for('login'))
+                return redirect(url_for('login'))
+            except:
+                flash("There is an Error on register")
         else:
             flash('The specified passwords do not match')
 
@@ -224,6 +227,12 @@ def delivery_profile():
 @login_required(5)
 def delivery_route():
     return render_template('deliveries/route.html', title='Delivery')
+
+
+@app.route('/delivery/notification')
+@login_required(5)
+def delivery_notification():
+    return render_template('deliveries/notification.html', title='Delivery')
 
 
 ########################################################################################################################
