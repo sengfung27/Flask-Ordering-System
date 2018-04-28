@@ -182,10 +182,7 @@ def additem():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
             flash('success')
-
-            return redirect(url_for('additem'))
         else:
             flash('not valid file')
 
