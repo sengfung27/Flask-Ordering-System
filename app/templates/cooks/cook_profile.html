@@ -14,8 +14,8 @@
     <div class="container">
         <h2>Profile</h2>
         <div class="bodyInner">
-            <div class="submitBottom" style="float: right">
-                <button type="button" class="btn btn-primary">Edit</button>
+            <div class="submitBottom" style="float: right; color: deepskyblue;">
+                <a href="{{ url_for("cook_edit",id=current_user.id) }}" style="color: deepskyblue;">Edit</a>
             </div>
 
             <br><br>
@@ -31,11 +31,12 @@
                     </thead>
 
                     <tbody>
-                    <tr>
-                        <td>Pauline Lau</td>
-                        <td>lp2333333</td>
-                        <td>paulau@hotmail.com</td>
-                    </tr>
+                        <tr>
+                            <td>{{ user.last_name }}, {{ user.first_name }}</td>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+
                     </tbody>
                 </table>
 
@@ -53,7 +54,7 @@
                     <tbody>
                     <tr>
                         <td>Cook</td>
-                        <td>1</td>
+                        <td>{{ user.number_of_warning }}</td>
 
                     </tr>
                     </tbody>

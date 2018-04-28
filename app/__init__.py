@@ -28,7 +28,7 @@ app.config.update(dict(
     SECRET_KEY="powerful secretkey",
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
-from app import routes, models
+from app import routes, models, errors
 from app.models import User, Role, Cake
 
 
@@ -43,13 +43,14 @@ from app.models import User, Role, Cake
 
 
 # create user
-# user = User(email="delivery@example.com",role_id=5)
+# user = User(email="deliver@example.com",role_id=5,first_name="m",last_name="n",gender="male",phone_number="082891920")
 # user.set_password("1234")
 # db.session.add(user)
 # print(user)
 # db.session.commit()
+# print(user)
 # me = db.session.query(User).filter_by(email="delivery@example.com").first()
-# print(me)
+# print(user)
 # loop
 # users = User.query.all()
 #

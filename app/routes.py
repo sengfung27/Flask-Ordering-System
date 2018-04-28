@@ -32,7 +32,9 @@ def login_required(*roles):
             if not boo:
                 return login_manager.unauthorized()
             return fn(*args, **kwargs)
+
         return decorated_view
+
     return wrapper
 
 
@@ -60,7 +62,7 @@ def login():
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
                 if current_user.role_id == 7:
-                    next_page = url_for('manager')
+                    next_page = url_for('manager', id=current_user.id)
                 elif current_user.role_id == 6:
                     next_page = url_for('cook')
                 elif current_user.role_id == 5:
@@ -135,10 +137,45 @@ def confirmation():
     return render_template('customers/confirmation.html', title='Menu')
 
 
-@app.route('/customer/customer_profile')
+@app.route('/customer/customer_profile/<id>')
 @login_required(1, 3, 4)
-def customer_profile():
-    return render_template('customers/customer_profile.html', title='Menu')
+def customer_profile(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    return render_template('customers/customer_profile.html', user=user)
+
+
+@app.route('/customer/customer_edit/<id>', methods=['GET', 'POST'])
+@login_required(1, 3, 4)
+def customer_edit(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    if request.method == "POST":
+        first_name = request.form.get('new_first_name')
+        last_name = request.form.get('new_last_name')
+        email = request.form.get('new_email')
+        phone_number = request.form.get('new_phone_number')
+        address = request.form.get('new_address')
+        password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_new_password')
+        try:
+            if first_name != "":
+                user.first_name = first_name
+            if last_name != "":
+                user.last_name = last_name
+            if email != "":
+                user.email = email
+            if phone_number != "":
+                user.phone_number = phone_number
+            if address != "":
+                user.address = address
+            if password != "" and confirm_password != "":
+                if password == confirm_password:
+                    user.set_password(password)
+            db.session.commit()
+            flash('You have successfully edit your profile!')
+            return redirect(url_for('customer_profile', id=current_user.id))
+        except:
+            flash("Either your information is duplicated in our system or your password is wrong")
+    return render_template('customers/customer_edit.html', user=user)
 
 
 @app.route('/customer/order_history')
@@ -168,6 +205,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+
 @app.route('/cook/additem', methods=['GET', 'POST'])
 @login_required(6)
 def additem():
@@ -185,14 +223,48 @@ def additem():
             flash('success')
         else:
             flash('not valid file')
-
     return render_template('cooks/cookadditem.html', title='Cook')
 
 
-@app.route('/cook/cook_profile')
+@app.route('/cook/cook_profile/<id>')
 @login_required(6)
-def cook_profile():
-    return render_template('cooks/cook_profile.html', title='Cook')
+def cook_profile(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    return render_template('cooks/cook_profile.html', user=user)
+
+
+@app.route('/cook/cook_edit/<id>', methods=['GET', 'POST'])
+@login_required(6)
+def cook_edit(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    if request.method == "POST":
+        first_name = request.form.get('new_first_name')
+        last_name = request.form.get('new_last_name')
+        email = request.form.get('new_email')
+        phone_number = request.form.get('new_phone_number')
+        address = request.form.get('new_address')
+        password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_new_password')
+        try:
+            if first_name != "":
+                user.first_name = first_name
+            if last_name != "":
+                user.last_name = last_name
+            if email != "":
+                user.email = email
+            if phone_number != "":
+                user.phone_number = phone_number
+            if address != "":
+                user.address = address
+            if password != "" and confirm_password != "":
+                if password == confirm_password:
+                    user.set_password(password)
+            db.session.commit()
+            flash('You have successfully edit your profile!')
+            return redirect(url_for('cook_profile', id=current_user.id))
+        except:
+            flash("Either your information is duplicated in our system or your password is different")
+    return render_template('cooks/cook_edit.html', user=user)
 
 
 @app.route('/cook/dropped_notification')
@@ -222,10 +294,45 @@ def notification():
     return render_template('deliveries/notification.html', title='Delivery')
 
 
-@app.route('/delivery/profile')
+@app.route('/deliver/profile/<id>')
 @login_required(5)
-def delivery_profile():
-    return render_template('deliveries/profile.html', title='Delivery')
+def delivery_profile(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    return render_template('deliveries/profile.html', user=user)
+
+
+@app.route('/deliver/edit/<id>', methods=['GET', 'POST'])
+@login_required(5)
+def deliver_edit(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    if request.method == "POST":
+        first_name = request.form.get('new_first_name')
+        last_name = request.form.get('new_last_name')
+        email = request.form.get('new_email')
+        phone_number = request.form.get('new_phone_number')
+        address = request.form.get('new_address')
+        password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_new_password')
+        try:
+            if first_name != "":
+                user.first_name = first_name
+            if last_name != "":
+                user.last_name = last_name
+            if email != "":
+                user.email = email
+            if phone_number != "":
+                user.phone_number = phone_number
+            if address != "":
+                user.address = address
+            if password != "" and confirm_password != "":
+                if password == confirm_password:
+                    user.set_password(password)
+            db.session.commit()
+            flash('You have successfully edit your profile!')
+            return redirect(url_for('delivery_profile', id=current_user.id))
+        except:
+            flash("Either your information is duplicated in our system or your password is different")
+    return render_template('deliveries/deliver_edit.html', user=user)
 
 
 @app.route('/delivery/route')
@@ -244,10 +351,45 @@ def delivery_notification():
 # Manager
 
 
-@app.route('/manager')
+@app.route('/manager/<id>')
 @login_required(7)
-def manager():
-    return render_template('managers/manager.html', title='Manager')
+def manager(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    return render_template('managers/manager.html', user=user)
+
+
+@app.route('/manager/edit/<id>', methods=['GET', 'POST'])
+@login_required(7)
+def manager_edit(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    if request.method == "POST":
+        first_name = request.form.get('new_first_name')
+        last_name = request.form.get('new_last_name')
+        email = request.form.get('new_email')
+        phone_number = request.form.get('new_phone_number')
+        address = request.form.get('new_address')
+        password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_new_password')
+        try:
+            if first_name != "":
+                user.first_name = first_name
+            if last_name != "":
+                user.last_name = last_name
+            if email != "":
+                user.email = email
+            if phone_number != "":
+                user.phone_number = phone_number
+            if address != "":
+                user.address = address
+            if password != "" and confirm_password != "":
+                if password == confirm_password:
+                    user.set_password(password)
+            db.session.commit()
+            flash('You have successfully edit your profile!')
+            return redirect(url_for('manager', id=current_user.id))
+        except:
+            flash("Either your information is duplicated in our system or your password is different")
+    return render_template('managers/manager_edit.html', user=user)
 
 
 @app.route('/manager/CookWarning')
