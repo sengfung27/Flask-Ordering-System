@@ -31,7 +31,11 @@ app.config.update(dict(
 from app import routes, models, errors
 from app.models import User, Role, Cake
 
-
+# myString = "wtf ,this ,so "
+# me, tre, qw = myString.split(",")
+# print(me)
+# print(tre)
+# print(qw)
 # me = User.query.filter_by(email="ii@example.com")
 # print(me)
 # if me is None:
@@ -49,8 +53,15 @@ from app.models import User, Role, Cake
 # print(user)
 # db.session.commit()
 # print(user)
-# me = db.session.query(User).filter_by(email="delivery@example.com").first()
-# print(user)
+# me = db.session.query(User).filter_by(email="deliver@example.com").first()
+# print(me)
+# print(me.role_id)
+# print(me.role.role_type)
+# me = db.session.query(Role).filter_by(role_type="manager").first()
+# print(me)
+# print(me.role_type)
+# print(me.user.email)
+
 # loop
 # users = User.query.all()
 #

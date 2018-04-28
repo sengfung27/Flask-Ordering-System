@@ -24,8 +24,11 @@ class User(db.Model, UserMixin):
     blacklist = db.Column(db.Boolean)
     number_of_warning = db.Column(db.Integer)
     rating = db.Column(db.DECIMAL(4, 2))
-
+    payment = db.Column(db.VARCHAR(255))
+    # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
+    # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
     role = db.relationship("Role", back_populates="user")
+    # payment = db.relationship("Payment", back_populates="user")
 
     def set_role_id(self, rid):
         self.role_id = rid
@@ -51,7 +54,7 @@ class Role(db.Model):
     user = db.relationship("User", back_populates="role")  # user must equal to back_populates "user" on other table
 
     def __repr__(self):
-        return '<Role: {}, {}>'.format(self.id, self.role_type)
+        return '<Role: {}, {}>'.format(self.id)
 
 
 class Cake(db.Model):
@@ -70,24 +73,7 @@ class Cake(db.Model):
     def __repr__(self):
         return '<Cake: {}, {}, {}>'.format(self.id, self.cake_name, self.description)
 
-# class Cook(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     number_of_warning = db.Column(db.Integer)
-#     user = db.relationship("User", back_populates="cook")
-#
-#
-# class Deliver(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#    number_of_warning = db.Column(db.Integer)
 
-# class Testing(UserMixin, db.Model):
-#     __tablename__ = 'testing'
-#     id = Column(db.Integer, primary_key=True, autoincrement=True)
-#     first = Column(db.Integer)
-#     last = Column(db.Integer)
-#
-#     def __repr__(self):
-#         return '<Testing: {}, {} {}>'.format(self.id, self.first, self.last)
 # Vip only in one store 2 2
 #                       1 3
 #  deliver check registered customer ratng, when rating > 4, it will
