@@ -11,63 +11,64 @@
     </head>
 
     <div class="container">
-        <h2>Add New Item</h2>
+        <h2>Edit Profile</h2>
 
-        <form action="{{ url_for('additem') }}" method="POST" class="form-horizontal"
+        <form action="{{ url_for('manager_edit',id=current_user.id) }}" method="POST" class="form-horizontal"
               enctype="multipart/form-data">
             <div class="bodyInner">
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="cakeName">Cake Name:</label>
+                    <label class="control-label col-md-2" for="firstname">First Name</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" placeholder="Enter Cake Name" name="cakeName"
-                               id="cakeName" required>
+                        <input type="text" class="form-control" name="new_first_name"
+                               id="firstname">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="category">Catagory:</label>
+                    <label class="control-label col-md-2" for="lastname">Last Name</label>
                     <div class="col-md-10">
-                        <select class="form-control" name="category" id="category" required>
-                            <option value="Cheesecake">Cheesecake</option>
-                            <option value="..">..</option>
-                            <option value="other">Others</option>
-                        </select>
+                        <input type="text" class="form-control" name="new_last_name"
+                               id="lastname">
                     </div>
                 </div>
 
-                <!--if other is not selected, this will not enable-->
-
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="newCategory">New Category Name:</label>
+                    <label class="control-label col-md-2" for="email">Email</label>
                     <div class="col-md-10">
-                        <fieldset disabled>
-                            <input class="form-control" id="newCategory" name="newCategory" type="text"
-                                   placeholder="Input your new category item" disabled>
-                        </fieldset>
+                        <input type="text" class="form-control" name="new_email"
+                               id="email">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="price">Price($):</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="$" name="price" id="price" required>
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <label class="control-label col-md-2">Upload Photos:</label>
-                    <div class="col-md-2">
-                        <label class="custom-file-label" for="cakePic">Choose file...</label>
-                        <input type="file" class="custom-file-input" name="cakePic" id="cakePic" required>
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="description">Description:</label>
+                    <label class="control-label col-md-2" for="phone_number">Phone Number</label>
                     <div class="col-md-10">
-                        <textarea class="form-control" rows="5" name="description" id="description" required></textarea>
+                        <input type="text" class="form-control" name="new_phone_number"
+                               id="phone_number">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="address">Address</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="new_address"
+                               id="address">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="password">Password</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="new_password"
+                               id="password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="password">Confirm Password</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="confirm_new_password"
+                               id="password">
                     </div>
                 </div>
 

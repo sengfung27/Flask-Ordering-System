@@ -19,8 +19,8 @@
 
     <div class="container">
         <div class="bodyInner">
-            <div class="submitBottom" style="float: right">
-                <button type="button" class="btn btn-primary">Edit</button>
+            <div class="submitBottom" style="float: right; color: deepskyblue;">
+                <a href="{{ url_for("deliver_edit",id=current_user.id) }}" style="color: deepskyblue;">Edit</a>
             </div>
 
             <br>
@@ -38,9 +38,9 @@
                     <!--class="" OR id=""-->
                     <tbody>
                     <tr>
-                        <td>Johnny Lee</td>
-                        <td>dv334455</td>
-                        <td>johnny@gmail.com</td>
+                        <td>{{ user.last_name }}, {{ user.first_name }}</td>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.email }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -58,8 +58,8 @@
                     <!--class="" OR id=""-->
                     <tbody>
                     <tr>
-                        <td>delivery man</td>
-                        <td>2</td>
+                        <td>Deliver</td>
+                        <td>{{ user.number_of_warning }}</td>
 
                     </tr>
                     </tbody>

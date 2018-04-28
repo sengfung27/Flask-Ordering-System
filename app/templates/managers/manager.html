@@ -1,82 +1,83 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
-    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
 
-</head>
+    </head>
 
-<!-- NAVBAR
-================================================== -->
-<style>
-    .col-centered
-    {
-        float: none;
-        margin-right: auto;
-        margin-left: auto;
-    }
-</style>
-
+    <!-- NAVBAR
+    ================================================== -->
+    <style>
+        .col-centered {
+            float: none;
+            margin-right: auto;
+            margin-left: auto;
+        }
+    </style>
 
 
-<br><br><br><br>
-<!--Personal information table-->
-<div class="container">
-    <h3>Profile</h3>
-    <!-- Edit Button -->
-    <input type="submit" class="btn btn-info" style="float: right" value="Edit">
-    <br>
-    <div class="row">
-        <div class="col-lg-6 col-centered">
-            <div class ="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>User ID</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-            <div class ="table-responsive">
-            <table class="table table-striped" style="width: 150px">
-                <thead>
-                <tr>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Manager</td>
-                </tr>
-                </tbody>
-            </table>
+
+    <br><br><br><br>
+    <!--Personal information table-->
+    <div class="container">
+        <h3>Profile</h3>
+        <!-- Edit Button -->
+        <div class="submitBottom" style="float: right; color: deepskyblue;">
+            <a href="{{ url_for("manager_edit",id=current_user.id) }}" style="color: deepskyblue;">Edit</a>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-6 col-centered">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>User ID</th>
+                            <th>Email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ user.last_name }}, {{ user.first_name }}</td>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped" style="width: 150px">
+                        <thead>
+                        <tr>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Manager</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-   <!-- FOOTER -->
-      <footer>
-		<div class="container">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-		</div>
-      </footer>
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
-    <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 {% endblock %}
