@@ -29,18 +29,18 @@ app.config.update(dict(
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
 from app import routes, models
-from app.models import User, Role
+from app.models import User, Role, Cake
 
 
-# me = db.session.query(User).filter_by(email="ms@example.com").first()
+# me = User.query.filter_by(email="ii@example.com")
 # print(me)
 # if me is None:
 #     print("nothing")
-#
-# role = me.role.role_type
-# print(role)
-# if role == "deliver":
-#     print("we did it")
+# for i in me:
+#     print("User {} {}".format(i.email, i.first_name))
+# User.update().va
+# db.session.update()
+
 
 # create user
 # user = User(email="delivery@example.com",role_id=5)
@@ -68,10 +68,9 @@ from app.models import User, Role
 
 
 # add id
-# u = Testing(first='11', last='22')
+# u = Cake(cake_name="cheese cake", description='yummy')
 # print(u)
-# print (server.local_bind_port)
-# db.session.add (u)
+# db.session.add(u)
 # db.session.commit()
 # print("ok")
 

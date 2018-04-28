@@ -52,13 +52,15 @@
             <a href="{{ url_for('delivery_notification') }}">Delivery Notification</a>
 
         {% elif current_user.role_id == 7 and current_user.is_authenticated %}
-            <a href="{{ url_for('manager') }}">Manager</a>
+            <a href="{{ url_for('cookwarning') }}">CookWarning</a>
+            <a href="{{ url_for('application') }}">Customer Approval</a>
             <a href="{{ url_for('decidedelivery') }}">Decide Delivery</a>
+            <a href="{{ url_for('deliverwarning') }}">Deliver Warning</a>
             <a href="{{ url_for('managecustomers') }}">Manage Customer</a>
             <a href="{{ url_for('paywage') }}">Paywage</a>
+            <a href="{{ url_for('complaint') }}">Customer Complaint</a>
 
         {% elif current_user.role_id == 6 and current_user.is_authenticated %}
-            <a href="{{ url_for('cook') }}">Cook</a>
             <a href="{{ url_for('cook_profile') }}">Cook Profile</a>
             <a href="{{ url_for('additem') }}">Add Item</a>
             <a href="{{ url_for('dropped_notification') }}">Dropped Notification</a>
