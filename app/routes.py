@@ -155,7 +155,7 @@ def registration():
     return render_template('customers/registerform.html')  # , form=form
 
 
-@app.route('/signup')
+@app.route('/checkout')
 def checkout():
     return render_template('customers/checkout.html', title='Menu')
 
@@ -177,18 +177,12 @@ def customer_profile(id):
 def customer_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":
@@ -288,18 +282,12 @@ def cook_profile(id):
 def cook_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":
@@ -356,18 +344,12 @@ def delivery_profile(id):
 def deliver_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":
@@ -413,18 +395,12 @@ def manager(id):
 def manager_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":
