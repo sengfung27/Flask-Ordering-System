@@ -1,7 +1,7 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
-from app.models import User
+from app.models import User, Cake
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
@@ -11,12 +11,13 @@ from app.forms import LoginForm, RegistrationForm
 from werkzeug.utils import secure_filename
 import os
 
-UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+#UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from flask_login import LoginManager, current_user, login_user, logout_user
+
 
 def login_required(*roles):
     def wrapper(fn):
@@ -205,21 +206,23 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
 @app.route('/cook/additem', methods=['GET', 'POST'])
 @login_required(6)
 def additem():
     if request.method == 'POST':
-        print(request.values.get('cakeName'))
-        print(request.values.get('category'))
-        print(request.values.get('price'))
-        print(request.values.get('description'))
+        cakePic = request.files['cakePic']
 
-        file = request.files['cakePic']
+        customerPirce =  0.95 * float(request.values.get('price'))
+        vipPrice = 0.9 * float(request.values.get('price'))
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if cakePic and allowed_file(cakePic.filename):
+            newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
+                           visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
+                           photo=cakePic.read(), description=request.values.get('description'))
+
+            db.session.add(newCake)
+            db.session.commit()
+
             flash('success')
         else:
             flash('not valid file')
