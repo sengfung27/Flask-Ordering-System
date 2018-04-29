@@ -128,7 +128,14 @@ def upload_file():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        if current_user.role_id == 7:
+            return redirect(url_for('manager'))
+        if current_user.role_id == 6:
+            return redirect(url_for('cook'))
+        if current_user.role_id == 5:
+            return redirect(url_for('delivery'))
+        else:
+            return redirect(url_for('index'))
     if request.method == 'POST':
         if request.values.get('password') == request.values.get('password2'):
             address = request.values.get('address1') + " " + \

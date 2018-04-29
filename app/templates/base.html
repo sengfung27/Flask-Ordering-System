@@ -66,7 +66,7 @@
             <a href="{{ url_for('dropped_notification') }}">Dropped Notification</a>
             <a href="{{ url_for('warning_notification') }}">Warning Notification</a>
 
-        {% elif (current_user.role_id == 3 or current_user.role_id == 4) and current_user.is_authenticated %}
+        {% elif (current_user.role_id == 1 or current_user.role_id == 3 or current_user.role_id == 4) and current_user.is_authenticated %}
             <a href="{{ url_for('customer_profile',id=current_user.id) }}">Customer Profile</a>
             <a href="{{ url_for('order_history') }}">Customer Order History</a>
             <a href="{{ url_for('rating') }}">Customer Rating</a>

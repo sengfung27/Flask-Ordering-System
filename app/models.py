@@ -14,7 +14,6 @@ class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.VARCHAR(255), unique=True, index=True)
-    phone_number = db.Column(db.BigInteger, unique=True)
     first_name = db.Column(db.VARCHAR(255))
     last_name = db.Column(db.VARCHAR(255))
     gender = db.Column(db.VARCHAR(6))
