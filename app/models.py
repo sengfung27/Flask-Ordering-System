@@ -29,6 +29,8 @@ class User(db.Model, UserMixin):
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
     role = db.relationship("Role", back_populates="user")
+    cart = db.relationship("Cart", back_populates="user")
+
     # payment = db.relationship("Payment", back_populates="user")
 
     def set_role_id(self, rid):
@@ -55,7 +57,7 @@ class Role(db.Model):
     user = db.relationship("User", back_populates="role")  # user must equal to back_populates "user" on other table
 
     def __repr__(self):
-        return '<Role: {}, {}>'.format(self.id)
+        return '<Role: {}, {}>'.format(self.id, self.role_type)
 
 
 class Cake(db.Model):
@@ -71,9 +73,26 @@ class Cake(db.Model):
     description = db.Column(db.VARCHAR(255))
     rating = db.Column(db.DECIMAL(4, 2))
 
+    cart = db.relationship("Cart", back_populates="cake")
+
     def __repr__(self):
         return '<Cake: {}, {}, {}>'.format(self.id, self.cake_name, self.description)
 
+
+class Cart(db.Model):
+    __tablename__ = 'carts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    cake_id = db.Column(db.Integer, db.ForeignKey('cakes.id'))
+    amount = db.Column(db.Integer)
+    price = db.Column(db.Integer)
+
+    cake = db.relationship("Cake", back_populates="cart")
+    user = db.relationship("User", back_populates="cart")
+
+    def __repr__(self):
+        return '<Cart: {}, {}>'.format(self.id, self.amount, self.price)
 
 # Vip only in one store 2 2
 #                       1 3

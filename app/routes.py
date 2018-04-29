@@ -1,7 +1,7 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
-from app.models import User, Cake
+from app.models import User, Cake, Cart
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
@@ -91,9 +91,15 @@ def menu():
 # Customer
 
 
-@app.route('/customer/description/<id>')
+@app.route('/customer/description/<id>',methods=['GET','POST'])
 def description(id):
     cake = Cake.query.filter_by(id=id).first_or_404()
+    if request.method == 'POST':
+        user = User.query.filter_by(id=current_user.id).first_or_404()
+        cart = Cart(cake_id=cake.id, user_id=user.id, amount=1, price=cake.customer_price)
+        db.session.add(cart)
+        db.session.commit()
+        flash('Added to your cart')
     return render_template('customers/description.html', cake=cake)
 
 
@@ -150,12 +156,18 @@ def registration():
 
 @app.route('/checkout')
 def checkout():
-    return render_template('customers/checkout.html', title='Menu')
+    user = User.query.filter_by(id=current_user.id)
+    cake = Cake.query.filter_by(id=id)
+    return render_template('customers/checkout.html')
 
 
-@app.route('/confirmation')
-def confirmation():
-    return render_template('customers/confirmation.html', title='Menu')
+@app.route('/cart', methods=['GET','POST'])
+def cart():
+    cart = Cart.query.filter_by(user_id=current_user.id)
+    total = 0
+    for i in cart:
+        total += i.amount
+    return render_template('customers/cart.html', cart=cart, total=total)
 
 
 @app.route('/customer/customer_profile/<id>')

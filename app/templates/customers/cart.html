@@ -8,12 +8,11 @@
 
     <div class="col-25">
         <div class="container"><h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b>4</b></span></h4>
-            <p><a href="#">Product 1</a> <span class="price">$15</span></p>
-            <p><a href="#">Product 2</a> <span class="price">$5</span></p>
-            <p><a href="#">Product 3</a> <span class="price">$8</span></p>
-            <p><a href="#">Product 4</a> <span class="price">$2</span></p>
+            {% for list in cart %}
+                <p><a href="{{ url_for('description', id=list.cake_id)}}">{{ list.cake.cake_name }}</a> <span class="price">{{ list.price }}</span></p>
+            {% endfor %}
             <hr>
-            <p>Total <span class="price" style="color:black"><b>$30</b></span></p>
+            <p>Total <span class="price" style="color:black"><b>{{ total }}</b></span></p>
             <a href="{{ url_for('checkout') }}">Back</a>
         </div>
     </div>

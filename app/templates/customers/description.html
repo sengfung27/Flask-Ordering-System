@@ -1,92 +1,105 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
-    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
-</head>
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
+    </head>
 
 
-<div class="container">
-    <div class="bodyInner">
-        <div class="space" style="height: 100px">
-        </div>
+    <div class="container">
+        <div class="bodyInner">
+            <div class="space" style="height: 100px">
+            </div>
 
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="item">
-                    <div class="row">
-                        <div class="gallery col-xs-12 col-sm-7 col-md-7">
-                            <div>
-                                <img src="{{ url_for('static', filename='img/greentea_crepe.jpg') }}" alt="greenteacake" style="width: 652px; height: 500px;">
-                            </div>
-                        </div>
-
-                        <div class="info col-xs-12 col-sm-12 col-md-5">
-                            <h2 align="center">Green Tea Crepe Cake</h2>
-
-                            <div class="description" style="margin-bottom: 10px;">
-                                <p>
-                                    {{ cake.description }}
-                                </p>
-
-                            </div>
-
-
-                            <div style="margin-bottom: 10px">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="item">
+                        <div class="row">
+                            <div class="gallery col-xs-12 col-sm-7 col-md-7">
                                 <div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <span class="item-price" style="font-size: 28px;">{{ cake.visitor_price }}</span>
+                                    <img src="{{ url_for('static', filename='img/greentea_crepe.jpg') }}"
+                                         alt="greenteacake" style="width: 652px; height: 500px;">
+                                </div>
+                            </div>
+
+                            <div class="info col-xs-12 col-sm-12 col-md-5">
+                                <h2 align="center">Green Tea Crepe Cake</h2>
+
+                                <div class="description" style="margin-bottom: 10px;">
+                                    <p>
+                                        {{ cake.description }}
+                                    </p>
+
+                                </div>
+
+
+                                <div style="margin-bottom: 10px">
+                                    <div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <p>Regular</p>
+                                                <span class="item-price"
+                                                      style="font-size: 28px;">{{ cake.visitor_price }}</span>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <p>Registered</p>
+                                                <span class="item-price"
+                                                      style="font-size: 28px;">{{ cake.customer_price }}</span>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <p>VIP</p>
+                                                <span class="item-price"
+                                                      style="font-size: 28px;">{{ cake.vip_price }}</span>
+                                            </div>
+
+                                            <div class="col-xs-3" style="float: right">
+                                                <div class="quantity-input">
+                                                    <input type="number" class="form-control" value="1">
+                                                    <!-- set limit-->
+                                                </div>
+                                            </div>
+
                                         </div>
 
-                                        <div class="col-xs-3" style="float: right">
-                                            <div class="quantity-input">
-                                                <input type="number" class="form-control" value="1"> <!-- set limit-->
+                                        <br>
+
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <form action="{{ url_for('description',id=cake.id) }}" method="post">
+                                                    <input value="Add to Cart" class="btn btn-primary btn-lg btn-block" type="submit" >
+                                                </form>
                                             </div>
                                         </div>
-
+                                        <hr>
                                     </div>
-
-                                    <br>
-
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <a href="#" class="btn btn-primary btn-lg btn-block" type="button">
-                                                <span style="display: none;">Adding...</span>
-                                                <span>Add to cart</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                <hr>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-</div>
-</div>
 
 
-
-<footer>
-    <div class="container">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </div>
-</footer>
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </div>
+    </footer>
 
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{url_for('static', filename='themes/dist/js/bootstrap.min.js')}}" ></script>
-    <script src="{{url_for('static', filename='themes/assets/js/holder.js')}}" ></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
 
-{%  endblock %}
+{% endblock %}
 

@@ -17,10 +17,10 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 login_manager = LoginManager(app)
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -29,7 +29,7 @@ app.config.update(dict(
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
 from app import routes, models, errors
-from app.models import User, Role, Cake
+from app.models import User, Role, Cake, Cart
 
 # myString = "wtf ,this ,so "
 # me, tre, qw = myString.split(",")
@@ -47,21 +47,36 @@ from app.models import User, Role, Cake
 
 
 # create user
-# user = User(email="deliver@example.com",role_id=5,first_name="m",last_name="n",gender="male",phone_number="082891920")
+# user = User(email="customer@example.com",role_id=3,first_name="m",last_name="n",gender="male")
 # user.set_password("1234")
 # db.session.add(user)
 # print(user)
 # db.session.commit()
 # print(user)
-# me = db.session.query(User).filter_by(email="deliver@example.com").first()
+# me = db.session.query(User).filter_by(email="customer@example.com",last_name="n").first()
 # print(me)
 # print(me.role_id)
 # print(me.role.role_type)
-# me = db.session.query(Role).filter_by(role_type="manager").first()
+# me = db.session.query(Role).filter_by(role_type="customer").first()
 # print(me)
 # print(me.role_type)
 # print(me.user.email)
 
+# foreign key access
+# if more than one
+# c =  Cart.query.filter_by(user_id=31)
+# for me in c:
+#     print(me)
+#     print(me.amount)
+#     print(me.cake.cake_name)
+#     print(me.user.email)
+
+# only one
+# c = Cart.query.filter_by(user_id=31).first()
+# print(me)
+# print(me.amount)
+# print(me.cake.cake_name)
+# print(me.user.email)
 # loop
 # users = User.query.all()
 #
@@ -89,4 +104,3 @@ from app.models import User, Role, Cake
 # delete id
 # Testing.query.filter_by(id='2').delete()
 # db.session.commit()
-
