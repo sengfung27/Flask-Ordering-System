@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager
+from sqlalchemy.dialects.mysql import MEDIUMBLOB
 
 
 # Set up user_loader
@@ -16,6 +17,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.VARCHAR(255), unique=True, index=True)
     first_name = db.Column(db.VARCHAR(255))
     last_name = db.Column(db.VARCHAR(255))
+    id_photo = db.Column(db.LargeBinary)
     gender = db.Column(db.VARCHAR(6))
     address = db.Column(db.VARCHAR(255))
     password_hash = db.Column(db.VARCHAR(255))
@@ -65,7 +67,7 @@ class Cake(db.Model):
     visitor_price = db.Column(db.DECIMAL(5, 2))
     customer_price = db.Column(db.DECIMAL(5, 2))
     vip_price = db.Column(db.DECIMAL(5, 2))
-    photo = db.Column(db.BLOB)
+    photo = db.Column(db.LargeBinary)
     description = db.Column(db.VARCHAR(255))
     rating = db.Column(db.DECIMAL(4, 2))
 

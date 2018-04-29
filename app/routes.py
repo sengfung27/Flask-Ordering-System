@@ -1,7 +1,7 @@
 from app import app, db, login_manager
-from flask import render_template, flash, redirect, request, url_for, jsonify
+from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
-from app.models import User
+from app.models import User, Cake
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
@@ -11,10 +11,10 @@ from app.forms import LoginForm, RegistrationForm
 from werkzeug.utils import secure_filename
 import os
 
-UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from flask_login import LoginManager, current_user, login_user, logout_user
 
@@ -98,33 +98,6 @@ def logout():
     return redirect(url_for('index'))
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-@app.route('/uploader', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return "success"
-        else:
-            return "not valid"
-    return """
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    <p>%s</p>
-    """ % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'], ))
-
-
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     if current_user.is_authenticated:
@@ -137,25 +110,31 @@ def registration():
         else:
             return redirect(url_for('index'))
     if request.method == 'POST':
+        idPic = request.files['identification']
+
         if request.values.get('password') == request.values.get('password2'):
             address = request.values.get('address1') + " " + \
                       request.values.get('address2') + ", " + \
                       request.values.get('city').upper() + ", " + \
                       request.values.get('state') + " " + \
                       str(request.values.get('zip_code'))
-            try:
-                employee = User(email=request.values.get('email'), address=address, role_id='1'
-                                , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-                                last_name=request.values.get('lastname'))
-                employee.set_password(request.values.get('password'))
-                db.session.add(employee)
-                db.session.commit()
 
-                flash('You have successfully registered! You may now login.')
+            if idPic and allowed_file(idPic.filename):
+                try:
+                    employee = User(email=request.values.get('email'), address=address, role_id='1'
+                                    , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+                                    last_name=request.values.get('lastname'), id_photo=idPic.read())
+                    employee.set_password(request.values.get('password'))
+                    db.session.add(employee)
+                    db.session.commit()
 
-                return redirect(url_for('login'))
-            except:
-                flash("There is an Error on register")
+                    flash('You have successfully registered! You may now login.')
+
+                    return redirect(url_for('login'))
+                except:
+                    flash("There is an Error on register")
+            else:
+                flash("invalid file")
         else:
             flash('The specified passwords do not match')
 
@@ -204,7 +183,7 @@ def customer_edit(id):
             if password != "" and confirm_password != "":
                 if password == confirm_password:
                     user.set_password(password)
-            if new_cardname != "" or new_cardnumber != "" or new_expired_month != ""\
+            if new_cardname != "" or new_cardnumber != "" or new_expired_month != "" \
                     or new_expired_year != "" or new_cvv != "":
                 card_name, card_number, expired_month, expired_year, cvv = user.payment.split(',')
                 if new_cardname != "":
@@ -254,46 +233,26 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/cook/additem')
+@app.route('/cook/additem', methods=['GET', 'POST'])
 @login_required(6)
 def additem():
     if request.method == 'POST':
-        print(request.values.get('cakeName'))
-        print(request.values.get('category'))
-        print(request.values.get('price'))
-        print(request.values.get('description'))
+        cakePic = request.files['cakePic']
 
-        file = request.files['cakePic']
+        customerPirce = 0.95 * float(request.values.get('price'))
+        vipPrice = 0.9 * float(request.values.get('price'))
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if cakePic and allowed_file(cakePic.filename):
+            newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
+                           visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
+                           photo=cakePic.read(), description=request.values.get('description'))
+
+            db.session.add(newCake)
+            db.session.commit()
 
             flash('success')
-
-            return redirect(url_for('additem'))
         else:
-            flash('not valid file')
-    # if request.method == 'POST':
-    #     print(request.values.get('price'))
-    #     print(request.values.get('description'))
-    #     employee = User(cake_name=request.values.get('cakeName'), cake_name=request.values.get('category')
-    #                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-    #                     last_name=request.values.get('lastname'))
-    #     employee.set_password(request.values.get('password'))
-    #     db.session.add(employee)
-    #     db.session.commit()
-    #     file = request.files['cakePic']
-    #
-    #     if file and allowed_file(file.filename):
-    #         filename = secure_filename(file.filename)
-    #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #
-    #         flash('success')
-    #
-    #         return redirect(url_for('additem'))
-    #     else:
-    #         flash('not valid file')
+            flash('invalid file')
     return render_template('cooks/cookadditem.html', title='Cook')
 
 
