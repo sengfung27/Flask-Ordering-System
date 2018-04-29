@@ -19,6 +19,11 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 from flask_login import LoginManager, current_user, login_user, logout_user
 
 
+def write_file(data, filename):
+    with open(filename, 'wb') as f:
+        f.write(data)
+
+
 def login_required(*roles):
     def wrapper(fn):
         @wraps(fn)
@@ -78,16 +83,18 @@ def login():
 
 @app.route('/menu')
 def menu():
-    return render_template('menu.html', title='Menu')
+    cakes = Cake.query.all()
+    return render_template('menu.html', cakes=cakes)
 
 
 ########################################################################################################################
 # Customer
 
 
-@app.route('/customer/description')
-def description():
-    return render_template('customers/description.html')
+@app.route('/customer/description/<id>')
+def description(id):
+    cake = Cake.query.filter_by(id=id).first_or_404()
+    return render_template('customers/description.html', cake=cake)
 
 
 @app.route('/logout')

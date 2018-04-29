@@ -3,71 +3,29 @@
 
 {% block content %}
 
-<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/menu.css')}}">
-<div id="wrapper">
-	<div class="page-wrapper" style="padding-top: 0px";>
-		<div class="container">
-			<div class="left-space" style="padding-left: 35px; padding-right: 0px";>
-				<div class="inner-space" style="margin-top: 7px; min-height: 1000px";>
-					<div class="row">
-						<h1 style="margin: 10px 40px">Cakes</h1>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/menu.css') }}">
+    <div id="wrapper">
+        <div class="page-wrapper" style="padding-top: 0px" ;>
+            <div class="container">
+                <div class="left-space" style="padding-left: 35px; padding-right: 0px" ;>
+                    <div class="inner-space" style="margin-top: 7px; min-height: 1000px" ;>
+                        <div class="row">
+                            <h1 style="margin: 10px 40px">Cakes</h1>
+                            {% for cake in cakes %}
+                                <div class="cake">
+                                    <a href="{{ url_for('description',id=cake.id) }}">
+                                        <img src="{{ cake.photo }}"
+                                             alt="greentea crepe cake" width="300px" height="200">
+                                        <div class="desc">{{ cake.cake_name }}<br>{{ cake.visitor_price }}</div>
+                                    </a>
+                                </div>
+                            {% endfor %}
 
-						<div class="cake">
-							<a target="_blank">
-								<img src="{{ url_for('static', filename='img/greentea_crepe.jpg') }}" alt="greentea crepe cake" width="300px" height="200">
-								<div class="desc">Green Tea Crepe Cake <br>$80 </div></a>
-						</div>
-
-						<div class="cake">
-							<a target="_blank"  >
-								<img src="{{ url_for('static', filename='img/mango_crepe.jpg') }}" alt="mango crepe cake" width="300px" height="200">
-								<div class="desc">Mango Crepe Cake <br>$80 </div></a>
-						</div>
-
-						<div class="cake">
-							<a target="_blank" >
-								<img src="{{ url_for('static', filename='img/greentea_crepe.jpg') }}" alt="greentea crepe cake" width="300px" height="200">
-								<div class="desc">Green Tea Crepe Cake <br>$80 </div></a>
-						</div>
-
-						<div class="cake">
-							<a target="_blank">
-								<img src="{{ url_for('static', filename='img/mango_crepe.jpg') }}" alt="mango crepe cake" width="300px" height="200">
-								<div class="desc">Mango Crepe Cake <br>$80 </div></a>
-						</div>
-					</div>
-
-					<div class="row">
-						<h1 style="margin: 10px 40px">Cakes2</h1>
-
-						<div class="cake">
-							<a target="_blank">
-								<img src="{{ url_for('static', filename='img/greentea_crepe.jpg') }}" alt="greentea crepe cake" width="300px" height="200">
-								<div class="desc">Green Tea Crepe Cake <br>$80 </div></a>
-						</div> 
-
-						<div class="cake">
-							<a target="_blank" >
-								<img src="{{ url_for('static', filename='img/mango_crepe.jpg') }}" alt="mango crepe cake" width="300px" height="200">
-								<div class="desc">Mango Crepe Cake <br>$80 </div></a>
-						</div>
-
-						<div class="cake">
-							<a target="_blank" >
-								<img src="{{ url_for('static', filename='img/greentea_crepe.jpg') }}" alt="greentea crepe cake" width="300px" height="200">
-								<div class="desc">Green Tea Crepe Cake <br>$80 </div></a>
-						</div> 
-
-						<div class="cake">
-							<a target="_blank">
-								<img src="{{ url_for('static', filename='img/mango_crepe.jpg') }}" alt="mango crepe cake" width="300px" height="200">
-								<div class="desc">Mango Crepe Cake <br>$80 </div></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
