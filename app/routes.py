@@ -11,10 +11,10 @@ from app.forms import LoginForm, RegistrationForm
 from werkzeug.utils import secure_filename
 import os
 
-#UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from flask_login import LoginManager, current_user, login_user, logout_user
 
@@ -103,25 +103,31 @@ def registration():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     if request.method == 'POST':
+        idPic = request.files['identification']
+
         if request.values.get('password') == request.values.get('password2'):
             address = request.values.get('address1') + " " + \
                       request.values.get('address2') + ", " + \
                       request.values.get('city').upper() + ", " + \
                       request.values.get('state') + " " + \
                       str(request.values.get('zip_code'))
-            try:
-                employee = User(email=request.values.get('email'), address=address, role_id='1'
-                                , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-                                last_name=request.values.get('lastname'))
-                employee.set_password(request.values.get('password'))
-                db.session.add(employee)
-                db.session.commit()
 
-                flash('You have successfully registered! You may now login.')
+            if idPic and allowed_file(idPic.filename):
+                try:
+                    employee = User(email=request.values.get('email'), address=address, role_id='1'
+                                    , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+                                    last_name=request.values.get('lastname'), id_photo=idPic.read())
+                    employee.set_password(request.values.get('password'))
+                    db.session.add(employee)
+                    db.session.commit()
 
-                return redirect(url_for('login'))
-            except:
-                flash("There is an Error on register")
+                    flash('You have successfully registered! You may now login.')
+
+                    return redirect(url_for('login'))
+                except:
+                    flash("There is an Error on register")
+            else:
+                flash("invalid file")
         else:
             flash('The specified passwords do not match')
 
@@ -170,7 +176,7 @@ def customer_edit(id):
             if password != "" and confirm_password != "":
                 if password == confirm_password:
                     user.set_password(password)
-            if new_cardname != "" or new_cardnumber != "" or new_expired_month != ""\
+            if new_cardname != "" or new_cardnumber != "" or new_expired_month != "" \
                     or new_expired_year != "" or new_cvv != "":
                 card_name, card_number, expired_month, expired_year, cvv = user.payment.split(',')
                 if new_cardname != "":
@@ -226,7 +232,7 @@ def additem():
     if request.method == 'POST':
         cakePic = request.files['cakePic']
 
-        customerPirce =  0.95 * float(request.values.get('price'))
+        customerPirce = 0.95 * float(request.values.get('price'))
         vipPrice = 0.9 * float(request.values.get('price'))
 
         if cakePic and allowed_file(cakePic.filename):
@@ -239,7 +245,7 @@ def additem():
 
             flash('success')
         else:
-            flash('not valid file')
+            flash('invalid file')
     return render_template('cooks/cookadditem.html', title='Cook')
 
 
