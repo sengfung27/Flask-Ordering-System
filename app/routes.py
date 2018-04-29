@@ -128,7 +128,7 @@ def registration():
     return render_template('customers/registerform.html')  # , form=form
 
 
-@app.route('/signup')
+@app.route('/checkout')
 def checkout():
     return render_template('customers/checkout.html', title='Menu')
 
@@ -150,18 +150,17 @@ def customer_profile(id):
 def customer_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
+        new_cardname = request.form.get('cardname')
+        new_cardnumber = request.form.get('cardnumber')
+        new_expired_month = request.form.get('expmonth')
+        new_expired_year = request.form.get('expyear')
+        new_cvv = request.form.get('cvv')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":
@@ -171,6 +170,21 @@ def customer_edit(id):
             if password != "" and confirm_password != "":
                 if password == confirm_password:
                     user.set_password(password)
+            if new_cardname != "" or new_cardnumber != "" or new_expired_month != ""\
+                    or new_expired_year != "" or new_cvv != "":
+                card_name, card_number, expired_month, expired_year, cvv = user.payment.split(',')
+                if new_cardname != "":
+                    card_name = new_cardname
+                if new_cardnumber != "":
+                    card_number = new_cardnumber
+                if new_expired_month != "":
+                    expired_month = new_expired_month
+                if new_expired_year != "":
+                    expired_year = new_expired_year
+                if new_cvv != "":
+                    cvv = new_cvv
+                payment = card_name + "," + card_number + "," + expired_month + "," + expired_year + "," + cvv
+                user.payment = payment
             db.session.commit()
             flash('You have successfully edit your profile!')
             return redirect(url_for('customer_profile', id=current_user.id))
@@ -241,18 +255,12 @@ def cook_profile(id):
 def cook_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":
@@ -309,18 +317,12 @@ def delivery_profile(id):
 def deliver_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":
@@ -366,18 +368,12 @@ def manager(id):
 def manager_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
-        first_name = request.form.get('new_first_name')
-        last_name = request.form.get('new_last_name')
         email = request.form.get('new_email')
         phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
-            if first_name != "":
-                user.first_name = first_name
-            if last_name != "":
-                user.last_name = last_name
             if email != "":
                 user.email = email
             if phone_number != "":

@@ -11,27 +11,14 @@
     </head>
 
     <div class="container">
-        <h2>Edit Profile</h2>
-
         <form action="{{ url_for('customer_edit',id=current_user.id) }}" method="POST" class="form-horizontal"
               enctype="multipart/form-data">
             <div class="bodyInner">
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="firstname">First Name</label>
-                    <div class="col-md-10">
-                        <input type="text" class="form-control" name="new_first_name"
-                               id="firstname">
+                <div class="row">
+                    <div class="col-md-offset-5">
+                        <h2>Edit Profile</h2>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="lastname">Last Name</label>
-                    <div class="col-md-10">
-                        <input type="text" class="form-control" name="new_last_name"
-                               id="lastname">
-                    </div>
-                </div>
-
                 <div class="form-group">
                     <label class="control-label col-md-2" for="email">Email</label>
                     <div class="col-md-10">
@@ -71,7 +58,43 @@
                                id="password">
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col-md-offset-5">
+                        <h2>Edit Payment</h2>
+                    </div>
+                    <div>
+                        <label class="control-label col-md-2" for="cname">Name on Card</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" name="cardname" placeholder="John More Doe">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="control-label col-md-2" for="ccnum">Credit card number</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="ccnum" name="cardnumber"
+                                   placeholder="1111-2222-3333-4444">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="control-label col-md-2" for="expmonth">Exp Month</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="expmonth" name="expmonth"
+                                   placeholder="September">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="control-label col-md-2" for="expyear">Exp Year</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="expyear" name="expyear" placeholder="2018">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="control-label col-md-2" for="cvv">CVV</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cvv" name="cvv" placeholder="352">
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-md-offset-11 col-md-1">
                         <button type="submit" class="btn btn-primary">Submit</button>
