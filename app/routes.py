@@ -107,7 +107,7 @@ def description(id):
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id).one_or_none()
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                        price=cake.customer_price)
+                        price=cake.customer_price, status="Not submitted")
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
@@ -200,12 +200,17 @@ def edit_cart():
         cart = Cart.query.filter_by(user_id=current_user.id)
 
     if request.method == "POST":
-        for i in cart:
-            if request.values.get('amount' + str(i.cake.id)) == "":
-                i.amount = i.amount
-            else:  # request.values.get('amount' + str(i.cake.id)) != i.amount
-                i.amount = request.values.get('amount' + str(i.cake.id))
-
+        if request.form['action'] == "submit_submit":
+            for i in cart:
+                if request.values.get('amount' + str(i.cake.id)) == "":
+                    i.amount = i.amount
+                else:  # request.values.get('amount' + str(i.cake.id)) != i.amount
+                    i.amount = request.values.get('amount' + str(i.cake.id))
+        else:  # submit_drop
+            cake_id = request.form['action']
+            cake_in_cart = Cart.query.filter_by(cake_id=cake_id).first()
+            if cake_in_cart is not None:
+                db.session.delete(cake_in_cart)
         db.session.commit()
         flash("Successful edit your cart")
     return render_template('customers/edit_cart.html', cart=cart)

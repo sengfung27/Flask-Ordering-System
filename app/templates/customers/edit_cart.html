@@ -22,12 +22,16 @@
                         <div class="col-md-10">
                             <input class="control-label col-md-2" type="number" class="form-control" name="amount{{ i.cake.id }}"
                                    id="email" placeholder="{{ i.amount }}">
+                            <div class="col-md-2">
+                                <button type="submit" name="action" value="{{ i.cake.id }}" class="btn btn-danger">Drop</button>
+                            </div>
+
                         </div>
                     </div>
                 {% endfor %}
                 <div class="form-group">
                     <div class="col-md-offset-11 col-md-1">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" name="action" value="submit_submit"class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>

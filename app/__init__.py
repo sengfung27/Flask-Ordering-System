@@ -109,3 +109,6 @@ from app.models import User, Role, Cake, Cart
 
 # from datetime import date
 # today = date.today()
+
+# request.form['action'] == "submit_submit"
+# request.values.get('asds')
