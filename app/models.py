@@ -69,14 +69,14 @@ class Cake(db.Model):
     visitor_price = db.Column(db.DECIMAL(5, 2))
     customer_price = db.Column(db.DECIMAL(5, 2))
     vip_price = db.Column(db.DECIMAL(5, 2))
-    photo = db.Column(db.LargeBinary)
+    photo = db.Column(db.VARCHAR(255))
     description = db.Column(db.VARCHAR(255))
     rating = db.Column(db.DECIMAL(4, 2))
 
     cart = db.relationship("Cart", back_populates="cake")
 
     def __repr__(self):
-        return '<Cake: {}, {}, {}>'.format(self.id, self.cake_name, self.description)
+        return '<Cake: {}, {}, {}, {}>'.format(self.id, self.cake_name, self.photo, self.description)
 
 
 class Cart(db.Model):
