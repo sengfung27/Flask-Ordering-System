@@ -17,10 +17,10 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+#UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 login_manager = LoginManager(app)
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -72,11 +72,7 @@ from app.models import User, Role, Cake, Cart
 #     print(me.user.email)
 
 # only one
-# c = Cart.query.filter_by(user_id=31).first()
-# print(me)
-# print(me.amount)
-# print(me.cake.cake_name)
-# print(me.user.email)
+# c =  Cart.query.filter_by(user_id=31).first()
 # loop
 # users = User.query.all()
 #
@@ -104,3 +100,10 @@ from app.models import User, Role, Cake, Cart
 # delete id
 # Testing.query.filter_by(id='2').delete()
 # db.session.commit()
+
+# Session
+# if 'username' in session:
+#       username = session['username']
+#       session['whateve'] = pas
+#       session.pop('username', None)
+

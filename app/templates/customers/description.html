@@ -40,42 +40,44 @@
                                 <div style="margin-bottom: 10px">
                                     <div>
                                         <hr>
-                                        <div class="row">
-                                            <div class="col-xs-3">
-                                                <p>Regular</p>
-                                                <span class="item-price"
-                                                      style="font-size: 28px;">{{ cake.visitor_price }}</span>
-                                            </div>
-                                            <div class="col-xs-3">
-                                                <p>Registered</p>
-                                                <span class="item-price"
-                                                      style="font-size: 28px;">{{ cake.customer_price }}</span>
-                                            </div>
-                                            <div class="col-xs-3">
-                                                <p>VIP</p>
-                                                <span class="item-price"
-                                                      style="font-size: 28px;">{{ cake.vip_price }}</span>
+                                        <form action="{{ url_for('description',id=cake.id) }}" method="post">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <p>Regular</p>
+                                                    <span class="item-price"
+                                                          style="font-size: 28px;">{{ cake.visitor_price }}</span>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <p>Registered</p>
+                                                    <span class="item-price"
+                                                          style="font-size: 28px;">{{ cake.customer_price }}</span>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <p>VIP</p>
+                                                    <span class="item-price"
+                                                          style="font-size: 28px;">{{ cake.vip_price }}</span>
+                                                </div>
+
+                                                <div class="col-xs-3" style="float: right">
+                                                    <div class="quantity-input">
+                                                        <input type="text" class="form-control" name="amount"
+                                                               value="1">
+                                                        <!-- set limit-->
+                                                    </div>
+                                                </div>
+
                                             </div>
 
-                                            <div class="col-xs-3" style="float: right">
-                                                <div class="quantity-input">
-                                                    <input type="number" class="form-control" value="1">
-                                                    <!-- set limit-->
+                                            <br>
+
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <input value="Add to Cart" class="btn btn-primary btn-lg btn-block"
+                                                           type="submit">
                                                 </div>
                                             </div>
-
-                                        </div>
-
-                                        <br>
-
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <form action="{{ url_for('description',id=cake.id) }}" method="post">
-                                                    <input value="Add to Cart" class="btn btn-primary btn-lg btn-block" type="submit" >
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <hr>
+                                            <hr>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

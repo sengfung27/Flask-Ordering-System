@@ -1,5 +1,5 @@
 from app import app, db, login_manager
-from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory
+from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory, session
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
 from app.models import User, Cake, Cart
 from werkzeug.urls import url_parse
@@ -64,7 +64,7 @@ def login():
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
         if e is not None and e.check_password(request.values.get('password')):
-            login_user(e, remember=request.values.get('remember_me'))
+            login_user(e)
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
                 if current_user.role_id == 7:
@@ -91,15 +91,26 @@ def menu():
 # Customer
 
 
-@app.route('/customer/description/<id>',methods=['GET','POST'])
+@app.route('/customer/description/<id>', methods=['GET', 'POST'])
 def description(id):
-    cake = Cake.query.filter_by(id=id).first_or_404()
+    cake = Cake.query.filter_by(id=id).first()
+
     if request.method == 'POST':
-        user = User.query.filter_by(id=current_user.id).first_or_404()
-        cart = Cart(cake_id=cake.id, user_id=user.id, amount=1, price=cake.customer_price)
-        db.session.add(cart)
-        db.session.commit()
-        flash('Added to your cart')
+        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id).one_or_none()
+        if cart is None:
+            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
+                        price=cake.customer_price)
+            db.session.add(temp)
+            db.session.commit()
+            flash('Added to your cart')
+            return redirect(url_for('cart'))
+        elif request.values.get('amount') == 0 or request.values.get('amount') == "0":
+            flash("Please enter the amount you want to purchase.")
+        else:
+            cart.amount = request.values.get('amount')
+            db.session.commit()
+            flash('Added to your cart')
+            return redirect(url_for('cart'))
     return render_template('customers/description.html', cake=cake)
 
 
@@ -161,13 +172,34 @@ def checkout():
     return render_template('customers/checkout.html')
 
 
-@app.route('/cart', methods=['GET','POST'])
+@app.route('/cart', methods=['GET', 'POST'])
 def cart():
-    cart = Cart.query.filter_by(user_id=current_user.id)
     total = 0
-    for i in cart:
-        total += i.amount
+    if current_user.is_authenticated:
+        cart = Cart.query.filter_by(user_id=current_user.id)
+        for i in cart:
+            total += i.price * i.amount
+    else:
+        cart = ""
     return render_template('customers/cart.html', cart=cart, total=total)
+
+
+@app.route('/edit_cart', methods=['GET', 'POST'])
+def edit_cart():
+    total = 0
+    if current_user.is_authenticated:
+        cart = Cart.query.filter_by(user_id=current_user.id)
+
+    if request.method == "POST":
+        for i in cart:
+            if request.values.get('amount' + str(i.cake.id)) == "":
+                i.amount = i.amount
+            else:  # request.values.get('amount' + str(i.cake.id)) != i.amount
+                i.amount = request.values.get('amount' + str(i.cake.id))
+
+        db.session.commit()
+        flash("Successful edit your cart")
+    return render_template('customers/edit_cart.html', cart=cart)
 
 
 @app.route('/customer/customer_profile/<id>')
