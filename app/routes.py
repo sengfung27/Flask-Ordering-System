@@ -10,11 +10,12 @@ from app.forms import LoginForm, RegistrationForm
 
 from werkzeug.utils import secure_filename
 import os
+from base64 import b64encode
+import base64
 
-# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/static'
+UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from flask_login import LoginManager, current_user, login_user, logout_user
 
@@ -81,9 +82,15 @@ def login():
     return render_template('login.html', title='Sign In')
 
 
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
 @app.route('/menu')
 def menu():
     cakes = Cake.query.all()
+
     return render_template('menu.html', cakes=cakes)
 
 
@@ -290,13 +297,16 @@ def additem():
     if request.method == 'POST':
         cakePic = request.files['cakePic']
 
-        customerPirce = 0.95 * float(request.values.get('price'))
-        vipPrice = 0.9 * float(request.values.get('price'))
-
         if cakePic and allowed_file(cakePic.filename):
+            filename = secure_filename(cakePic.filename)
+            cakePic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            customerPirce = 0.95 * float(request.values.get('price'))
+            vipPrice = 0.9 * float(request.values.get('price'))
+
             newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
                            visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
-                           photo=cakePic.read(), description=request.values.get('description'))
+                           photo=filename, description=request.values.get('description'))
 
             db.session.add(newCake)
             db.session.commit()

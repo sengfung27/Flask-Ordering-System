@@ -76,7 +76,7 @@ class Cake(db.Model):
     cart = db.relationship("Cart", back_populates="cake")
 
     def __repr__(self):
-        return '<Cake: {}, {}, {}>'.format(self.id, self.cake_name, self.description)
+        return '<Cake: {}, {}, {}, {}>'.format(self.id, self.cake_name, self.photo, self.description)
 
 
 class Cart(db.Model):
