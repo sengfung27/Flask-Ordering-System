@@ -13,9 +13,9 @@ import os
 from base64 import b64encode
 import base64
 
-UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
+# ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from flask_login import LoginManager, current_user, login_user, logout_user
 
@@ -87,6 +87,7 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
+
 @app.route('/menu')
 def menu():
     cakes = Cake.query.all()
@@ -111,7 +112,7 @@ def description(id):
             db.session.commit()
             flash('Added to your cart')
             return redirect(url_for('cart'))
-        elif request.values.get('amount') == 0 or request.values.get('amount') == "0":
+        elif int(request.values.get('amount')) <= 0:
             flash("Please enter the amount you want to purchase.")
         else:
             cart.amount = request.values.get('amount')
