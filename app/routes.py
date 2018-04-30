@@ -10,12 +10,6 @@ from app.forms import LoginForm, RegistrationForm
 
 from werkzeug.utils import secure_filename
 import os
-from base64 import b64encode
-import base64
-
-UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from flask_login import LoginManager, current_user, login_user, logout_user
 
