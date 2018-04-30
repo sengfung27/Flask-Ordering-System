@@ -41,7 +41,6 @@
         {% endif %}
 
         <a href="{{ url_for('menu') }}">Menu</a>
-        <a href="{{ url_for('checkout') }}">Checkout</a>
         <a href="{{ url_for('cart') }}">Cart</a>
 
         {% if current_user.role_id == 5 and current_user.is_authenticated %}
@@ -66,10 +65,11 @@
             <a href="{{ url_for('warning_notification') }}">Warning Notification</a>
 
         {% elif (current_user.role_id == 1 or current_user.role_id == 3 or current_user.role_id == 4) and current_user.is_authenticated %}
+            <a href="{{ url_for('checkout') }}">Checkout</a>
             <a href="{{ url_for('customer_profile',id=current_user.id) }}">Customer Profile</a>
             <a href="{{ url_for('order_history') }}">Customer Order History</a>
             <a href="{{ url_for('rating') }}">Customer Rating</a>
-        {% else  %}
+        {% else %}
 
             <a href="{{ url_for('registration') }}">Registration</a>
             <a href="{{ url_for('login') }}">Login</a>

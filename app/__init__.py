@@ -18,8 +18,6 @@ app.config[
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 login_manager = LoginManager(app)
 Bootstrap(app)
@@ -28,6 +26,10 @@ app.config.update(dict(
     SECRET_KEY="powerful secretkey",
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
+# UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
 
@@ -72,11 +74,7 @@ from app.models import User, Role, Cake, Cart
 #     print(me.user.email)
 
 # only one
-# c = Cart.query.filter_by(user_id=31).first()
-# print(me)
-# print(me.amount)
-# print(me.cake.cake_name)
-# print(me.user.email)
+# c =  Cart.query.filter_by(user_id=31).first()
 # loop
 # users = User.query.all()
 #
@@ -104,3 +102,13 @@ from app.models import User, Role, Cake, Cart
 # delete id
 # Testing.query.filter_by(id='2').delete()
 # db.session.commit()
+
+# Session
+# if 'username' in session:
+#       username = session['username']
+#       session['whateve'] = pas
+#       session.pop('username', None)
+
+
+# from datetime import date
+# today = date.today()
