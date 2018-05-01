@@ -87,7 +87,7 @@ class Cart(db.Model):
     cake_id = db.Column(db.Integer, db.ForeignKey('cakes.id'))
     amount = db.Column(db.Integer)
     price = db.Column(db.Integer)
-
+    status = db.Column(db.VARCHAR(30)) # Not submitted, Submitted, In process, History
     cake = db.relationship("Cake", back_populates="cart")
     user = db.relationship("User", back_populates="cart")
 

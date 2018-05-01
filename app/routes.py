@@ -97,7 +97,7 @@ def description(id):
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id).one_or_none()
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                        price=cake.customer_price)
+                        price=cake.customer_price, status="Not submitted")
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
@@ -167,9 +167,10 @@ def registration():
 
 @app.route('/checkout')
 def checkout():
-    user = User.query.filter_by(id=current_user.id)
-    cake = Cake.query.filter_by(id=id)
-    return render_template('customers/checkout.html')
+    user = User.query.filter_by(id=current_user.id).first()
+    cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+    return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
+                           expired_month=expired_month, expired_year=expired_year, cvv=cvv)
 
 
 @app.route('/cart', methods=['GET', 'POST'])
@@ -191,12 +192,17 @@ def edit_cart():
         cart = Cart.query.filter_by(user_id=current_user.id)
 
     if request.method == "POST":
-        for i in cart:
-            if request.values.get('amount' + str(i.cake.id)) == "":
-                i.amount = i.amount
-            else:  # request.values.get('amount' + str(i.cake.id)) != i.amount
-                i.amount = request.values.get('amount' + str(i.cake.id))
-
+        if request.form['action'] == "submit_submit":
+            for i in cart:
+                if request.values.get('amount' + str(i.cake.id)) == "":
+                    i.amount = i.amount
+                else:  # request.values.get('amount' + str(i.cake.id)) != i.amount
+                    i.amount = request.values.get('amount' + str(i.cake.id))
+        else:  # submit_drop
+            cake_id = request.form['action']
+            cake_in_cart = Cart.query.filter_by(cake_id=cake_id).first()
+            if cake_in_cart is not None:
+                db.session.delete(cake_in_cart)
         db.session.commit()
         flash("Successful edit your cart")
     return render_template('customers/edit_cart.html', cart=cart)
@@ -227,25 +233,30 @@ def customer_edit(id):
         try:
             if email != "":
                 user.email = email
-            if phone_number != "":
-                user.phone_number = phone_number
             if address != "":
                 user.address = address
             if password != "" and confirm_password != "":
                 if password == confirm_password:
                     user.set_password(password)
-            if new_cardname != "" or new_cardnumber != "" or new_expired_month != "" \
-                    or new_expired_year != "" or new_cvv != "":
-                card_name, card_number, expired_month, expired_year, cvv = user.payment.split(',')
-                if new_cardname != "":
+            if new_cardname != "" and new_cardnumber != "" and new_expired_month != "" \
+                    and new_expired_year != "" and new_cvv != "":
+                if user.payment is not None:
+                    card_name, card_number, expired_month, expired_year, cvv = user.payment.split(',')
+                    if new_cardname != "":
+                        card_name = new_cardname
+                    if new_cardnumber != "":
+                        card_number = new_cardnumber
+                    if new_expired_month != "":
+                        expired_month = new_expired_month
+                    if new_expired_year != "":
+                        expired_year = new_expired_year
+                    if new_cvv != "":
+                        cvv = new_cvv
+                else:
                     card_name = new_cardname
-                if new_cardnumber != "":
                     card_number = new_cardnumber
-                if new_expired_month != "":
                     expired_month = new_expired_month
-                if new_expired_year != "":
                     expired_year = new_expired_year
-                if new_cvv != "":
                     cvv = new_cvv
                 payment = card_name + "," + card_number + "," + expired_month + "," + expired_year + "," + cvv
                 user.payment = payment
