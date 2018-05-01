@@ -14,10 +14,6 @@ from flask_login import LoginManager, current_user, login_user, logout_user
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-def write_file(data, filename):
-    with open(filename, 'wb') as f:
-        f.write(data)
-
 
 def login_required(*roles):
     def wrapper(fn):
@@ -135,21 +131,23 @@ def registration():
             return redirect(url_for('delivery'))
         else:
             return redirect(url_for('index'))
+
     if request.method == 'POST':
         idPic = request.files['identification']
 
         if request.values.get('password') == request.values.get('password2'):
-            address = request.values.get('address1') + " " + \
-                      request.values.get('address2') + ", " + \
-                      request.values.get('city').upper() + ", " + \
-                      request.values.get('state') + " " + \
-                      str(request.values.get('zip_code'))
-
             if idPic and allowed_file(idPic.filename):
+                filename = secure_filename(idPic.filename)
+                path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                idPic.save(path)
+                newname = request.values.get('email') + '.png'
+                target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
+                os.rename(path, target)
+
                 try:
-                    employee = User(email=request.values.get('email'), address=address, role_id='1'
+                    employee = User(email=request.values.get('email'), address=request.values.get('address'), role_id='1'
                                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-                                    last_name=request.values.get('lastname'), id_photo=idPic.read())
+                                    last_name=request.values.get('lastname'), id_photo=newname)
                     employee.set_password(request.values.get('password'))
                     db.session.add(employee)
                     db.session.commit()
@@ -294,14 +292,19 @@ def additem():
 
         if cakePic and allowed_file(cakePic.filename):
             filename = secure_filename(cakePic.filename)
-            cakePic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            cakePic.save(path)
+            newname = (request.values.get('cakeName')).replace(" ", "") + '.png'
+            target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
+            os.rename(path, target)
+
 
             customerPirce = 0.95 * float(request.values.get('price'))
             vipPrice = 0.9 * float(request.values.get('price'))
 
             newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
                            visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
-                           photo=filename, description=request.values.get('description'))
+                           photo=newname, description=request.values.get('description'))
 
             db.session.add(newCake)
             db.session.commit()

@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.VARCHAR(255), unique=True, index=True)
     first_name = db.Column(db.VARCHAR(255))
     last_name = db.Column(db.VARCHAR(255))
-    id_photo = db.Column(db.LargeBinary)
+    id_photo = db.Column(db.VARCHAR(255))
     gender = db.Column(db.VARCHAR(6))
     address = db.Column(db.VARCHAR(255))
     password_hash = db.Column(db.VARCHAR(255))
