@@ -71,7 +71,7 @@ class Cake(db.Model):
     vip_price = db.Column(db.DECIMAL(5, 2))
     photo = db.Column(db.VARCHAR(255))
     description = db.Column(db.VARCHAR(255))
-    cook_id = db.Column(db.VARCHAR(255))
+    cook_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     rating = db.Column(db.DECIMAL(4, 2))
 
     cart = db.relationship("Cart", back_populates="cake")
