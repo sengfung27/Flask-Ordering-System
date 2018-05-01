@@ -353,6 +353,7 @@ def edititem():
         price = request.form.get('price')
         description = request.form.get('description')
 
+
         if category != "":
             edit_cake.category = category
         if category == "other":
@@ -360,7 +361,7 @@ def edititem():
         if price != "":
             edit_cake.visitor_price = price
             edit_cake.customer_price = 0.95 * float(price)
-            edit_cake.customer_price = 0.9 * float(price)
+            edit_cake.vip_price = 0.9 * float(price)
         if description != "":
             edit_cake.description = description
         db.session.commit()
