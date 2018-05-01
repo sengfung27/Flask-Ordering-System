@@ -287,7 +287,8 @@ def rating():
 @app.route('/cook')
 @login_required(6)
 def cook():
-    return render_template('cooks/cook.html', title='Cook')
+    cakes = Cake.query.all()
+    return render_template('cooks/cook.html', title='Cook', cakes=cakes)
 
 
 def allowed_file(filename):
@@ -315,7 +316,7 @@ def additem():
 
             newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
                            visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
-                           photo=newname, description=request.values.get('description'))
+                           photo=newname, cook_id=current_user.id, description=request.values.get('description'))
 
             db.session.add(newCake)
             db.session.commit()
@@ -324,6 +325,47 @@ def additem():
         else:
             flash('invalid file')
     return render_template('cooks/cookadditem.html', title='Cook')
+
+@app.route('/cook/dropitem', methods=['GET', 'POST'])
+def dropitem():
+    cakes = Cake.query.all()
+
+    if request.method == "POST":
+        cake_name = request.values.get('cake')
+        drop_cake = Cake.query.filter_by(cake_name=cake_name).first()
+        if drop_cake is not None:
+            db.session.delete(drop_cake)
+            db.session.commit()
+            flash("Successful delete item")
+
+    return render_template('cooks/drop_item.html', title='Cook', cakes=cakes)
+
+@app.route('/cook/edititem', methods=['GET', 'POST'])
+def edititem():
+    cakes = Cake.query.all()
+
+    if request.method == "POST":
+        cake_name = request.values.get('cake')
+        edit_cake = Cake.query.filter_by(cake_name=cake_name).first()
+
+        category = request.form.get('category')
+        newCategory = request.form.get('newCategory')
+        price = request.form.get('price')
+        description = request.form.get('description')
+
+        if category != "":
+            edit_cake.category = category
+        if category == "other":
+            edit_cake.category = newCategory
+        if price != "":
+            edit_cake.visitor_price = price
+            edit_cake.customer_price = 0.95 * float(price)
+            edit_cake.customer_price = 0.9 * float(price)
+        if description != "":
+            edit_cake.description = description
+        db.session.commit()
+        flash('You have successfully edit item!')
+    return render_template('cooks/edit_item.html', title='Cook', cakes=cakes)
 
 
 @app.route('/cook/cook_profile/<id>')

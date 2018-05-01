@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
+    </head>
+
+    <div class="container">
+        <h2>Drop Item</h2>
+
+        <div class="bodyInner">
+            <form action="{{ url_for('dropitem') }}" method="POST" class="form-horizontal"
+                  enctype="multipart/form-data">
+                <div class="drop" style="width: 550px; margin: auto">
+                    <div class="form-group col-md-6">
+                        <label for="cake">Select Cake (select one):</label>
+                        <select class="form-control" id="cake" name="cake">
+                            {% for cake in cakes %}
+                                <option>{{ cake.cake_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <br><br><br>
+                    <div class="col-md-3" style="float: right">
+                        <button type="submit" class="btn btn-danger">Drop</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div class="container">
+        <br><br><br><br><br>
+    </div>
+
+
+    </footer>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
+
+{% endblock %}
