@@ -28,10 +28,8 @@ class User(db.Model, UserMixin):
     payment = db.Column(db.VARCHAR(255))
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
-    role = db.relationship("Role", back_populates="user")
+    role = db.relationship("Role", foreign_keys=[role_id], back_populates="user")
     cart = db.relationship("Cart", back_populates="user")
-
-    # payment = db.relationship("Payment", back_populates="user")
 
     def set_role_id(self, rid):
         self.role_id = rid
@@ -90,9 +88,24 @@ class Cart(db.Model):
     status = db.Column(db.VARCHAR(30)) # Not submitted, Submitted, In process, History
     cake = db.relationship("Cake", back_populates="cart")
     user = db.relationship("User", back_populates="cart")
+    log = db.relationship("Log", back_populates="cart")
 
     def __repr__(self):
         return '<Cart: {}, {}>'.format(self.id, self.amount, self.price)
+
+
+class Log(db.Model):
+    __tablename__ = 'logs'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    payment = db.Column(db.VARCHAR(255))
+    cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
+    cook_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    deliver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    cart = db.relationship("Cart", back_populates="log")
+    cook = db.relationship("User", foreign_keys=[cook_id], backref="cook_log")
+    deliver = db.relationship("User", foreign_keys=[deliver_id], backref="deliver_log")
 
 # Vip only in one store 2 2
 #                       1 3

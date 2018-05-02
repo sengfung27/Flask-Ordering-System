@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Staff</h2>
+    <form action="{{ url_for('assign_order',id=cart.id) }}" method="POST">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>checkbox</th>
+            </tr>
+            </thead>
+            {% for cook in cooks %}
+                <tr>
+                    <td>{{ cook.id }}</td>
+                    <td>{{ cook.last_name }}, {{ cook.first_name }}</td>
+                    <td>{{ cook.role.role_type }}</td>
+                    <td><input type="checkbox" name="cook" value="{{ cook.id }}"></td>
+                </tr>
+            {% endfor %}
+        <br>
+            {% for deliver in delivers %}
+                <tr>
+                    <td>{{ deliver.id }}</td>
+                    <td>{{ deliver.last_name }}, {{ deliver.first_name }}</td>
+                    <td>{{ deliver.role.role_type }}</td>
+                    <td><input type="checkbox" name="deliver" value="{{ deliver.id }}"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="col-md-offset-8">
+            <input type="submit" value="Assign" class="btn btn-success">
+        </div>
+    </form>
+{% endblock %}

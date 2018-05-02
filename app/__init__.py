@@ -30,6 +30,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
 
+w = "wqewe,qew,qewe"
+str1 = w.split(',')
+print(str1)
+p = ','.join(str1)
+print(p)
 # myString = "wtf ,this ,so "
 # me, tre, qw = myString.split(",")
 # print(me)
@@ -46,7 +51,7 @@ from app.models import User, Role, Cake, Cart
 
 
 # create user
-# user = User(email="customer@example.com",role_id=3,first_name="m",last_name="n",gender="male")
+# user = User(email="deliver2@example.com",role_id=5,first_name="wewq",last_name="ooo",gender="male")
 # user.set_password("1234")
 # db.session.add(user)
 # print(user)
