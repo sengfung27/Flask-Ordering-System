@@ -1,7 +1,7 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory, session
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
-from app.models import User, Cake, Cart
+from app.models import User, Cake, Cart, Log
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
@@ -164,10 +164,20 @@ def registration():
     return render_template('customers/registerform.html')  # , form=form
 
 
-@app.route('/checkout')
+@app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    user = User.query.filter_by(id=current_user.id).first()
-    cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+    if current_user.is_authenticated and request.method == 'GET':
+        user = User.query.filter_by(id=current_user.id).first()
+        cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+    elif request.method == 'POST' and current_user.is_authenticated:
+        user = User.query.filter_by(id=current_user.id).first()
+        cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+        cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
+        for i in cart_cake:
+            i.status = "Submitted"
+        db.session.commit()
+        flash("You have successful checkout your Cart item")
+
     return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
                            expired_month=expired_month, expired_year=expired_year, cvv=cvv)
 
@@ -176,7 +186,7 @@ def checkout():
 def cart():
     total = 0
     if current_user.is_authenticated:
-        cart = Cart.query.filter_by(user_id=current_user.id)
+        cart = Cart.query.filter_by(user_id=current_user.id, status="Not submitted")
         for i in cart:
             total += i.price * i.amount
     else:
@@ -186,7 +196,6 @@ def cart():
 
 @app.route('/edit_cart', methods=['GET', 'POST'])
 def edit_cart():
-    total = 0
     if current_user.is_authenticated:
         cart = Cart.query.filter_by(user_id=current_user.id)
 
@@ -541,10 +550,29 @@ def complaint():
     return render_template('managers/CustomerComplaint.html')
 
 
-@app.route('/manager/DecideDelivery')
+@app.route('/manager/order')
 @login_required(7)
-def decidedelivery():
-    return render_template('managers/DecideDelivery.html')
+def order():
+    carts = Cart.query.filter_by(status="Submitted")
+    return render_template('managers/order.html', carts=carts)
+
+
+@app.route('/manager/assign_order/<id>', methods=['GET','POST'])
+@login_required(7)
+def assign_order(id):
+    cart = Cart.query.filter_by(id=id).first()
+    cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    delivers = User.query.filter_by(role_id=5)  # store_id = ?
+    if request.method == 'POST':
+        cook_id = request.form['cook']
+        deliver_id = request.form['deliver']
+        cart.status = "In process"
+        log = Log(payment=cart.user.payment, cart_id=cart.id, cook_id=cook_id, deliver_id=deliver_id)
+        db.session.add(log)
+        db.session.commit()
+        flash("Successful assigned deliver and cook to this order: " + str(cart.id))
+        return redirect(url_for("order"))
+    return render_template('managers/assign_order.html', cooks=cooks, delivers=delivers, cart=cart)
 
 
 @app.route('/manager/DeliverWarning')
