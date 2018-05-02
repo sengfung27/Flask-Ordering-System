@@ -30,11 +30,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
 
-w = "wqewe,qew,qewe"
-str1 = w.split(',')
-print(str1)
-p = ','.join(str1)
-print(p)
+# w = "wqewe,qew,qewe"
+# str1 = w.split(',')
+# print(str1)
+# p = ','.join(str1)
+# print(p)
 # myString = "wtf ,this ,so "
 # me, tre, qw = myString.split(",")
 # print(me)
@@ -51,17 +51,18 @@ print(p)
 
 
 # create user
-# user = User(email="deliver2@example.com",role_id=5,first_name="wewq",last_name="ooo",gender="male")
+
+# user = User(email="delivery@example.com",role_id=5,first_name="delivery",last_name="man",gender="male")
 # user.set_password("1234")
 # db.session.add(user)
 # print(user)
 # db.session.commit()
 # print(user)
-# me = db.session.query(User).filter_by(email="customer@example.com",last_name="n").first()
+# me = db.session.query(User).filter_by(email="delivery@example.com",last_name="n").first()
 # print(me)
 # print(me.role_id)
 # print(me.role.role_type)
-# me = db.session.query(Role).filter_by(role_type="customer").first()
+# me = db.session.query(Role).filter_by(role_type="deliver").first()
 # print(me)
 # print(me.role_type)
 # print(me.user.email)
