@@ -6,7 +6,7 @@ from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-from app.forms import LoginForm, RegistrationForm
+#from app.forms import LoginForm, RegistrationForm
 
 from werkzeug.utils import secure_filename
 import os
@@ -35,7 +35,6 @@ def login_required(*roles):
     return wrapper
 
 
-@app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -564,3 +563,16 @@ def managecustomers():
 @login_required(7)
 def paywage():
     return render_template('managers/PayWage.html')
+
+########################################################################################################################
+# Map
+
+@app.route('/')
+@app.route('/mapforcustomers')
+def mapforcust():
+    return render_template('/MapForCustomer.html')
+
+@app.route('/mapfordelivery')
+@login_required(5)
+def mapfordeli():
+    return render_template('/MapForDelivery.html')

@@ -49,17 +49,17 @@ from app.models import User, Role, Cake, Cart
 
 
 # create user
-# user = User(email="customer@example.com",role_id=3,first_name="m",last_name="n",gender="male")
+# user = User(email="delivery@example.com",role_id=5,first_name="delivery",last_name="man",gender="male")
 # user.set_password("1234")
 # db.session.add(user)
 # print(user)
 # db.session.commit()
 # print(user)
-# me = db.session.query(User).filter_by(email="customer@example.com",last_name="n").first()
+# me = db.session.query(User).filter_by(email="delivery@example.com",last_name="n").first()
 # print(me)
 # print(me.role_id)
 # print(me.role.role_type)
-# me = db.session.query(Role).filter_by(role_type="customer").first()
+# me = db.session.query(Role).filter_by(role_type="deliver").first()
 # print(me)
 # print(me.role_type)
 # print(me.user.email)
