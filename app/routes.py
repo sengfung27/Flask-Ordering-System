@@ -198,7 +198,7 @@ def cart():
 @app.route('/edit_cart', methods=['GET', 'POST'])
 def edit_cart():
     if current_user.is_authenticated:
-        cart = Cart.query.filter_by(user_id=current_user.id)
+        cart = Cart.query.filter_by(user_id=current_user.id, status="Not submitted")
 
     if request.method == "POST":
         if request.form['action'] == "submit_submit":
@@ -209,7 +209,7 @@ def edit_cart():
                     i.amount = request.values.get('amount' + str(i.cake.id))
         else:  # submit_drop
             cake_id = request.form['action']
-            cake_in_cart = Cart.query.filter_by(cake_id=cake_id).first()
+            cake_in_cart = Cart.query.filter_by(cake_id=cake_id, status="Not submitted").first()
             if cake_in_cart is not None:
                 db.session.delete(cake_in_cart)
         db.session.commit()
