@@ -58,7 +58,7 @@ def login():
         if current_user.role_id == 6:
             return redirect(url_for('cook'))
         if current_user.role_id == 5:
-            return redirect(url_for('delivery'))
+            return redirect(url_for('deliver'))
         else:
             return redirect(url_for('index'))
     if request.method == 'POST':
@@ -72,7 +72,7 @@ def login():
                 elif current_user.role_id == 6:
                     next_page = url_for('cook')
                 elif current_user.role_id == 5:
-                    next_page = url_for('delivery')
+                    next_page = url_for('deliver')
                 else:
                     next_page = url_for('index')
             return redirect(next_page)
@@ -103,7 +103,7 @@ def description(id):
     cake = Cake.query.filter_by(id=id).first()
     cooks = User.query.filter_by(role_id=6) # store_id = ?
     if request.method == 'POST':
-        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id).one_or_none()
+        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
         cook = request.form['cook']
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
@@ -388,21 +388,22 @@ def warning_notification():
 ########################################################################################################################
 # Delivery
 
-@app.route('/delivery')
+@app.route('/deliver')
 @login_required(5)
-def delivery():
-    return render_template('deliveries/delivery.html', title='Delivery')
+def deliver():
+    logs = Log.query.filter_by(deliver_id=current_user.id)
+    return render_template('deliveries/delivery.html', title='Deliver', logs=logs)
 
 
-@app.route('/delivery/notification')
+@app.route('/deliver/notification')
 @login_required(5)
 def notification():
-    return render_template('deliveries/notification.html', title='Delivery')
+    return render_template('deliveries/notification.html', title='Deliver')
 
 
 @app.route('/deliver/profile/<id>')
 @login_required(5)
-def delivery_profile(id):
+def deliver_profile(id):
     user = User.query.filter_by(id=id).first_or_404()
     return render_template('deliveries/profile.html', user=user)
 
@@ -438,13 +439,13 @@ def deliver_edit(id):
 @app.route('/delivery/route')
 @login_required(5)
 def delivery_route():
-    return render_template('deliveries/route.html', title='Delivery')
+    return render_template('deliveries/route.html', title='Deliver')
 
 
-@app.route('/delivery/notification')
+@app.route('/deliver/notification')
 @login_required(5)
-def delivery_notification():
-    return render_template('deliveries/notification.html', title='Delivery')
+def deliver_notification():
+    return render_template('deliveries/notification.html', title='Deliver')
 
 
 ########################################################################################################################

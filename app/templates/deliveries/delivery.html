@@ -2,21 +2,21 @@
 
 {% block content %}
 
-<head>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{{url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js')}}" ></script>
-    <link href="{{url_for('static', filename='themes/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='themes/assets/css/carousel.css')}}" rel="stylesheet">
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
 
 
-</head>
-<!-- NAVBAR
-================================================== -->
+    </head>
+    <!-- NAVBAR
+    ================================================== -->
 
-<div class="pageTitle">
+    <div class="pageTitle">
     <div class="container">
-        <h2>Welcome {{title}} </h2>
+        <h2>Welcome {{ title }} </h2>
     </div>
 
     <div class="container">
@@ -38,35 +38,37 @@
                 <!--class="" OR id=""-->
 
                 <tbody>
-                <tr>
-                    <td>Odr2343441</td>
-                    <td>John Jay</td>
-                    <td>< 3, 2 ></td>
-                    <td>
-                        <a href="route.html" target="_blank" class="btn btn-primary" type="button" aria-pressed="true">Show
-                            Route</a>
-                    </td>
-                    <td>
-                        <form>
-                            <div class="form-group">
-                                <label for="rate">Select (select one):</label>
-                                <select class="form-control" id="rate" style="width: 130px" ;>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-
+                {% for log in logs %}
+                    <tr>
+                        <td>{{ log.cart_id }}</td>
+                        <td>{{ log.cart.user.last_name }}, {{ log.cart.user.first_name }}</td>
+                        <td>{{ log.cart.user.address }}</td>
+                        <td>
+                            <a href="route.html" target="_blank" class="btn btn-primary" type="button"
+                               aria-pressed="true">Show
+                                Route</a>
+                        </td>
+                        <td>
+                            <form>
                                 <div class="form-group">
-                                    <label for="comment">Comment:</label>
-                                    <textarea class="form-control" rows="3" id="comment"></textarea>
-                                </div>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
+                                    <label for="rate">Select (select one):</label>
+                                    <select class="form-control" id="rate" style="width: 130px" ;>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
 
+                                    <div class="form-group">
+                                        <label for="comment">Comment:</label>
+                                        <textarea class="form-control" rows="3" id="comment"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
                 <tr>
                     <td>Odr2343442</td>
                     <td>John Jay Jay</td>
@@ -94,35 +96,6 @@
                         </form>
                     </td>
                 </tr>
-
-                <tr>
-                    <td>Odr2343443</td>
-                    <td>John Jay Jay Jay</td>
-                    <td>< 3, 4 ></td>
-                    <td>
-                        <a href="#" class="btn btn-primary" type="button" aria-pressed="true">Show Route</a>
-                    </td>
-                    <td>
-                        <form>
-                            <div class="form-group">
-                                <label for="rate2">Select (select one):</label>
-                                <select class="form-control" id="rate2" style="width: 130px" ;>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-
-                                <div class="form-group">
-                                    <label for="comment2">Comment:</label>
-                                    <textarea class="form-control" rows="3" id="comment2"></textarea>
-                                </div>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-
 
                 </tbody>
 
