@@ -1,15 +1,25 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory, session
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
-from app.models import User, Cake, Cart, Log
+from app.models import User, Cake, Cart
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-#from app.forms import LoginForm, RegistrationForm
-
+# from app.forms import LoginForm, RegistrationForm
+from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
+from decimal import *
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+from base64 import b64encode
+import base64
+
+# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
+# ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 from flask_login import LoginManager, current_user, login_user, logout_user
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -91,13 +101,14 @@ def menu():
 @app.route('/customer/description/<id>', methods=['GET', 'POST'])
 def description(id):
     cake = Cake.query.filter_by(id=id).first()
-    cooks = User.query.filter_by(role_id=6) # store_id = ?
+    cooks = User.query.filter_by(role_id=6)  # store_id = ?
     if request.method == 'POST':
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
         cook = request.form['cook']
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                        price=cake.customer_price, status="Not submitted", cook_id=cook)
+                        price=cake.customer_price, status="Not submitted", cook_id=cook, cook_rating=0,
+                        deliver_rating=0, user_rating=0)
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
@@ -147,7 +158,8 @@ def registration():
                 try:
                     employee = User(email=request.values.get('email'), address=request.values.get('address'), role_id='1'
                                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-                                    last_name=request.values.get('lastname'), id_photo=newname)
+                                    last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
+                                    order_made=0)
                     employee.set_password(request.values.get('password'))
                     db.session.add(employee)
                     db.session.commit()
@@ -170,12 +182,13 @@ def checkout():
     if current_user.is_authenticated and request.method == 'GET':
         user = User.query.filter_by(id=current_user.id).first()
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
-    elif request.method == 'POST' and current_user.is_authenticated:
+    elif current_user.is_authenticated and request.method == 'POST':
         user = User.query.filter_by(id=current_user.id).first()
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
         cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
         for i in cart_cake:
             i.status = "Submitted"
+            i.time_submit = datetime.utcnow()
         db.session.commit()
         flash("You have successful checkout your Cart item")
 
@@ -431,8 +444,33 @@ def warning_notification():
 @app.route('/deliver')
 @login_required(5)
 def deliver():
-    logs = Log.query.filter_by(deliver_id=current_user.id)
+    logs = Cart.query.filter_by(deliver_id=current_user.id, status="In process")
     return render_template('deliveries/delivery.html', title='Deliver', logs=logs)
+
+
+@app.route('/deliver_rating/<id>', methods=['GET', 'POST'])
+@login_required(5)
+def deliver_rating(id):
+    cart = Cart.query.filter_by(id=id).first()
+    if request.method == 'POST':
+        user = User.query.filter_by(id=cart.user_id).first()
+        rating = request.form.get('rate_list')
+        comments = request.form.get('comments')
+        cart.user_rating = rating
+        cart.user_comments = comments
+        cart.status = "Closed"
+        user.order_made += 1.0
+        user.rating = (user.rating + int(rating)) / Decimal(user.order_made)
+        if user.order_made > 3 and user.rating > 4.0 and user.role_id == 3:
+            user.role_id = 4  # VIP
+        if user.order_made > 3 and 1 < user.rating < 2.0:
+            user.role_id = 1  # demote to visitor
+        if user.order_made > 3 and user.rating >= 1.0:
+            user.blacklist = 1
+        db.session.commit()
+        flash("Thank you your rating and feedback")
+        return redirect(url_for("deliver"))
+    return render_template('deliveries/deliver_rating.html', cart=cart)
 
 
 @app.route('/deliver/notification')
@@ -559,7 +597,7 @@ def order():
     return render_template('managers/order.html', carts=carts)
 
 
-@app.route('/manager/assign_order/<id>', methods=['GET','POST'])
+@app.route('/manager/assign_order/<id>', methods=['GET', 'POST'])
 @login_required(7)
 def assign_order(id):
     cart = Cart.query.filter_by(id=id).first()
@@ -567,8 +605,7 @@ def assign_order(id):
     if request.method == 'POST':
         deliver_id = request.form['deliver']
         cart.status = "In process"
-        log = Log(payment=cart.user.payment, cart_id=cart.id, deliver_id=deliver_id)
-        db.session.add(log)
+        cart.deliver_id = deliver_id
         db.session.commit()
         flash("Successful assigned deliver to this order: " + str(cart.id))
         return redirect(url_for("order"))
@@ -592,6 +629,7 @@ def managecustomers():
 def paywage():
     return render_template('managers/PayWage.html')
 
+
 ########################################################################################################################
 # Map
 
@@ -599,6 +637,7 @@ def paywage():
 @app.route('/mapforcustomers')
 def mapforcust():
     return render_template('/MapForCustomer.html')
+
 
 @app.route('/mapfordelivery')
 @login_required(5)

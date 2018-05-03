@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sshtunnel import SSHTunnelForwarder
 from flask_login import LoginManager
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
@@ -33,6 +33,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
 
+
+
+# cart_user = Cart.query.func.count(user_id=31, status="In process")
+# if cart_user > 1:
+#     print("yeah")
+# else:
+#     print("No")
+# current_user.last_seen = datetime.utcnow()
 # w = "wqewe,qew,qewe"
 # str1 = w.split(',')
 # print(str1)
