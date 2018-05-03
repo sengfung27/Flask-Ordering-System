@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="col-50">
                                         <label for="cvv">CVV</label>
-                                        <input type="number" id="cvv" name="cvv" value="{{ cvv }}"y>
+                                        <input type="number" id="cvv" name="cvv" value="{{ cvv }}" y>
                                     </div>
                                 </div>
                             {% else %}
@@ -96,14 +96,15 @@
                                 </div>
 
                             {% endif %}
-
-
                         </div>
                     </div>
-                    <input type="submit" value="Proceed to Checkout" class="btn btn-success">
+
+                    <br>
+                    <div class="submit" style="float: right">
+                        <input type="submit" value="Submit Order" class="btn btn-success">
+                    </div>
                     <h4><i class="fa fa-shopping-cart"></i><a href="{{ url_for('cart') }}">Shopping Cart</a><span
                             class="price" style="color:black"> <b></b></span></h4>
-
                 </form>
             </div>
         </div>
