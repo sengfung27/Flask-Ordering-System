@@ -336,7 +336,7 @@ def additem():
             customerPirce = 0.95 * float(request.values.get('price'))
             vipPrice = 0.9 * float(request.values.get('price'))
 
-            newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
+            newCake = Cake(cake_name=request.values.get('cakeName'),
                            visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
                            photo=newname, description=request.values.get('description'))
 
