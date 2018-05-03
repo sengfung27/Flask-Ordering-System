@@ -22,40 +22,40 @@
 
     <br><br>
     <!--body-->
-    <div class="container">
+    <div class="container" style="min-height: 30vh">
         <div class="row">
             <!--Links Table-->
         </div>
-        <div class="col-lg-10">
-            <div class="table-responsive">
-                <table class="table table-bordered">
+
+        <div class="table-responsive" style="width: 700px; margin: auto">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Customer Name</th>
+                    <!-- <th>Photo ID</th> -->
+                    <th>Email</th>
+                    <th>Address</th>
+                </tr>
+
+                {% for user in me %}
                     <tr>
-                        <th>Customer ID</th>
-                        <th>Customer Name</th>
-                        <!-- <th>Photo ID</th> -->
-                        <th>Email</th>
-                        <th>Address</th>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.first_name }}{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.address }}</td>
                     </tr>
-
-                    {% for user in me %}
-                        <tr>
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.first_name }}{{ user.last_name }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.address }}</td>
-                        </tr>
-                    {% endfor %}
+                {% endfor %}
 
 
-                </table>
-            </div>
-            <!-- button -->
-            <form action = "{{ url_for('application') }}" method = "post">
-                <input type="submit" name="change" class="btn btn-info" style="float: right" value="Submit">
-            </form>
+            </table>
         </div>
+        <!-- button -->
+        <form action="{{ url_for('application') }}" method="post">
+            <input type="submit" name="change" class="btn btn-info" style="float: right" value="Submit">
+        </form>
     </div>
-    </div>
+
+
     <!-- FOOTER -->
     <footer>
         <div class="container">
