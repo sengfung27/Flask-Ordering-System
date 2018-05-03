@@ -63,7 +63,6 @@ class Cake(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cake_name = db.Column(db.VARCHAR(255), nullable=False)
-    category = db.Column(db.VARCHAR(255))
     visitor_price = db.Column(db.DECIMAL(5, 2))
     customer_price = db.Column(db.DECIMAL(5, 2))
     vip_price = db.Column(db.DECIMAL(5, 2))

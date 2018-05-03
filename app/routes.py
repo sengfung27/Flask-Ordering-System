@@ -338,7 +338,7 @@ def additem():
 
             newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
                            visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
-                           photo=newname, cook_id=current_user.id, description=request.values.get('description'))
+                           photo=newname, description=request.values.get('description'))
 
             db.session.add(newCake)
             db.session.commit()
