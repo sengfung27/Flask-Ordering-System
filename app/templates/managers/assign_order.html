@@ -12,15 +12,7 @@
                 <th>checkbox</th>
             </tr>
             </thead>
-            {% for cook in cooks %}
-                <tr>
-                    <td>{{ cook.id }}</td>
-                    <td>{{ cook.last_name }}, {{ cook.first_name }}</td>
-                    <td>{{ cook.role.role_type }}</td>
-                    <td><input type="checkbox" name="cook" value="{{ cook.id }}"></td>
-                </tr>
-            {% endfor %}
-        <br>
+            <br>
             {% for deliver in delivers %}
                 <tr>
                     <td>{{ deliver.id }}</td>

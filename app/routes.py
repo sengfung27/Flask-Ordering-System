@@ -91,12 +91,13 @@ def menu():
 @app.route('/customer/description/<id>', methods=['GET', 'POST'])
 def description(id):
     cake = Cake.query.filter_by(id=id).first()
-
+    cooks = User.query.filter_by(role_id=6) # store_id = ?
     if request.method == 'POST':
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id).one_or_none()
+        cook = request.form['cook']
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                        price=cake.customer_price, status="Not submitted")
+                        price=cake.customer_price, status="Not submitted", cook_id=cook)
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
@@ -108,7 +109,7 @@ def description(id):
             db.session.commit()
             flash('Added to your cart')
             return redirect(url_for('cart'))
-    return render_template('customers/description.html', cake=cake)
+    return render_template('customers/description.html', cake=cake, cooks=cooks)
 
 
 @app.route('/logout')
@@ -561,18 +562,16 @@ def order():
 @login_required(7)
 def assign_order(id):
     cart = Cart.query.filter_by(id=id).first()
-    cooks = User.query.filter_by(role_id=6)  # store_id = ?
     delivers = User.query.filter_by(role_id=5)  # store_id = ?
     if request.method == 'POST':
-        cook_id = request.form['cook']
         deliver_id = request.form['deliver']
         cart.status = "In process"
-        log = Log(payment=cart.user.payment, cart_id=cart.id, cook_id=cook_id, deliver_id=deliver_id)
+        log = Log(payment=cart.user.payment, cart_id=cart.id, deliver_id=deliver_id)
         db.session.add(log)
         db.session.commit()
-        flash("Successful assigned deliver and cook to this order: " + str(cart.id))
+        flash("Successful assigned deliver to this order: " + str(cart.id))
         return redirect(url_for("order"))
-    return render_template('managers/assign_order.html', cooks=cooks, delivers=delivers, cart=cart)
+    return render_template('managers/assign_order.html', delivers=delivers, cart=cart)
 
 
 @app.route('/manager/DeliverWarning')
