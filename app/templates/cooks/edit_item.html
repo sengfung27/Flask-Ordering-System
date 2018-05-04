@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <head>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{{ url_for('static', filename='themes/assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
+    </head>
+
+    <div class="container">
+        <h2>Edit Profile</h2>
+
+        <form action="{{ url_for('edititem') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+            <div class="bodyInner">
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="cake">Select Cake:</label>
+                    <div class="col-md-10">
+                        <select class="form-control" name="cake" id="cake" required>
+                            {% for cake in cakes %}
+                                <option>{{ cake.cake_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="cakeInfo">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="category">Catagory:</label>
+                        <div class="col-md-10">
+                            <select class="form-control" name="category" id="category">
+                                <option></option>
+                                <option value="Cheesecake">Cheesecake</option>
+                                <option value="..">..</option>
+                                <option value="other">Others</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--if other is not selected, this will not enable-->
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="newCategory">New Category Name:</label>
+                        <div class="col-md-10">
+                            <fieldset disabled>
+                                <input class="form-control" id="newCategory" name="newCategory" type="text"
+                                       placeholder="Input your new category item" disabled>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="price">Price($):</label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="$" name="price" id="price">
+                        </div>
+                    </div>
+
+
+                    <!--div class="form-group">
+                        <label class="control-label col-md-2">Upload Photos:</label>
+                        <div class="col-md-2">
+                            <label class="custom-file-label" for="cakePic">Choose file...</label>
+                            <input type="file" class="custom-file-input" name="cakePic" id="cakePic" required>
+                        </div>
+                    </div-->
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="description">Description:</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="5" name="description" id="description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-11 col-md-1">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div class="container">
+        <br><br><br><br><br>
+    </div>
+
+
+
+    </footer>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="{{ url_for('static', filename='themes/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='themes/assets/js/holder.js') }}"></script>
+
+{% endblock %}

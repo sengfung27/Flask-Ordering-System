@@ -25,61 +25,36 @@
 
 
                     <div class="btn-group">
-                        <a href="#" class="btn btn-primary" role="button">Modify</a>
+                        <a href="cook/edititem" class="btn btn-primary" role="button">Modify</a>
                     </div>
 
                     <div class="btn-group">
-                        <a href="#" class="btn btn-danger" role="button">Drop</a>
+                        <a href="cook/dropitem" class="btn btn-danger" role="button">Drop</a>
                     </div>
                 </div>
                 <br>
             </div>
 
 
-            <div class="class_table">
+            <div class="class_table" style="width: 900px; margin: auto">
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Cake</th>
-                        <th>CakeID</th>
-                        <th>Customer's Price</th>
-                        <th>Guest Price</th>
-                        <th>VIP Price</th>
+                        <th class="col-md-3">Cake</th>
+                        <th class="col-md-3">Visitor Price</th>
+                        <th class="col-md-3">Customer's Price</th>
+                        <th class="col-md-3">VIP Price</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="alert-info">
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                    </tr>
-
-                    <tr>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                    </tr>
-
-                    <tr>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                    </tr>
-
-                    <tr>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                        <td>/</td>
-                    </tr>
-
+                    {% for cake in cakes %}
+                        <tr>
+                            <td>{{ cake.cake_name }}</td>
+                            <td>{{ cake.visitor_price }}</td>
+                            <td>{{ cake.customer_price }}</td>
+                            <td>{{ cake.vip_price }}</td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -92,11 +67,11 @@
 
 
                     <div class="btn-group">
-                        <a href="#" class="btn btn-primary" role="button">Modify</a>
+                        <a href="cook/edititem" class="btn btn-primary" role="button">Modify</a>
                     </div>
 
                     <div class="btn-group">
-                        <a href="#" class="btn btn-danger" role="button">Drop</a>
+                        <a href="cook/dropitem" class="btn btn-danger" role="button">Drop</a>
                     </div>
                 </div>
                 <br>

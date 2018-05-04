@@ -27,21 +27,37 @@
     </div>
 
     <br><br>
-    <div class="container">
-        <div class="row">
+    <div class="container" style="min-height: 30vh">
+        <div class="bodyInner">
             <!--List of Orders Table-->
-            <div class="col-lg-6">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
+
+            <div class="table-responsive" style="width: 600px; margin: auto; max-height: 600px">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>List of Orders (ID)</th>
+                        <th>Name of customer</th>
+                        <th>Address</th>
+                        <th>Cake</th>
+                        <th>Amount</th>
+                        <th>Assign</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cart in carts %}
                         <tr>
-                            <th>List of Orders (ID)</th>
-                            <th>Name of customer</th>
-                            <th>Address</th>
-                            <th>Cake</th>
-                            <th>Amount</th>
-                            <th>Assign</th>
+                            <td>{{ cart.id }}</td>
+                            <td>{{ cart.user.last_name }}, {{ cart.user.first_name }}</td>
+                            <td>{{ cart.address }}</td>
+                            <td>{{ cart.cake.cake_name }}</td>
+                            <td>{{ cart.amount }}</td>
+                            <td class="col-md-2">
+                                <a href="{{ url_for('assign_order',id=cart.id) }}" class="btn btn-primary">
+                                    assign
+                                </a>
+                            </td>
                         </tr>
+<<<<<<< HEAD
                         </thead>
                         <tbody>
                         {% for cart in carts %}
@@ -61,12 +77,18 @@
                         </tbody>
                     </table>
                 </div>
+=======
+                    {% endfor %}
+                    </tbody>
+                </table>
+>>>>>>> 0552204177a32bfd49d6bc07b409b42aa94b9f9d
             </div>
             <!--Delivery Table-->
 
 
         </div>
     </div>
+
 
     <!-- FOOTER -->
     <footer>

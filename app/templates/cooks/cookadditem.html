@@ -13,37 +13,15 @@
     <div class="container">
         <h2>Add New Item</h2>
 
-        <form action="{{ url_for('additem') }}" method="POST" class="form-horizontal"
+        <form action="{{ url_for('additem', id=current_user.id) }}" method="POST" class="form-horizontal"
               enctype="multipart/form-data">
+
             <div class="bodyInner">
                 <div class="form-group">
                     <label class="control-label col-md-2" for="cakeName">Cake Name:</label>
                     <div class="col-md-10">
                         <input type="text" class="form-control" placeholder="Enter Cake Name" name="cakeName"
                                id="cakeName" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="category">Catagory:</label>
-                    <div class="col-md-10">
-                        <select class="form-control" name="category" id="category" required>
-                            <option value="Cheesecake">Cheesecake</option>
-                            <option value="..">..</option>
-                            <option value="other">Others</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!--if other is not selected, this will not enable-->
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="newCategory">New Category Name:</label>
-                    <div class="col-md-10">
-                        <fieldset disabled>
-                            <input class="form-control" id="newCategory" name="newCategory" type="text"
-                                   placeholder="Input your new category item" disabled>
-                        </fieldset>
                     </div>
                 </div>
 
@@ -72,7 +50,7 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-md-offset-11 col-md-1">
+                    <div class="col-md-2" style="float: right">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>

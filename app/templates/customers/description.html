@@ -12,7 +12,7 @@
 
     <div class="container">
         <div class="bodyInner">
-            <div class="space" style="height: 100px">
+            <div class="space" style="height: 30px">
             </div>
 
             <div class="row">
@@ -42,21 +42,22 @@
                                         <hr>
                                         <form action="{{ url_for('description',id=cake.id) }}" method="post">
                                             <div class="row">
-                                                <div class="col-xs-3">
+                                                <div class="col-xs-4">
                                                     <p>Regular</p>
                                                     <span class="item-price"
                                                           style="font-size: 28px;">{{ cake.visitor_price }}</span>
                                                 </div>
-                                                <div class="col-xs-3">
+                                                <div class="col-xs-4">
                                                     <p>Registered</p>
                                                     <span class="item-price"
                                                           style="font-size: 28px;">{{ cake.customer_price }}</span>
                                                 </div>
-                                                <div class="col-xs-3">
+                                                <div class="col-xs-4">
                                                     <p>VIP</p>
                                                     <span class="item-price"
                                                           style="font-size: 28px;">{{ cake.vip_price }}</span>
                                                 </div>
+<<<<<<< HEAD
 
                                                 <div class="row">
                                                     <div class="col-xs-6" style="float: right">
@@ -67,6 +68,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-x-6" style="float: right">
+=======
+                                                <div class="row col-xs-12">
+                                                <br>
+                                                    <div class="col-xs-8">
+                                                        <label style="font-weight: normal">Select cook:</label>
+>>>>>>> 0552204177a32bfd49d6bc07b409b42aa94b9f9d
                                                         <select name="cook">
                                                             {% for cook in cooks %}
                                                                 <option value="{{ cook.id }}">{{ cook.last_name }},
@@ -74,9 +81,14 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
+                                                    <div class="col-xs-4">
+                                                        <div class="quantity-input">
+                                                            <input type="number" class="form-control" name="amount"
+                                                                   value="1">
+                                                            <!-- set limit-->
+                                                        </div>
+                                                    </div>
                                                 </div>
-
-
                                             </div>
 
                                             <br>
@@ -100,7 +112,7 @@
         </div>
     </div>
 
-
+    <br><br>
 
     <footer>
         <div class="container">

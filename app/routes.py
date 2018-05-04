@@ -23,10 +23,7 @@ import base64
 
 from flask_login import LoginManager, current_user, login_user, logout_user
 
-
-def write_file(data, filename):
-    with open(filename, 'wb') as f:
-        f.write(data)
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 def login_required(*roles):
@@ -146,22 +143,29 @@ def registration():
             return redirect(url_for('delivery'))
         else:
             return redirect(url_for('index'))
+
     if request.method == 'POST':
         idPic = request.files['identification']
 
         if request.values.get('password') == request.values.get('password2'):
-            address = request.values.get('address1') + " " + \
-                      request.values.get('address2') + ", " + \
-                      request.values.get('city').upper() + ", " + \
-                      request.values.get('state') + " " + \
-                      str(request.values.get('zip_code'))
-
             if idPic and allowed_file(idPic.filename):
+                filename = secure_filename(idPic.filename)
+                path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                idPic.save(path)
+                newname = request.values.get('email') + '.png'
+                target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
+                os.rename(path, target)
+
                 try:
-                    employee = User(email=request.values.get('email'), address=address, role_id='1'
+                    employee = User(email=request.values.get('email'), address=request.values.get('address'), role_id='1'
                                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+<<<<<<< HEAD
                                     last_name=request.values.get('lastname'), id_photo=idPic.read(), rating=0.0,
                                     order_made=0, store_id=1)
+=======
+                                    last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
+                                    order_made=0)
+>>>>>>> 0552204177a32bfd49d6bc07b409b42aa94b9f9d
                     employee.set_password(request.values.get('password'))
                     db.session.add(employee)
                     db.session.commit()
@@ -318,7 +322,8 @@ def rating(id):
 @app.route('/cook')
 @login_required(6)
 def cook():
-    return render_template('cooks/cook.html', title='Cook')
+    cakes = Cake.query.all()
+    return render_template('cooks/cook.html', title='Cook', cakes=cakes)
 
 
 def allowed_file(filename):
@@ -334,14 +339,19 @@ def additem():
 
         if cakePic and allowed_file(cakePic.filename):
             filename = secure_filename(cakePic.filename)
-            cakePic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            cakePic.save(path)
+            newname = (request.values.get('cakeName')).replace(" ", "") + '.png'
+            target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
+            os.rename(path, target)
+
 
             customerPirce = 0.95 * float(request.values.get('price'))
             vipPrice = 0.9 * float(request.values.get('price'))
 
-            newCake = Cake(cake_name=request.values.get('cakeName'), category=request.values.get('category'),
+            newCake = Cake(cake_name=request.values.get('cakeName'),
                            visitor_price=request.values.get('price'), customer_price=customerPirce, vip_price=vipPrice,
-                           photo=filename, description=request.values.get('description'))
+                           photo=newname, description=request.values.get('description'))
 
             db.session.add(newCake)
             db.session.commit()
@@ -350,6 +360,48 @@ def additem():
         else:
             flash('invalid file')
     return render_template('cooks/cookadditem.html', title='Cook')
+
+@app.route('/cook/dropitem', methods=['GET', 'POST'])
+def dropitem():
+    cakes = Cake.query.all()
+
+    if request.method == "POST":
+        cake_name = request.values.get('cake')
+        drop_cake = Cake.query.filter_by(cake_name=cake_name).first()
+        if drop_cake is not None:
+            db.session.delete(drop_cake)
+            db.session.commit()
+            flash("Successful delete item")
+
+    return render_template('cooks/drop_item.html', title='Cook', cakes=cakes)
+
+@app.route('/cook/edititem', methods=['GET', 'POST'])
+def edititem():
+    cakes = Cake.query.all()
+
+    if request.method == "POST":
+        cake_name = request.values.get('cake')
+        edit_cake = Cake.query.filter_by(cake_name=cake_name).first()
+
+        category = request.form.get('category')
+        newCategory = request.form.get('newCategory')
+        price = request.form.get('price')
+        description = request.form.get('description')
+
+
+        if category != "":
+            edit_cake.category = category
+        if category == "other":
+            edit_cake.category = newCategory
+        if price != "":
+            edit_cake.visitor_price = price
+            edit_cake.customer_price = 0.95 * float(price)
+            edit_cake.vip_price = 0.9 * float(price)
+        if description != "":
+            edit_cake.description = description
+        db.session.commit()
+        flash('You have successfully edit item!')
+    return render_template('cooks/edit_item.html', title='Cook', cakes=cakes)
 
 
 @app.route('/cook/cook_profile/<id>')
