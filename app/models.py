@@ -26,10 +26,13 @@ class User(db.Model, UserMixin):
     number_of_warning = db.Column(db.Integer)
     rating = db.Column(db.DECIMAL(4, 2))
     payment = db.Column(db.VARCHAR(255))
+    store_id = db.Column(db.Integer, db.ForeignKey('store.storeid'))
+
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
     order_made = db.Column(db.Integer)
     role = db.relationship("Role", foreign_keys=[role_id], back_populates="user")
+    store = db.relationship("Store", foreign_keys=[store_id], backref="user")
 
     def set_role_id(self, rid):
         self.role_id = rid
@@ -45,6 +48,14 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User: {}, {}>'.format(self.id, self.email)
+
+
+class Store(db.Model):
+    __tablename__ = 'store'
+
+    storeid = db.Column(db.Integer, primary_key=True)
+    width = db.Column(db.Integer)
+    height = db.Column(db.Integer)
 
 
 class Role(db.Model):
@@ -63,7 +74,6 @@ class Cake(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cake_name = db.Column(db.VARCHAR(255), nullable=False)
-    category = db.Column(db.VARCHAR(255))
     visitor_price = db.Column(db.DECIMAL(5, 2))
     customer_price = db.Column(db.DECIMAL(5, 2))
     vip_price = db.Column(db.DECIMAL(5, 2))
@@ -81,6 +91,7 @@ class Cart(db.Model):
     __tablename__ = 'carts'
 
     id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     cake_id = db.Column(db.Integer, db.ForeignKey('cakes.id'))
     cook_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -88,10 +99,12 @@ class Cart(db.Model):
     amount = db.Column(db.Integer)
     price = db.Column(db.Integer)
     status = db.Column(db.VARCHAR(30)) # Not submitted, Submitted, In process, Closed
-    cook_rating = db.Column(db.Integer)
+    cake_rating = db.Column(db.Integer)
     deliver_rating = db.Column(db.Integer)
-    cook_comments = db.Column(db.VARCHAR(255))
+    store_rating = db.Column(db.Integer)
+    cake_comments = db.Column(db.VARCHAR(255))
     deliver_comments = db.Column(db.VARCHAR(255))
+    store_comments = db.Column(db.VARCHAR(255))
     user_rating = db.Column(db.Integer)
     user_comments = db.Column(db.VARCHAR(255))
     time_submit = db.Column(db.DateTime)
