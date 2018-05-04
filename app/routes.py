@@ -11,6 +11,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 from decimal import *
+from sqlalchemy import func, or_
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 from base64 import b64encode
@@ -110,7 +111,7 @@ def description(id):
         cook = request.form['cook']
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                        price=cake.customer_price, status="Not submitted", cook_id=cook, cook_rating=0,
+                        price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
                         deliver_rating=0, user_rating=0)
             db.session.add(temp)
             db.session.commit()
@@ -160,7 +161,7 @@ def registration():
                     employee = User(email=request.values.get('email'), address=address, role_id='1'
                                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
                                     last_name=request.values.get('lastname'), id_photo=idPic.read(), rating=0.0,
-                                    order_made=0)
+                                    order_made=0, store_id=1)
                     employee.set_password(request.values.get('password'))
                     db.session.add(employee)
                     db.session.commit()
@@ -185,10 +186,12 @@ def checkout():
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
     elif current_user.is_authenticated and request.method == 'POST':
         user = User.query.filter_by(id=current_user.id).first()
+        index = db.session.query(func.max(Cart.order_id)).scalar() + 1
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
         cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
         for i in cart_cake:
             i.status = "Submitted"
+            i.order_id = index
             i.time_submit = datetime.utcnow()
         db.session.commit()
         flash("You have successful checkout your Cart item")
@@ -294,13 +297,18 @@ def customer_edit(id):
 @app.route('/customer/order_history')
 @login_required(1, 3, 4)
 def order_history():
-    return render_template('customers/order_history.html', title='Menu')
+    counts = db.session.query(func.max(Cart.order_id)).scalar()
+
+    carts = Cart.query.filter(or_(Cart.user_id == current_user.id, Cart.status == "Submitted",
+                                  Cart.status == "In Process", Cart.status == "Closed"))
+    return render_template('customers/order_history.html', carts=carts, counts = counts)
 
 
-@app.route('/customer/rating')
+@app.route('/customer/rating/<id>')
 @login_required(1, 3, 4)
-def rating():
-    return render_template('customers/rating.html', title='Menu')
+def rating(id):
+    carts = Cart.query.filter_by(id=id).first()
+    return render_template('customers/rating.html', carts=carts)
 
 
 ########################################################################################################################
@@ -406,13 +414,15 @@ def deliver():
 def deliver_rating(id):
     cart = Cart.query.filter_by(id=id).first()
     if request.method == 'POST':
+        update_cart = Cart.query.filter_by(order_id=cart.order_id)
         user = User.query.filter_by(id=cart.user_id).first()
         rating = request.form.get('rate_list')
         comments = request.form.get('comments')
-        cart.user_rating = rating
-        cart.user_comments = comments
-        cart.status = "Closed"
-        user.order_made += 1.0
+        for i in update_cart:
+            i.user_rating = rating
+            i.user_comments = comments
+            i.status = "Closed"
+        user.order_made += 1
         user.rating = (user.rating + int(rating)) / Decimal(user.order_made)
         if user.order_made > 3 and user.rating > 4.0 and user.role_id == 3:
             user.role_id = 4  # VIP

@@ -2,12 +2,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sshtunnel import SSHTunnelForwarder
 from flask_login import LoginManager
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, or_
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 server = SSHTunnelForwarder(
-    ('134.74.126.104', 22),
+    ('134.74.126.104', 22),  # 104
     ssh_username='huan2077',
     ssh_password='23242077',
     remote_bind_address=('134.74.146.21', 3306))
@@ -30,8 +30,21 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
 
+# user = User(email="deliver@example.com", role_id=5, first_name="delive",last_name="man",gender="male", store_id=1)
+#
+# user.set_password('1234')
+# db.session.add(user)
+# db.session.commit()
+# i = Cart.query.filter(or_(Cart.user_id==31,Cart.cake_id==11, Cart.status=="In Process"))
+# for j in i:
+#     print(j.user_id, j.cake_id, j.status)
+# i = Cart.index
+# print(i)
+# Cart.index += 1
+# print(i, Cart.index)
+# o = db.session.query(func.max(Cart.id)).scalar()
 
-
+# print(o)
 # cart_user = Cart.query.func.count(user_id=31, status="In process")
 # if cart_user > 1:
 #     print("yeah")

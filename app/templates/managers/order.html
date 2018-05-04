@@ -46,7 +46,7 @@
                         <tbody>
                         {% for cart in carts %}
                             <tr>
-                                <td>{{ cart.id }}</td>
+                                <td>{{ cart.order_id }}</td>
                                 <td>{{ cart.user.last_name }}, {{ cart.user.first_name }}</td>
                                 <td>{{ cart.address }}</td>
                                 <td>{{ cart.cake.cake_name }}</td>
