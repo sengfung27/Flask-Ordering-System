@@ -24,8 +24,9 @@
 <br><br>
 <!--Employees Salary Information table-->
 <div class="container">
-	<form>
-    <div class ="table-responsive">
+	<form action="{{ url_for('paywage') }}" method="POST"  class="form-horizontal"
+              enctype="multipart/form-data">
+    <div class="form-group, table-responsive">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -35,36 +36,42 @@
             <th>Hour</th>
             <th>Rate</th>
             <th>Total Salary</th>
-			<th>Select</th>
         </tr>
         </thead>
         <tbody>
+        {% for list in delivery %}
         <tr>
-            <td>/</td>
-            <td>/</td>
-            <td>Cooker/Deli.men</td>
-            <td>/</td>
-            <td>/</td>
-            <td>/</td>
-			<td><label><input type="checkbox" value=""></label></td>
+            <td>{{ list.id}}</td>
+            <td>{{ list.first_name}} {{ list.last_name}}</td>
+            <td>{{ list.role}}</td>
+            <td><label><input type="text" class="form-control" id="hrs" name="hours{{list.id}}"></label></td>
+            <td>{{ delivery_salary_rate}}</td>
+            <td>{{ list.salary }}</td>
         </tr>
+        {% endfor %}
+
+        {% for list in cook %}
         <tr>
-            <td>/</td>
-            <td>/</td>
-            <td>/</td>
-            <td>/</td>
-            <td>/</td>
-            <td>/</td>
-			<td><label><input type="checkbox" value=""></label></td>
+            <td>{{ list.id}}</td>
+            <td>{{ list.first_name}} {{ list.last_name}}</td>
+            <td>{{ list.role}}</td>
+            <td><label><input type="text" class="form-control" id="hrs" name="hours{{list.id}}"></label></td>
+            <td>{{ cook_salary_rate}}</td>
+            <td>{{ list.salary  }}</td>
         </tr>
+        {% endfor %}
         </tbody>
     </table>
+        <div class="form-group">
+            <div class="col-md-offset-11 col-md-1">
+                <button type="submit" name="action" value="submit_hours" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
     </div>
 	</form>
-<!-- Submit Button -->
-	<input type="submit" class="btn btn-info" style="float: right" value="Submit">
 </div>
-      <!-- FOOTER -->
+    <br><br>
+    <!-- FOOTER -->
       <footer>
 		<div class="container">
         <p class="pull-right"><a href="#">Back to top</a></p>

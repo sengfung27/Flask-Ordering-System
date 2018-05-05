@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
     salary = db.Column(db.DECIMAL(9, 2))
     order_made = db.Column(db.Integer)
     number_of_drop = db.Column(db.Integer)
+
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
 
