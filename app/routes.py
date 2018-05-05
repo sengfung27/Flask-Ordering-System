@@ -159,13 +159,9 @@ def registration():
                 try:
                     employee = User(email=request.values.get('email'), address=request.values.get('address'), role_id='1'
                                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-<<<<<<< HEAD
                                     last_name=request.values.get('lastname'), id_photo=idPic.read(), rating=0.0,
                                     order_made=0, store_id=1)
-=======
-                                    last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
-                                    order_made=0)
->>>>>>> 0552204177a32bfd49d6bc07b409b42aa94b9f9d
+
                     employee.set_password(request.values.get('password'))
                     db.session.add(employee)
                     db.session.commit()
