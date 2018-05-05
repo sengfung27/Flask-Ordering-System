@@ -93,6 +93,10 @@ def menu():
 
     return render_template('menu.html', cakes=cakes)
 
+@app.route('/customize_cake')
+def customize_cake():
+    return render_template('customize_cake.html')
+
 
 ########################################################################################################################
 # Customer
@@ -565,10 +569,18 @@ def manager_edit(id):
     return render_template('managers/manager_edit.html', user=user)
 
 
-@app.route('/manager/CookWarning')
+@app.route('/manager/CookWarning', methods=['GET', 'POST'])
 @login_required(7)
 def cookwarning():
-    return render_template('managers/CookWarning.html')
+    cook = User.query.filter_by(role_id=6)
+    if request.method == "POST":
+        target = int(request.form['erase'])
+        cook_target = User.query.filter_by(id=target).first()
+        if cook_target.number_of_warning > 0:
+            cook_target.number_of_warning = cook_target.number_of_warning - 1
+            db.session.commit()
+            flash("Erase Successfully!")
+    return render_template('managers/CookWarning.html', cook=cook)
 
 
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
@@ -612,10 +624,18 @@ def assign_order(id):
     return render_template('managers/assign_order.html', delivers=delivers, cart=cart)
 
 
-@app.route('/manager/DeliverWarning')
+@app.route('/manager/DeliverWarning', methods=['GET', 'POST'])
 @login_required(7)
 def deliverwarning():
-    return render_template('managers/DeliverWarning.html')
+    delivery = User.query.filter_by(role_id=5)
+    if request.method == "POST":
+        target = int(request.form['erase'])
+        delivery_target = User.query.filter_by(id=target).first()
+        if delivery_target.number_of_warning > 0:
+            delivery_target.number_of_warning = delivery_target.number_of_warning - 1
+            db.session.commit()
+            flash("Erase Successfully!")
+    return render_template('managers/DeliverWarning.html', delivery=delivery)
 
 
 @app.route('/manager/ManageCustomers')
@@ -624,10 +644,27 @@ def managecustomers():
     return render_template('managers/ManageCustomers.html')
 
 
-@app.route('/manager/PayWage')
+@app.route('/manager/PayWage', methods=['GET', 'POST'])
 @login_required(7)
 def paywage():
-    return render_template('managers/PayWage.html')
+    delivery = User.query.filter_by(role_id=5)
+    cook = User.query.filter_by(role_id=6)
+    if request.method == 'POST':
+        if request.form['action'] == "submit_hours":
+            for i in delivery:
+                if request.values.get('hours' + str(i.id)) == "":
+                    i.salary = 0.0
+                else:
+                    i.salary = float(request.values.get('hours' + str(i.id)))*15
+            for j in cook:
+                if request.values.get('hours' + str(j.id)) == "":
+                    j.salary = 0.0
+                else:
+                    j.salary = float(request.values.get('hours' + str(j.id)))*20
+        db.session.commit()
+        flash("Submit Successfully!")
+    return render_template('managers/PayWage.html', delivery=delivery, cook=cook, delivery_salary_rate=15,
+                           cook_salary_rate=20)
 
 
 ########################################################################################################################

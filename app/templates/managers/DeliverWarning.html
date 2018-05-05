@@ -22,6 +22,8 @@
 <br><br>
 <!--body-->
 <div class="container">
+    <form action="{{ url_for('deliverwarning') }}" method="POST"  class="form-horizontal"
+              enctype="multipart/form-data">
 	<div class="row">
 		<!--Links Table-->
 		<div class="col-lg-2">
@@ -56,23 +58,20 @@
 				</tr>
 				</thead>
                 <tbody>
+                {% for i in delivery %}
 				<tr>
-					<td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-                    <td><input type="submit" class="btn btn-info" value="Erase"></td>
+					<td>{{ i.id }}</td>
+                    <td>{{ i.first_name}} {{ i.last_name}}</td>
+                    <td>{{ i.number_of_warning }}</td>
+                    <td><button type="submit" name="erase" value="{{ i.id }}" class="btn btn-danger">Erase</button></td>
 				</tr>
-				<tr>
-					<td>/</td>
-                    <td>/</td>
-                    <td>/</td>
-                    <td><input type="submit" class="btn btn-info" value="Erase"></td>
-				</tr>
+                {% endfor %}
 				</tbody>
 			</table>
 			</div>
 		</div>
     </div>
+	</form>
 </div>
 
 

@@ -26,6 +26,7 @@ class User(db.Model, UserMixin):
     number_of_warning = db.Column(db.Integer)
     rating = db.Column(db.DECIMAL(4, 2))
     payment = db.Column(db.VARCHAR(255))
+    salary = db.Column(db.DECIMAL(9, 2))
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
     order_made = db.Column(db.Integer)
