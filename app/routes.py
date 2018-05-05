@@ -159,13 +159,8 @@ def registration():
                 try:
                     employee = User(email=request.values.get('email'), address=request.values.get('address'), role_id='1'
                                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-<<<<<<< HEAD
-                                    last_name=request.values.get('lastname'), id_photo=idPic.read(), rating=0.0,
-                                    order_made=0, store_id=1)
-=======
                                     last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
                                     order_made=0)
->>>>>>> 0552204177a32bfd49d6bc07b409b42aa94b9f9d
                     employee.set_password(request.values.get('password'))
                     db.session.add(employee)
                     db.session.commit()
@@ -653,6 +648,19 @@ def paywage():
 def mapforcust():
     return render_template('/MapForCustomer.html')
 
+@app.route('/mapforcustomers/ajax', methods=['POST'])
+def mapforcoord():
+    x = request.form.get('x', 0, type=int)
+    y = request.form.get('y', 0, type=int)
+    c_x = request.form.get('c_x', 0, type=int)
+    c_y = request.form.get('c_y', 0, type=int)
+    session['coord'] = [x,y,c_x,c_y]
+    print(x)
+    print(y)
+    print(c_x)
+    print(c_y)
+    # x,y --> store -> products model
+    return jsonify('success')
 
 @app.route('/mapfordelivery')
 @login_required(5)
