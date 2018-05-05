@@ -57,10 +57,13 @@
                                                     <span class="item-price"
                                                           style="font-size: 28px;">{{ cake.vip_price }}</span>
                                                 </div>
+
+
                                                 <div class="row col-xs-12">
                                                 <br>
                                                     <div class="col-xs-8">
                                                         <label style="font-weight: normal">Select cook:</label>
+
                                                         <select name="cook">
                                                             {% for cook in cooks %}
                                                                 <option value="{{ cook.id }}">{{ cook.last_name }},

@@ -5,8 +5,9 @@
     <div class="row">
     <form action="{{ url_for("deliver_rating", id=cart.id) }}" id="form1" method="POST">
         <div class="col-md-offset-5">
-            <h3>Please rate this Customer: {{ cart.user.id }}</h3>
-            <h3>{{ cart.user.last_name }}, {{ cart.user.first_name }}</h3>
+            <h3>Order ID: {{ cart.order_id }}</h3>
+            <h3>Please rate this Customer: {{ cart.user_id }}</h3>
+            <h3>Name: {{ cart.user.last_name }}, {{ cart.user.first_name }}</h3>
             <div class="form-group" >
                 <label for="rate">Select (select one):</label>
                 <select form="form1" class="form-control" name='rate_list'id="rate" style="width: 130px" ;>

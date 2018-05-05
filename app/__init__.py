@@ -2,12 +2,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sshtunnel import SSHTunnelForwarder
 from flask_login import LoginManager
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, or_
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 server = SSHTunnelForwarder(
-    ('134.74.126.104', 22),
+    ('134.74.126.104', 22),  # 104
     ssh_username='huan2077',
     ssh_password='23242077',
     remote_bind_address=('134.74.146.21', 3306))
@@ -17,7 +17,7 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
+# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
 
 login_manager = LoginManager(app)
 Bootstrap(app)
@@ -26,15 +26,32 @@ app.config.update(dict(
     SECRET_KEY="powerful secretkey",
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
-# UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
+UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
+from datetime import datetime
 
+# user = User(email="manager@example.com", role_id=7, first_name="mana",last_name="ger",gender="male",
+# store_id=1, order_made=0, rating=0.0)
+# user = User(email="customer@example.com", role_id=3, first_name="mana",last_name="ger",gender="male",
+# store_id=1, order_made=0, rating=0.0,blacklist=0)
+#
+# user.set_password('1234')
+# db.session.add(user)
+# db.session.commit()
+# i = Cart.query.filter(or_(Cart.user_id==31,Cart.cake_id==11, Cart.status=="In Process"))
+# for j in i:
+#     print(j.user_id, j.cake_id, j.status)
+# i = Cart.index
+# print(i)
+# Cart.index += 1
+# print(i, Cart.index)
+# o = db.session.query(func.max(Cart.id)).scalar()
 
-
+# print(o)
 # cart_user = Cart.query.func.count(user_id=31, status="In process")
 # if cart_user > 1:
 #     print("yeah")
