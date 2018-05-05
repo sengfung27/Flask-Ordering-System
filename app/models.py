@@ -27,10 +27,12 @@ class User(db.Model, UserMixin):
     rating = db.Column(db.DECIMAL(4, 2))
     payment = db.Column(db.VARCHAR(255))
     store_id = db.Column(db.Integer, db.ForeignKey('store.storeid'))
-
+    salary = db.Column(db.DECIMAL(9, 2))
+    order_made = db.Column(db.Integer)
+    number_of_drop = db.Column(db.Integer)
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
-    order_made = db.Column(db.Integer)
+
     role = db.relationship("Role", foreign_keys=[role_id], back_populates="user")
     store = db.relationship("Store", foreign_keys=[store_id], backref="user")
 
@@ -80,7 +82,8 @@ class Cake(db.Model):
     photo = db.Column(db.VARCHAR(255))
     description = db.Column(db.VARCHAR(255))
     rating = db.Column(db.DECIMAL(4, 2))
-
+    order_made = db.Column(db.Integer)
+    drop_amount = db.Column(db.Integer)
     cart = db.relationship("Cart", back_populates="cake")
 
     def __repr__(self):
@@ -117,6 +120,8 @@ class Cart(db.Model):
     def __repr__(self):
         return '<Cart: {}, {}>'.format(self.id, self.amount, self.price)
 
+    def set_time(self, time):
+        self.time_submit = time
 
 # class Log(db.Model):
 #     __tablename__ = 'logs'

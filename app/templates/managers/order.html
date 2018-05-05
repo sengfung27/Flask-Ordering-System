@@ -46,7 +46,7 @@
                     <tbody>
                     {% for cart in carts %}
                         <tr>
-                            <td>{{ cart.id }}</td>
+                            <td>{{ cart.order_id }}</td>
                             <td>{{ cart.user.last_name }}, {{ cart.user.first_name }}</td>
                             <td>{{ cart.address }}</td>
                             <td>{{ cart.cake.cake_name }}</td>
@@ -57,31 +57,9 @@
                                 </a>
                             </td>
                         </tr>
-<<<<<<< HEAD
-                        </thead>
-                        <tbody>
-                        {% for cart in carts %}
-                            <tr>
-                                <td>{{ cart.order_id }}</td>
-                                <td>{{ cart.user.last_name }}, {{ cart.user.first_name }}</td>
-                                <td>{{ cart.address }}</td>
-                                <td>{{ cart.cake.cake_name }}</td>
-                                <td>{{ cart.amount }}</td>
-                                <td class="col-md-2">
-                                    <a href="{{ url_for('assign_order',id=cart.id) }}" class="btn btn-primary">
-                                        assign
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-=======
                     {% endfor %}
                     </tbody>
                 </table>
->>>>>>> 0552204177a32bfd49d6bc07b409b42aa94b9f9d
             </div>
             <!--Delivery Table-->
 

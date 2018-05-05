@@ -64,7 +64,8 @@ def login():
             return redirect(url_for('index'))
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
-        if e is not None and e.check_password(request.values.get('password')):
+        if e is not None and e.check_password(request.values.get('password'))\
+                and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
@@ -77,8 +78,10 @@ def login():
                 else:
                     next_page = url_for('index')
             return redirect(next_page)
+        elif e.blacklist:
+            flash("Blacklist account will be blocked")
         else:
-            flash('Invalid email or password.')
+            flash('Invalid email or password')
     return render_template('login.html', title='Sign In')
 
 
@@ -109,7 +112,7 @@ def description(id):
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
                         price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
-                        deliver_rating=0, user_rating=0)
+                        deliver_rating=0, user_rating=0, store_rating=0)
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
@@ -157,15 +160,12 @@ def registration():
                 os.rename(path, target)
 
                 try:
-                    employee = User(email=request.values.get('email'), address=request.values.get('address'), role_id='1'
+                    employee = User(email=request.values.get('email'), address=request.values.get('address'),
+                                    role_id='1'
                                     , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-<<<<<<< HEAD
-                                    last_name=request.values.get('lastname'), id_photo=idPic.read(), rating=0.0,
-                                    order_made=0, store_id=1)
-=======
                                     last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
-                                    order_made=0)
->>>>>>> 0552204177a32bfd49d6bc07b409b42aa94b9f9d
+                                    store_id=1, number_of_warning=0, order_made=0, blacklist=0)
+
                     employee.set_password(request.values.get('password'))
                     db.session.add(employee)
                     db.session.commit()
@@ -251,7 +251,6 @@ def customer_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
         email = request.form.get('new_email')
-        phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
@@ -302,17 +301,89 @@ def customer_edit(id):
 @login_required(1, 3, 4)
 def order_history():
     counts = db.session.query(func.max(Cart.order_id)).scalar()
-
     carts = Cart.query.filter(or_(Cart.user_id == current_user.id, Cart.status == "Submitted",
                                   Cart.status == "In Process", Cart.status == "Closed"))
-    return render_template('customers/order_history.html', carts=carts, counts = counts)
+    return render_template('customers/order_history.html', carts=carts, counts=counts)
 
 
-@app.route('/customer/rating/<id>')
+@app.route('/customer/rating/<id>', methods=['GET','POST'])
 @login_required(1, 3, 4)
 def rating(id):
-    carts = Cart.query.filter_by(id=id).first()
-    return render_template('customers/rating.html', carts=carts)
+    cart = Cart.query.filter_by(id=id).first()
+    if request.method == "POST":
+        if request.form.get('store_rating')is None:
+            flash("Store rating is empty")
+            return redirect(url_for('rating', id=id))
+        store_rating = int(request.form.get('store_rating'))
+
+        if request.form.get('deliver_rating') is None:
+            flash("Deliver rating is empty")
+            return redirect(url_for('rating', id=id))
+        deliver_rating = int(request.form.get('deliver_rating'))
+
+        if request.form.get('cake_rating') is None:
+            flash("Cake rating is empty")
+            return redirect(url_for('rating', id=id))
+        cake_rating = int(request.form.get('cake_rating'))
+
+        cake_comments = request.form.get('cake_comments')
+        deliver_comments = request.form.get('deliver_comments')
+        store_comments = request.form.get('store_comments')
+
+        if store_rating < 3 and store_comments == '':
+            flash("Rating lower than 3 must provide comments")
+            return redirect(url_for('rating', id=id))
+        if cake_rating < 3 and cake_comments == '':
+            flash("Rating lower than 3 must provide comments")
+            return redirect(url_for('rating', id=id))
+        if deliver_rating < 3 and deliver_comments == '':
+            flash("Rating lower than 3 must provide comments")
+            return redirect(url_for('rating', id=id))
+
+        cart.store_rating = store_rating
+        cart.store_comments = store_comments
+        cart.cake_rating = cake_rating
+        cart.cake_comments = cake_comments
+        cart.cake.order_made += 1
+        if cart.cake.order_made == 1:
+            cart.cake.rating = cake_rating
+        elif cart.cake.order_made == 2:
+            cart.cake.rating = (cake_rating + cart.cake.rating) / Decimal(2.0)
+        else:  # cart.cake.order_made >= 3
+            cart.cake.rating = (cake_rating + (2 * cart.cake.rating)) / Decimal(3.0)
+            if cart.cake.rating < Decimal(2.0):
+                temp = Cake.query.filter_by(id=cart.cake.id).first()
+                db.session.delete(temp)
+                flash("Cake "+str(cart.cake.cake_name)+" has been dropped.")
+                cart.cook.number_of_drop += 1
+                flash("Cook "+str(cart.cook_id)+" has been added a number of dropped")
+                if cart.cook.number_of_drop >= 2:
+                    cart.cook.number_of_warning += 1
+                    flash("Cook has cake was dropped twice before, so there is a warning on his acc")
+                    if cart.cook.number_of_warning > 3:
+                        cart.cook.blacklist = True
+                        flash("Cook has more than 3 warnings, therefore he/she is laid off")
+                    cart.cook.number_of_drop = 0
+
+        cart.deliver_rating = deliver_rating
+        cart.deliver_comments = deliver_comments
+        cart.deliver.order_made += 1
+        if cart.deliver.order_made == 1:
+            cart.deliver.rating = deliver_rating
+        elif cart.deliver.order_made == 2:
+            cart.deliver.rating = (deliver_rating + cart.deliver.rating) / Decimal(2.0)
+        else:
+            cart.deliver.rating = (deliver_rating + (2 * cart.deliver.rating)) / Decimal(3.0)
+            if cart.deliver.rating < Decimal(2.0):
+                cart.deliver.number_of_warning += 1
+                flash("Deliver "+str(cart.deliver_id)+" has rating less than 2.0, therefore received a warning")
+                if cart.deliver.number_of_warning > 3:
+                    cart.deliver.blacklist = True
+                    flash("Deliver has more than 3 warnings, therefore he/she is laid off")
+        db.session.commit()
+        flash("Thank you for your rating")
+        return redirect(url_for("order_history"))
+    return render_template('customers/rating.html', cart=cart)
 
 
 ########################################################################################################################
@@ -345,7 +416,6 @@ def additem():
             target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
             os.rename(path, target)
 
-
             customerPirce = 0.95 * float(request.values.get('price'))
             vipPrice = 0.9 * float(request.values.get('price'))
 
@@ -361,6 +431,7 @@ def additem():
             flash('invalid file')
     return render_template('cooks/cookadditem.html', title='Cook')
 
+
 @app.route('/cook/dropitem', methods=['GET', 'POST'])
 def dropitem():
     cakes = Cake.query.all()
@@ -375,6 +446,7 @@ def dropitem():
 
     return render_template('cooks/drop_item.html', title='Cook', cakes=cakes)
 
+
 @app.route('/cook/edititem', methods=['GET', 'POST'])
 def edititem():
     cakes = Cake.query.all()
@@ -387,7 +459,6 @@ def edititem():
         newCategory = request.form.get('newCategory')
         price = request.form.get('price')
         description = request.form.get('description')
-
 
         if category != "":
             edit_cake.category = category
@@ -417,15 +488,12 @@ def cook_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
         email = request.form.get('new_email')
-        phone_number = request.form.get('new_phone_number')
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
             if email != "":
                 user.email = email
-            if phone_number != "":
-                user.phone_number = phone_number
             if address != "":
                 user.address = address
             if password != "" and confirm_password != "":
@@ -482,6 +550,7 @@ def deliver_rating(id):
             user.role_id = 1  # demote to visitor
         if user.order_made > 3 and user.rating >= 1.0:
             user.blacklist = 1
+            user.role_id = 1
         db.session.commit()
         flash("Thank you your rating and feedback")
         return redirect(url_for("deliver"))
@@ -507,15 +576,13 @@ def deliver_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
         email = request.form.get('new_email')
-        phone_number = request.form.get('new_phone_number')
+
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
             if email != "":
                 user.email = email
-            if phone_number != "":
-                user.phone_number = phone_number
             if address != "":
                 user.address = address
             if password != "" and confirm_password != "":
@@ -558,15 +625,13 @@ def manager_edit(id):
     user = User.query.filter_by(id=id).first_or_404()
     if request.method == "POST":
         email = request.form.get('new_email')
-        phone_number = request.form.get('new_phone_number')
+
         address = request.form.get('new_address')
         password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_new_password')
         try:
             if email != "":
                 user.email = email
-            if phone_number != "":
-                user.phone_number = phone_number
             if address != "":
                 user.address = address
             if password != "" and confirm_password != "":
