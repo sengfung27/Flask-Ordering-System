@@ -110,6 +110,27 @@ def customize_cake():
 def description(id):
     cake = Cake.query.filter_by(id=id).first()
     cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    if request.method == 'POST' and current_user.id:
+        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
+        cook = request.form['cook']
+        if cart is None:
+            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
+                        price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
+                        deliver_rating=0, user_rating=0, store_rating=0)
+            db.session.add(temp)
+            db.session.commit()
+            flash('Added to your cart')
+            return redirect(url_for('cart'))
+        elif int(request.values.get('amount')) <= 0:
+            flash("Please enter the amount you want to purchase.")
+        else:
+            cart.amount = request.values.get('amount')
+            db.session.commit()
+            flash('Added to your cart')
+            return redirect(url_for('cart'))
+    return render_template('customers/description.html', cake=cake, cooks=cooks)
+    cake = Cake.query.filter_by(id=id).first()
+    cooks = User.query.filter_by(role_id=6)  # store_id = ?
     if request.method == 'POST':
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
         cook = request.form['cook']
@@ -129,7 +150,6 @@ def description(id):
             flash('Added to your cart')
             return redirect(url_for('cart'))
     return render_template('customers/description.html', cake=cake, cooks=cooks)
-
 
 @app.route('/logout')
 @login_required(1, 3, 4, 5, 6, 7)
@@ -162,24 +182,29 @@ def registration():
                 newname = request.values.get('email') + '.png'
                 target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
                 os.rename(path, target)
+                u = User.query.filter_by(first_name=request.values.get('firstname'),
+                                         last_name=request.values.get('lastname'),
+                                         address=request.values.get('address')).first()
+                if u is None:
+                    try:
+                        employee = User(email=request.values.get('email'), address=request.values.get('address'),
+                                        role_id='1', gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+                                        last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
+                                        store_id=1, number_of_warning=0, order_made=0, blacklist=0, number_of_drop=0)
 
-                try:
-                    employee = User(email=request.values.get('email'), address=request.values.get('address'),
-                                    role_id='1'
-                                    , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
-                                    last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
+                        employee.set_password(request.values.get('password'))
+                        db.session.add(employee)
+                        db.session.commit()
 
-                                    store_id=1, number_of_warning=0, order_made=0, blacklist=0)
+                        flash('You have successfully registered! You may now login.')
 
-                    employee.set_password(request.values.get('password'))
-                    db.session.add(employee)
-                    db.session.commit()
-
-                    flash('You have successfully registered! You may now login.')
-
-                    return redirect(url_for('login'))
-                except:
-                    flash("There is an Error on register")
+                        return redirect(url_for('login'))
+                    except:
+                        flash("Error in requesting, db down")
+                elif u.blacklist == 1:
+                    flash("You have been banned from our system")
+                else:
+                    flash("Provided information is duplicated in our system.")
             else:
                 flash("invalid file")
         else:
@@ -460,15 +485,9 @@ def edititem():
         cake_name = request.values.get('cake')
         edit_cake = Cake.query.filter_by(cake_name=cake_name).first()
 
-        category = request.form.get('category')
-        newCategory = request.form.get('newCategory')
         price = request.form.get('price')
         description = request.form.get('description')
 
-        if category != "":
-            edit_cake.category = category
-        if category == "other":
-            edit_cake.category = newCategory
         if price != "":
             edit_cake.visitor_price = price
             edit_cake.customer_price = 0.95 * float(price)
