@@ -161,10 +161,8 @@ def registration():
 
                 try:
                     employee = User(email=request.values.get('email'), address=request.values.get('address'),
-                                    role_id='1'
-                                    , gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+                                    role_id='1', gender=request.values.get('gender'), first_name=request.values.get('firstname'),
                                     last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
-
                                     store_id=1, number_of_warning=0, order_made=0, blacklist=0)
 
                     employee.set_password(request.values.get('password'))
