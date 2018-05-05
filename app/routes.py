@@ -538,6 +538,11 @@ def mapforcoord():
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
+    session['coord'] = [x,y,c_x,c_y]
+    print(x)
+    print(y)
+    print(c_x)
+    print(c_y)
     # x,y --> store -> products model
     return jsonify('success')
 

@@ -1,5 +1,4 @@
-﻿
-{% block content %}
+﻿{% block content %}
 
     <!DOCTYPE HTML>
     <html lang="en">
@@ -9,6 +8,7 @@
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="../static/lib/themes/jquery.ui.all.css"/>
+        <link rel="stylesheet" href="../static/themes/assets/css/bootstrap.min.css"/>
 
         <script type="text/javascript" src="../static/lib/raphael-min.js"></script>
         <script type="text/javascript" src="../static/lib/es5-shim.min.js"></script>
@@ -120,7 +120,8 @@
                             console.log(data);
                             $("#msg").html(data.msg);
                         },
-                        error: function (data) {}
+                        error: function (data) {
+                        }
                     });
                 });
                 $.extend(Controller, {
@@ -230,15 +231,13 @@
 
     </div>
 
+    <a href="/login" id="confirm_address" class="btn btn-info" role="submit">Confirm your address</a>
 
-    <div style="float: left; font-weight: bold">
-                   <button id="confirm_address" class="btn btn-info"> Confirm your address</button>
-                </div>
+
     <!--
     <button name="confirm" class="btn-md" id="confirm" onclick="">Confirm your address</button>
     <div id="instructions_panel" class="panel">
     -->
-    </div>
 
     <div id="algorithm_panel" class="panel right_panel">
         <header><h2 class="header_title">Select Algorithm</h2></header>
