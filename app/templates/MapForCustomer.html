@@ -35,6 +35,7 @@
     <div class="main-page container">
         <script type="text/javascript">
             //by Zw, this can be the field that takes parameter from backend(address/axis)
+            var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
             var stores = [ //test data
                 {
                     "id": 1,
@@ -91,23 +92,16 @@
                     "id": 7,
                     "x_grid": 2,
                     "y_grid": 14,
-                    "created_at": null,
-                    "updated_at": null,
                     "stores": {
                         "id": 7,
                         "name": "teststore",
-                        "description": "",
-                        "image": "",
-                        "address_id": 4,
-                        "created_at": null,
-                        "updated_at": null
                     },
-                    "distance": 16.55294535724685
                 }
             ];
             var tempStores = [];
             var check = false;
             var storeSelection = [];
+            var customerAddress = [];
             $(document).ready(function () {
                 if (!Raphael.svg) {
                     window.location = 'notsupported.html';
@@ -115,14 +109,18 @@
                 $('#confirm_address').click(function (event) {
                     $.ajax({
                         type: "POST",
-                        url: "/select-store",
+                        url: $SCRIPT_ROOT + "/mapforcustomers/ajax",
                         data: {
-                            Coord: storeSelection,
+                            x: storeSelection[0],
+                            y: storeSelection[1],
+                            c_x: customerAddress[0],
+                            c_y: customerAddress[1]
                         },
                         success: function (data) {
-                            console.log(data.msg);
+                            console.log(data);
                             $("#msg").html(data.msg);
                         },
+                        error: function (data) {}
                     });
                 });
                 $.extend(Controller, {
@@ -151,6 +149,8 @@
                         }
                         else if (this.can('eraseWall') && !grid.isWalkableAt(gridX, gridY)) {
                             this.setEndPos(gridX, gridY);
+                            customerAddress = [];
+                            customerAddress.push(gridX, gridY);
                             findNearestStores(gridX, gridY);
                         }
                     },
@@ -232,8 +232,7 @@
 
 
     <div style="float: left; font-weight: bold">
-
-                    <a href="{{ url_for('login') }}">Confirm your address</a>
+                   <button id="confirm_address" class="btn btn-info"> Confirm your address</button>
                 </div>
     <!--
     <button name="confirm" class="btn-md" id="confirm" onclick="">Confirm your address</button>

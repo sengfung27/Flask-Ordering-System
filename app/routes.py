@@ -532,6 +532,16 @@ def paywage():
 def mapforcust():
     return render_template('/MapForCustomer.html')
 
+@app.route('/mapforcustomers/ajax', methods=['POST'])
+def mapforcoord():
+    x = request.form.get('x', 0, type=int)
+    y = request.form.get('y', 0, type=int)
+    c_x = request.form.get('c_x', 0, type=int)
+    c_y = request.form.get('c_y', 0, type=int)
+    # x,y --> store -> products model
+    return jsonify('success')
+
+
 @app.route('/mapfordelivery')
 @login_required(5)
 def mapfordeli():
