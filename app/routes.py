@@ -99,7 +99,8 @@ def menu():
 
 @app.route('/customize_cake', methods=['GET', 'POST'])
 def customize_cake():
-    if request.method == 'POST':
+    cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    if request.method == 'POST'and current_user.id:
             description = request.values.get('cake flavors') + ", " + request.values.get('cake filling') + ", " + \
                           request.values.get('frosting') + ", " + request.values.get('toppings') + ", " +\
                           request.values.get('size')
@@ -109,30 +110,22 @@ def customize_cake():
             db.session.add(newCake)
             db.session.commit()
 
-            cake = Cake.query.filter_by(id=id).first()
-            cooks = User.query.filter_by(role_id=6)  # store_id = ?
-            if request.method == 'POST' and current_user.id:
-                cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id,
+            cake = Cake.query.filter_by(description=description).first()
+
+            cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id,
                                             status="Not submitted").one_or_none()
-                cook = request.form['cook']
-                if cart is None:
-                    temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                                price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
-                                deliver_rating=0, user_rating=0, store_rating=0)
-                    db.session.add(temp)
-                    db.session.commit()
-                    flash('Added to your cart')
-                    return redirect(url_for('cart'))
-                elif int(request.values.get('amount')) <= 0:
-                    flash("Please enter the amount you want to purchase.")
-                else:
-                    cart.amount = request.values.get('amount')
-                    db.session.commit()
-                    flash('Added to your cart')
-                    return redirect(url_for('cart'))
+            cook = request.form['cook']
+            if cart is None:
+                temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=1,
+                            price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
+                            deliver_rating=0, user_rating=0, store_rating=0)
+                db.session.add(temp)
+                db.session.commit()
+                flash('Added to your cart')
+                return redirect(url_for('cart'))
 
             flash('success')
-    return render_template('customize_cake.html', title='Customize_Cook')
+    return render_template('customize_cake.html', cooks=cooks)
 
 
 ########################################################################################################################

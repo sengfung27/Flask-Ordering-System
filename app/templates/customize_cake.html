@@ -55,7 +55,18 @@
             <label><input type="radio" name="size" value="Median (serves 4-7 people)" style="margin: 10px 20px;">Median (serves 4-7 people)</label>
             <label><input type="radio" name="size" value="Large (serves 8-10 people)" style="margin: 10px 20px;">Median (serves 8-10 people)</label>
             </div>
-            <br>
+            <br><br>
+
+            <div class="col-xs-8">
+                <label>Select cook:</label>
+
+                <select name="cook">
+                    {% for cook in cooks %}
+                        <option value="{{ cook.id }}">{{ cook.last_name }},
+                            {{ cook.first_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
             <div class="form-group">
                     <div class="col-md-2" style="margin: 10px 20px;">
