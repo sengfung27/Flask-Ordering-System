@@ -362,7 +362,7 @@ def checkout():
                 return redirect(url_for('checkout'))
             payment = card_name + "," + card_number + "," + expmonth + "," + expyear + "," + cvv
             exist_user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
-                                        address=address).first()
+                                              address=address).first()
             if exist_user is None:
                 add_user = User(email=email, address=address, role_id='1', first_name=first_name,
                                 last_name=last_name, rating=0.0, store_id=1, number_of_warning=0,
@@ -370,7 +370,7 @@ def checkout():
                 db.session.add(add_user)
                 db.session.commit()
             user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
-                                        address = address).first()
+                                        address=address).first()
             cake_total = db.session.query(func.max(Cake.id)).scalar()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
             count = 0
@@ -821,7 +821,8 @@ def cookwarning():
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-    me = User.query.filter_by(role_id=1, blacklist=False)
+    me = User.query.filter(User.role_id == 1, User.blacklist == False,
+                           User.password_hash != "")
     if request.method == 'POST':
         if request.values.get('approve'):
             user_id = int(request.values.get('approve'))
