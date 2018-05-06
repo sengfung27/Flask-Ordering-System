@@ -148,27 +148,7 @@ def description(id):
             flash('Added to your cart')
             return redirect(url_for('cart'))
     return render_template('customers/description.html', cake=cake, cooks=cooks)
-    cake = Cake.query.filter_by(id=id).first()
-    cooks = User.query.filter_by(role_id=6)  # store_id = ?
-    if request.method == 'POST':
-        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
-        cook = request.form['cook']
-        if cart is None:
-            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                        price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
-                        deliver_rating=0, user_rating=0, store_rating=0)
-            db.session.add(temp)
-            db.session.commit()
-            flash('Added to your cart')
-            return redirect(url_for('cart'))
-        elif int(request.values.get('amount')) <= 0:
-            flash("Please enter the amount you want to purchase.")
-        else:
-            cart.amount = request.values.get('amount')
-            db.session.commit()
-            flash('Added to your cart')
-            return redirect(url_for('cart'))
-    return render_template('customers/description.html', cake=cake, cooks=cooks)
+
 
 @app.route('/logout')
 @login_required(1, 3, 4, 5, 6, 7)
@@ -201,12 +181,15 @@ def registration():
                 newname = request.values.get('email') + '.png'
                 target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
                 os.rename(path, target)
+
+                print(request.values.get('address1'))
+
                 u = User.query.filter_by(first_name=request.values.get('firstname'),
                                          last_name=request.values.get('lastname'),
                                          address=request.values.get('address')).first()
                 if u is None:
                     try:
-                        employee = User(email=request.values.get('email'), address=request.values.get('address'),
+                        employee = User(email=request.values.get('email'), address=request.values.get('address1'),
                                         role_id='1', gender=request.values.get('gender'), first_name=request.values.get('firstname'),
                                         last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
                                         store_id=1, number_of_warning=0, order_made=0, blacklist=0, number_of_drop=0)
@@ -236,11 +219,17 @@ def registration():
 def checkout():
     if current_user.is_authenticated and request.method == 'GET':
         user = User.query.filter_by(id=current_user.id).first()
+        if user.payment is None:
+            return render_template('customers/checkout.html',user=user)
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+        return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
+                           expired_month=expired_month, expired_year=expired_year, cvv=cvv)
     elif current_user.is_authenticated and request.method == 'POST':
         user = User.query.filter_by(id=current_user.id).first()
         index = db.session.query(func.max(Cart.order_id)).scalar() + 1
-        cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+        if user.payment is None:
+            flash("You payment is empty, please go to profile and add your payment")
+            return redirect(url_for('customer_edit', id=user.id))
         cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
         for i in cart_cake:
             i.status = "Submitted"
@@ -248,9 +237,8 @@ def checkout():
             i.time_submit = datetime.utcnow()
         db.session.commit()
         flash("You have successful checkout your Cart item")
-
-    return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
-                           expired_month=expired_month, expired_year=expired_year, cvv=cvv)
+        return redirect(url_for('order_history'))
+    return render_template('customers/checkout.html')
 
 
 @app.route('/cart', methods=['GET', 'POST'])
@@ -308,6 +296,7 @@ def customer_edit(id):
         new_expired_month = request.form.get('expmonth')
         new_expired_year = request.form.get('expyear')
         new_cvv = request.form.get('cvv')
+        new_billing_addr = request.form.get('billingaddr')
         try:
             if email != "":
                 user.email = email
@@ -316,8 +305,10 @@ def customer_edit(id):
             if password != "" and confirm_password != "":
                 if password == confirm_password:
                     user.set_password(password)
-            if new_cardname != "" and new_cardnumber != "" and new_expired_month != "" \
-                    and new_expired_year != "" and new_cvv != "":
+            if new_billing_addr != "":
+                user.billing_address = new_billing_addr
+            if new_cardname != "" or new_cardnumber != "" or new_expired_month != "" \
+                    or new_expired_year != "" or new_cvv != "":
                 if user.payment is not None:
                     card_name, card_number, expired_month, expired_year, cvv = user.payment.split(',')
                     if new_cardname != "":
