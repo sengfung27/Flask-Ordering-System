@@ -100,12 +100,9 @@ def menu():
 
     return render_template('menu.html', cakes=cakes)
 
-<<<<<<< HEAD
-@app.route('/customize_cake', methods=['GET', 'POST'])
-=======
 
-@app.route('/customize_cake')
->>>>>>> 0a1b100360327fe730a1b2dfee9d9ac89a11166b
+@app.route('/customize_cake', methods=['GET', 'POST'])
+
 def customize_cake():
     if request.method == 'POST':
         cakePic = request.files['cakePic']
