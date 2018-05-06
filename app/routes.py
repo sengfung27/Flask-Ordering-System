@@ -226,11 +226,11 @@ def description(id):
     elif request.method == 'POST' and current_user.id:
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").first()
         cook = request.form['cook']
+        amount = int(request.values.get('amount'))
+        if amount <= 0:
+            flash("Invalid amount. Please enter a positive amount")
+            return redirect(url_for('description', id=cake.id))
         if cart is None:
-            amount = int(request.values.get('amount'))
-            if amount <= 0:
-                flash("Invalid amount. Please enter a positive amount")
-                return redirect(url_for('description', id=cake.id))
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
                         price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
                         deliver_rating=0, user_rating=0, store_rating=0)
