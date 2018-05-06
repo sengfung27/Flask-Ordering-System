@@ -31,6 +31,12 @@
 2. allow input salary individually *FIXED*
 3. start new salary sheet *FIXED*
 
+/manager/CustomerComplain
+1. need to complete
+
+/manager/ManageCustomers
+1. need to complete
+
 ------------------------------------------- Delivery ---------------------------------------------
 /deliver_rating
 1. deliver_rating.html needs styling
@@ -39,3 +45,9 @@
 /deliver/notification
 1. need to complete
 
+------------------------------------------- Cook ---------------------------------------------
+/cook/dropped_notification
+1. need to complete
+
+/cook/warning_notification
+1. need to complete

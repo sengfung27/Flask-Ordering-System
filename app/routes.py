@@ -184,7 +184,7 @@ def description(id):
             cook = User.query.filter_by(id=cook_id).first()
             session[str(cake.id)] = [cake.id, amount, cook.id, cake.cake_name,
                                      cook.first_name, cake.visitor_price]
-            flash("Successful store in session")
+            flash("Successful store to Session")
             return redirect(url_for('menu'))
         elif amount <= 0:
             flash("Invalid amount")
@@ -357,7 +357,7 @@ def checkout():
                 db.session.add(add_user)
                 db.session.commit()
             user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
-                                        address=address).first()
+                                        address = address).first()
             cake_total = db.session.query(func.max(Cake.id)).scalar()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
             count = 0
