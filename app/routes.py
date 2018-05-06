@@ -213,7 +213,7 @@ def checkout():
             return render_template('customers/checkout.html', user=user)
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
         return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
-                           expired_month=expired_month, expired_year=expired_year, cvv=cvv)
+                           expired_month=expired_month, expired_year=expired_year, cvv=cvv, billing_address=user.billing_address)
     elif current_user.is_authenticated and request.method == 'POST':
         user = User.query.filter_by(id=current_user.id).first()
         index = db.session.query(func.max(Cart.order_id)).scalar() + 1
@@ -750,19 +750,31 @@ def paywage():
     delivery = User.query.filter_by(role_id=5)
     cook = User.query.filter_by(role_id=6)
     if request.method == 'POST':
-        if request.form['action'] == "submit_hours":
+        if request.form['action'] == "new_sheet":
             for i in delivery:
                 if request.values.get('hours' + str(i.id)) == "":
                     i.salary = 0.0
-                else:
-                    i.salary = float(request.values.get('hours' + str(i.id)))*15
+                    db.session.commit()
             for j in cook:
                 if request.values.get('hours' + str(j.id)) == "":
                     j.salary = 0.0
+                    db.session.commit()
+            flash("New salary sheet")
+
+        if request.form['action'] == "submit_hours":
+            for i in delivery:
+                if request.values.get('hours' + str(i.id)) == "":
+                    i.salary = i.salary
+                else:
+                    i.salary = float(request.values.get('hours' + str(i.id)))*15
+                    db.session.commit()
+            for j in cook:
+                if request.values.get('hours' + str(j.id)) == "":
+                    j.salary = j.salary
                 else:
                     j.salary = float(request.values.get('hours' + str(j.id)))*20
-        db.session.commit()
-        flash("Submit Successfully!")
+                    db.session.commit()
+            flash("Submit Successfully!")
     return render_template('managers/PayWage.html', delivery=delivery, cook=cook, delivery_salary_rate=15,
                            cook_salary_rate=20)
 
