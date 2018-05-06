@@ -31,28 +31,29 @@
             <table class="table table-bordered">
                 <tr>
                     <th class="col-sm-2">Customer ID</th>
-                    <th class="col-sm-3">Customer Name</th>
+                    <th class="col-sm-2">Customer Name</th>
                     <th class="col-sm-2">Photo ID</th>
-                    <th class="col-sm-3">Email</th>
+                    <th class="col-sm-2">Email</th>
                     <th class="col-sm-2">Address</th>
+                    <th class="col-sm-2">Approve</th>
                 </tr>
-
-                {% for user in me %}
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.first_name }} {{ user.last_name }}</td>
-                        <td><a style="color: black" target="_blank" href={{ url_for('uploaded_file', filename=user.email+'.png') }} >ID</a></td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.address }}</td>
-                    </tr>
-                {% endfor %}
-
+                <form action="{{ url_for('application') }}" method="POST">
+                    {% for user in me %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td><a style="color: black" target="_blank"
+                                   href={{ url_for('uploaded_file', filename=user.email+'.png') }}>ID</a></td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.address }}</td>
+                            <td><input type="submit" name="change" value="{{ user.id }}" class="btn btn-info"
+                                       style="float: right"
+                                       value="Approve"></td>
+                        </tr>
+                    {% endfor %}
+                </form>
             </table>
 
-            <form action="{{ url_for('application') }}" method="post">
-                <input type="submit" name="change" class="btn btn-info" style="float: right"
-                       value="Approve">
-            </form>
         </div>
     </div>
 

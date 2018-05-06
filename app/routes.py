@@ -64,7 +64,10 @@ def login():
             return redirect(url_for('index'))
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
-        if e is not None and e.check_password(request.values.get('password')) \
+        if e is None:
+            flash("You need to create an account in order to login.")
+            return redirect(url_for('registration'))
+        elif e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
             next_page = request.args.get('next')
@@ -371,17 +374,22 @@ def checkout():
                 flash("Payment field should not be empty")
                 return redirect(url_for('checkout'))
             payment = card_name + "," + card_number + "," + expmonth + "," + expyear + "," + cvv
-            add_user = User(email=email, address=address, role_id='1', first_name=first_name,
-                            last_name=last_name, rating=0.0, store_id=1, number_of_warning=0,
-                            order_made=0, blacklist=0, number_of_drop=0, payment=payment, billing_address=billing)
-            db.session.add(add_user)
-            db.session.commit()
+            exist_user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
+                                        address=address).first()
+            if exist_user is None:
+                add_user = User(email=email, address=address, role_id='1', first_name=first_name,
+                                last_name=last_name, rating=0.0, store_id=1, number_of_warning=0,
+                                order_made=0, blacklist=0, number_of_drop=0, payment=payment, billing_address=billing)
+                db.session.add(add_user)
+                db.session.commit()
             user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
                                         address = address).first()
             cake_total = db.session.query(func.max(Cake.id)).scalar()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
+            count = 0
             for j in range(1, int(cake_total) + 1):
                 if str(j) in session:
+                    count += 1
                     i = str(j)
                     cake_id = session[i][0]
                     amount = session[i][1]
@@ -393,6 +401,9 @@ def checkout():
                                 time_submit=datetime.utcnow())
                     db.session.add(temp)
                     session.pop(i, None)
+            if count == 0:
+                flash("You have no items in Cart")
+                return redirect(url_for('menu'))
             db.session.commit()
             flash("You have successful checkout your Cart items")
             return redirect(url_for('index'))
@@ -694,8 +705,11 @@ def deliver_rating(id):
     if request.method == 'POST':
         update_cart = Cart.query.filter_by(order_id=cart.order_id)
         user = User.query.filter_by(id=cart.user_id).first()
-        rating = request.form.get('rate_list')
+        rating = int(request.form.get('rate_list'))
         comments = request.form.get('comments')
+        if rating < 3 and comments == "":
+            flash("Comments must be provided if rating is less than 3")
+            return redirect(url_for('deliver_rating', id=id))
         for i in update_cart:
             i.user_rating = rating
             i.user_comments = comments
@@ -822,11 +836,11 @@ def cookwarning():
 def application():
     me = User.query.filter_by(role_id=1)
     if request.method == 'POST':
-        for i in me:
-            # visitor become customer, 1 to 3
-            i.role_id = 3
-            db.session.commit()
-        flash("Success to update all visitor to customer")
+        user_id = int(request.values.get('change'))
+        user = User.query.filter_by(id=user_id).first()
+        user.role_id = 3
+        db.session.commit()
+        flash("Success to update " + user.first_name + " visitor to registered customer")
     return render_template('managers/CustomerApplication.html', me=me)
 
 
