@@ -50,7 +50,7 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, passwords)
 
     def __repr__(self):
-        return '<User: {}, {}>'.format(self.id, self.email)
+        return '<User: {}, {}>'.format(self.password_hash, self.email)
 
 
 class Store(db.Model):
