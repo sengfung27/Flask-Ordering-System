@@ -13,14 +13,13 @@
     <div class="container">
         <div class="bodyInner">
             <br><br>
-            <h1>{{ cart.cake.cake_name }}</h1>
-            {#            <h1>{{ carts.cake.cake_name }}</h1> ? store#}
+
             <div class="profile" style="width: 700px; margin: auto">
                 <form action="{{ url_for('rating',id = cart.id) }}" id="form" method="POST">
                     <table id="storeRate" class="table" style="width: 700px;">
                         <thead>
                         <tr>
-                            <th class="col-sm-2">Store Rating: {{ cart.cook.store_id }}</th>
+                            <th class="col-sm-2">Store Rating: Store {{ cart.cook.store_id }}</th>
                             <th class="col-sm-2">Comment</th>
                         </tr>
                         </thead>
