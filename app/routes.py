@@ -277,6 +277,7 @@ def customer_edit(id):
         new_expired_month = request.form.get('expmonth')
         new_expired_year = request.form.get('expyear')
         new_cvv = request.form.get('cvv')
+        new_billing_addr = request.form.get('billingaddr')
         try:
             if email != "":
                 user.email = email
@@ -285,8 +286,10 @@ def customer_edit(id):
             if password != "" and confirm_password != "":
                 if password == confirm_password:
                     user.set_password(password)
-            if new_cardname != "" and new_cardnumber != "" and new_expired_month != "" \
-                    and new_expired_year != "" and new_cvv != "":
+            if new_billing_addr != "":
+                user.billing_address = new_billing_addr
+            if new_cardname != "" or new_cardnumber != "" or new_expired_month != "" \
+                    or new_expired_year != "" or new_cvv != "":
                 if user.payment is not None:
                     card_name, card_number, expired_month, expired_year, cvv = user.payment.split(',')
                     if new_cardname != "":

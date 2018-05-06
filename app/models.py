@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.VARCHAR(255))
     last_name = db.Column(db.VARCHAR(255))
     id_photo = db.Column(db.VARCHAR(255))
-    gender = db.Column(db.VARCHAR(6))
+    billing_address = db.Column(db.VARCHAR(6))
     address = db.Column(db.VARCHAR(255))
     password_hash = db.Column(db.VARCHAR(255))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), index=True)
