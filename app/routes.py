@@ -64,7 +64,10 @@ def login():
             return redirect(url_for('index'))
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
-        if e is not None and e.check_password(request.values.get('password')) \
+        if e is None:
+            flash("You need to create an account in order to login.")
+            return redirect(url_for('registration'))
+        elif e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
             next_page = request.args.get('next')
@@ -78,7 +81,7 @@ def login():
                 else:
                     next_page = url_for('index')
             return redirect(next_page)
-        elif e.blacklist == 1:
+        elif e.blacklist:
             flash("Blacklist account will be blocked")
         else:
             flash('Invalid email or password')
