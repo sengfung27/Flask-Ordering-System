@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from sshtunnel import SSHTunnelForwarder
 from flask_login import LoginManager
@@ -26,13 +26,15 @@ app.config.update(dict(
     SECRET_KEY="powerful secretkey",
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
-#UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
+# UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.secret_key = 'super secret key'
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
 from datetime import datetime
+
+
 
 # user = User(email="manager@example.com", role_id=7, first_name="mana",last_name="ger",gender="male",
 # store_id=1, order_made=0, rating=0.0)

@@ -64,7 +64,7 @@ def login():
             return redirect(url_for('index'))
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
-        if e is not None and e.check_password(request.values.get('password'))\
+        if e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
             next_page = request.args.get('next')
@@ -139,31 +139,6 @@ def customize_cake():
 # Customer
 
 
-@app.route('/customer/description/<id>', methods=['GET', 'POST'])
-def description(id):
-    cake = Cake.query.filter_by(id=id).first()
-    cooks = User.query.filter_by(role_id=6)  # store_id = ?
-    if request.method == 'POST' and current_user.id:
-        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
-        cook = request.form['cook']
-        if cart is None:
-            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
-                        price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
-                        deliver_rating=0, user_rating=0, store_rating=0)
-            db.session.add(temp)
-            db.session.commit()
-            flash('Added to your cart')
-            return redirect(url_for('cart'))
-        elif int(request.values.get('amount')) <= 0:
-            flash("Please enter the amount you want to purchase.")
-        else:
-            cart.amount = request.values.get('amount')
-            db.session.commit()
-            flash('Added to your cart')
-            return redirect(url_for('cart'))
-    return render_template('customers/description.html', cake=cake, cooks=cooks)
-
-
 @app.route('/logout')
 @login_required(1, 3, 4, 5, 6, 7)
 def logout():
@@ -204,7 +179,8 @@ def registration():
                 if u is None:
                     try:
                         employee = User(email=request.values.get('email'), address=request.values.get('address1'),
-                                        role_id='1', gender=request.values.get('gender'), first_name=request.values.get('firstname'),
+                                        role_id='1', gender=request.values.get('gender'),
+                                        first_name=request.values.get('firstname'),
                                         last_name=request.values.get('lastname'), id_photo=newname, rating=0.0,
                                         store_id=1, number_of_warning=0, order_made=0, blacklist=0, number_of_drop=0)
 
@@ -229,30 +205,45 @@ def registration():
     return render_template('customers/registerform.html')  # , form=form
 
 
-@app.route('/checkout', methods=['GET', 'POST'])
-def checkout():
-    if current_user.is_authenticated and request.method == 'GET':
-        user = User.query.filter_by(id=current_user.id).first()
-        if user.payment is None:
-            return render_template('customers/checkout.html',user=user)
-        cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
-        return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
-                           expired_month=expired_month, expired_year=expired_year, cvv=cvv)
-    elif current_user.is_authenticated and request.method == 'POST':
-        user = User.query.filter_by(id=current_user.id).first()
-        index = db.session.query(func.max(Cart.order_id)).scalar() + 1
-        if user.payment is None:
-            flash("You payment is empty, please go to profile and add your payment")
-            return redirect(url_for('customer_edit', id=user.id))
-        cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
-        for i in cart_cake:
-            i.status = "Submitted"
-            i.order_id = index
-            i.time_submit = datetime.utcnow()
-        db.session.commit()
-        flash("You have successful checkout your Cart item")
-        return redirect(url_for('order_history'))
-    return render_template('customers/checkout.html')
+@app.route('/customer/description/<id>', methods=['GET', 'POST'])
+def description(id):
+    cake = Cake.query.filter_by(id=id).first()
+    cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    if request.method == 'POST' and current_user.is_anonymous:
+        amount = int(request.values.get('amount'))
+        cook_id = int(request.values.get('cook'))
+        if str(cake.id) not in session:
+            cook = User.query.filter_by(id=cook_id).first()
+            session[str(cake.id)] = [cake.id, amount, cook.id, cake.cake_name,
+                                     cook.first_name, cake.visitor_price]
+            flash("Successful store to Session")
+            return redirect(url_for('menu'))
+        elif amount <= 0:
+            flash("Invalid amount")
+            return redirect(url_for('description', id=cake.id))
+        else:
+            flash("Initial amount: " + str(session[str(cake.id)][1]))
+            session[str(cake.id)][1] = amount
+            flash("After changed the amount: " + str(session[str(cake.id)][1]))
+            return redirect(url_for('menu'))
+    elif request.method == 'POST' and current_user.id:
+        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
+        cook = request.form['cook']
+        if cart is None:
+            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
+                        price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
+                        deliver_rating=0, user_rating=0, store_rating=0)
+            db.session.add(temp)
+            db.session.commit()
+            flash('Added to your cart')
+            return redirect(url_for('cart'))
+
+        else:
+            cart.amount = request.values.get('amount')
+            db.session.commit()
+            flash('Added to your cart')
+            return redirect(url_for('cart'))
+    return render_template('customers/description.html', cake=cake, cooks=cooks)
 
 
 @app.route('/cart', methods=['GET', 'POST'])
@@ -263,31 +254,159 @@ def cart():
 
         for i in cart:
             total += i.price * i.amount
+        return render_template('customers/cart.html', cart=cart, total=total)
     else:
-        cart = ""
-    return render_template('customers/cart.html', cart=cart, total=total)
+        cart_array = []
+        total = 0
+        cake_total = db.session.query(func.max(Cake.id)).scalar()
+        for j in range(1, int(cake_total) + 1):
+            if str(j) in session:
+                i = str(j)
+                temp = []
+                cake_id = session[i][0]
+                amount = session[i][1]
+                cook_id = session[i][2]
+                cake_name = session[i][3]
+                cook_first_name = session[i][4]
+                visitor_price = session[i][5]
+                temp.append(cake_id)
+                temp.append(amount)
+                temp.append(cook_id)
+                temp.append(cake_name)
+                temp.append(cook_first_name)
+                temp.append(visitor_price)
+                cart_array.append(temp)
+                total += amount * visitor_price
+        return render_template('customers/cart.html', cart_array=cart_array, total=total)
 
 
 @app.route('/edit_cart', methods=['GET', 'POST'])
 def edit_cart():
     if current_user.is_authenticated:
         cart = Cart.query.filter_by(user_id=current_user.id, status="Not submitted")
+        if request.method == "POST":
+            if request.form['action'] == "submit_submit":
+                for i in cart:
+                    if request.values.get('amount' + str(i.cake.id)) != "":
+                        i.amount = request.values.get('amount' + str(i.cake.id))
+            else:  # submit_drop
+                cake_id = request.form['action']
+                cake_in_cart = Cart.query.filter_by(cake_id=cake_id, status="Not submitted").first()
+                if cake_in_cart is not None:
+                    db.session.delete(cake_in_cart)
+            db.session.commit()
+            flash("Successful edit your cart")
+            return redirect(url_for('cart'))
+        return render_template('customers/edit_cart.html', cart=cart)
+    else:
+        cart_array = []
+        cake_total = db.session.query(func.max(Cake.id)).scalar()
+        for j in range(1, int(cake_total) + 1):
+            if str(j) in session:
+                i = str(j)
+                temp = []
+                cake_id = session[i][0]
+                amount = session[i][1]
+                cake_name = session[i][3]
+                temp.append(cake_id)
+                temp.append(amount)
+                temp.append(cake_name)
+                cart_array.append(temp)
+        if current_user.is_anonymous and request.method == "POST":
+            if request.form['action'] == "submit_submit":
+                for j in range(1, int(cake_total) + 1):
+                    if str(j) in session:
+                        i = str(j)
+                        if request.values.get('amount' + str(session[i][1])) != "":
+                            if int(request.values.get('amount' + str(session[i][0]))) <= 0:
+                                flash("Invalid, please enter again")
+                                return redirect(url_for('edit_cart'))
+                            session[i][1] = int(request.values.get('amount' + str(session[i][0])))
+                            flash("Successful updated the amount of cakes")
+                            return redirect(url_for('cart'))
+                        else:
+                            flash("You must enter a number")
+            else:  # submit_drop
+                cake_id = request.form['action']
+                if str(cake_id) in session:
+                    session.pop(str(cake_id), None)
+                    flash("You cake has been dropped")
+                    return redirect(url_for('cart'))
+        return render_template('customers/edit_cart.html', cart_array=cart_array)
 
-    if request.method == "POST":
-        if request.form['action'] == "submit_submit":
-            for i in cart:
-                if request.values.get('amount' + str(i.cake.id)) == "":
-                    i.amount = i.amount
-                else:  # request.values.get('amount' + str(i.cake.id)) != i.amount
-                    i.amount = request.values.get('amount' + str(i.cake.id))
-        else:  # submit_drop
-            cake_id = request.form['action']
-            cake_in_cart = Cart.query.filter_by(cake_id=cake_id, status="Not submitted").first()
-            if cake_in_cart is not None:
-                db.session.delete(cake_in_cart)
-        db.session.commit()
-        flash("Successful edit your cart")
-    return render_template('customers/edit_cart.html', cart=cart)
+
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    if current_user.is_authenticated:
+        user = User.query.filter_by(id=current_user.id).first()
+        if user.payment is not None:
+            cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+        if request.method == 'POST':
+            user = User.query.filter_by(id=current_user.id).first()
+            index = db.session.query(func.max(Cart.order_id)).scalar() + 1
+            if user.payment is None:
+                flash("You payment is empty, please go to profile and add your payment")
+                return redirect(url_for('customer_edit', id=user.id))
+            cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted").first()
+            if cart_cake is None:
+                flash("You have no cake to checkout")
+                return redirect(url_for('menu'))
+            cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
+            for i in cart_cake:
+                i.status = "Submitted"
+                i.order_id = index
+                i.time_submit = datetime.utcnow()
+            db.session.commit()
+            flash("You have successful checkout your Cart item")
+            return redirect(url_for('order_history'))
+        return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
+                               expired_month=expired_month, expired_year=expired_year, cvv=cvv,
+                               billing_address=user.billing_address)
+    else:
+        if request.method == 'POST':
+            first_name = request.values.get('first_name')
+            last_name = request.values.get('last_name')
+            email = request.values.get('email')
+            address = request.values.get('address')
+            card_name = request.values.get('cardname')
+            card_number = request.values.get('cardnumber')
+            expmonth = request.values.get('expmonth')
+            expyear = request.values.get('expyear')
+            cvv = request.values.get('cvv')
+            billing = request.values.get('billing')
+            if first_name == "" or last_name == "" or email == "" or address == "":
+                flash("Personal field should not be empty.")
+                return redirect(url_for('checkout'))
+            if card_name == "" or card_number == "" or expmonth == "" or expyear == "" or cvv == "" or billing == "":
+                flash("Payment field should not be empty")
+                return redirect(url_for('checkout'))
+            payment = card_name + "," + card_number + "," + expmonth + "," + expyear + "," + cvv
+            add_user = User(email=email, address=address, role_id='1', first_name=first_name,
+                            last_name=last_name, rating=0.0, store_id=1, number_of_warning=0,
+                            order_made=0, blacklist=0, number_of_drop=0, payment=payment, billing_address=billing)
+            db.session.add(add_user)
+            db.session.commit()
+            user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
+                                        address = address).first()
+            cake_total = db.session.query(func.max(Cake.id)).scalar()
+            index = db.session.query(func.max(Cart.order_id)).scalar() + 1
+            for j in range(1, int(cake_total) + 1):
+                if str(j) in session:
+                    i = str(j)
+                    cake_id = session[i][0]
+                    amount = session[i][1]
+                    cook_id = session[i][2]
+                    visitor_price = session[i][5]
+                    temp = Cart(cake_id=cake_id, user_id=user.id, amount=amount,
+                                price=visitor_price, status="Submitted", cook_id=cook_id, cake_rating=0,
+                                deliver_rating=0, user_rating=0, store_rating=0, order_id=index,
+                                time_submit=datetime.utcnow())
+                    db.session.add(temp)
+                    session.pop(i, None)
+            db.session.commit()
+            flash("You have successful checkout your Cart items")
+            return redirect(url_for('index'))
+        return render_template('customers/checkout.html')
 
 
 @app.route('/customer/customer_profile/<id>')
@@ -361,12 +480,12 @@ def order_history():
     return render_template('customers/order_history.html', carts=carts, counts=counts)
 
 
-@app.route('/customer/rating/<id>', methods=['GET','POST'])
+@app.route('/customer/rating/<id>', methods=['GET', 'POST'])
 @login_required(1, 3, 4)
 def rating(id):
     cart = Cart.query.filter_by(id=id).first()
     if request.method == "POST":
-        if request.form.get('store_rating')is None:
+        if request.form.get('store_rating') is None:
             flash("Store rating is empty")
             return redirect(url_for('rating', id=id))
         store_rating = int(request.form.get('store_rating'))
@@ -409,9 +528,9 @@ def rating(id):
             if cart.cake.rating < Decimal(2.0):
                 temp = Cake.query.filter_by(id=cart.cake.id).first()
                 db.session.delete(temp)
-                flash("Cake "+str(cart.cake.cake_name)+" has been dropped.")
+                flash("Cake " + str(cart.cake.cake_name) + " has been dropped.")
                 cart.cook.number_of_drop += 1
-                flash("Cook "+str(cart.cook_id)+" has been added a number of dropped")
+                flash("Cook " + str(cart.cook_id) + " has been added a number of dropped")
                 if cart.cook.number_of_drop >= 2:
                     cart.cook.number_of_warning += 1
                     flash("Cook has cake was dropped twice before, so there is a warning on his acc")
@@ -431,7 +550,7 @@ def rating(id):
             cart.deliver.rating = (deliver_rating + (2 * cart.deliver.rating)) / Decimal(3.0)
             if cart.deliver.rating < Decimal(2.0):
                 cart.deliver.number_of_warning += 1
-                flash("Deliver "+str(cart.deliver_id)+" has rating less than 2.0, therefore received a warning")
+                flash("Deliver " + str(cart.deliver_id) + " has rating less than 2.0, therefore received a warning")
                 if cart.deliver.number_of_warning > 3:
                     cart.deliver.blacklist = True
                     flash("Deliver has more than 3 warnings, therefore he/she is laid off")
@@ -775,19 +894,31 @@ def paywage():
     delivery = User.query.filter_by(role_id=5)
     cook = User.query.filter_by(role_id=6)
     if request.method == 'POST':
-        if request.form['action'] == "submit_hours":
+        if request.form['action'] == "new_sheet":
             for i in delivery:
                 if request.values.get('hours' + str(i.id)) == "":
                     i.salary = 0.0
-                else:
-                    i.salary = float(request.values.get('hours' + str(i.id)))*15
+                    db.session.commit()
             for j in cook:
                 if request.values.get('hours' + str(j.id)) == "":
                     j.salary = 0.0
+                    db.session.commit()
+            flash("New salary sheet")
+
+        if request.form['action'] == "submit_hours":
+            for i in delivery:
+                if request.values.get('hours' + str(i.id)) == "":
+                    i.salary = i.salary
                 else:
-                    j.salary = float(request.values.get('hours' + str(j.id)))*20
-        db.session.commit()
-        flash("Submit Successfully!")
+                    i.salary = float(request.values.get('hours' + str(i.id))) * 15
+                    db.session.commit()
+            for j in cook:
+                if request.values.get('hours' + str(j.id)) == "":
+                    j.salary = j.salary
+                else:
+                    j.salary = float(request.values.get('hours' + str(j.id))) * 20
+                    db.session.commit()
+            flash("Submit Successfully!")
     return render_template('managers/PayWage.html', delivery=delivery, cook=cook, delivery_salary_rate=15,
                            cook_salary_rate=20)
 
@@ -800,19 +931,21 @@ def paywage():
 def mapforcust():
     return render_template('/MapForCustomer.html')
 
+
 @app.route('/mapforcustomers/ajax', methods=['POST'])
 def mapforcoord():
     x = request.form.get('x', 0, type=int)
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
-    session['coord'] = [x,y,c_x,c_y]
+    session['coord'] = [x, y, c_x, c_y]
     print(x)
     print(y)
     print(c_x)
     print(c_y)
     # x,y --> store -> products model
     return jsonify('success')
+
 
 @app.route('/mapfordelivery')
 @login_required(5)

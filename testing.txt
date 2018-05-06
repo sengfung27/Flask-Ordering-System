@@ -1,0 +1,53 @@
+/login
+1. type in wrong email will cause error
+    now :: input: delivery@example.com which is not in the db,
+           error: File "/Users/caizhuoying/Documents/Flask-Ordering-System/app/routes.py", line 81, in login
+                  elif e.blacklist:
+                  AttributeError: 'NoneType' object has no attribute 'blacklist'
+
+------------------------------------------- Customer ---------------------------------------------
+/cart
+1. different status different price
+    now :: all status use customer price
+
+/checkout
+1. allow submit order only if the cart is not empty
+    now :: allow submit order even if there is nothing in the cart
+
+/customize_cake
+1. styling the page
+2. need to complete
+
+------------------------------------------- Manager ---------------------------------------------
+/manager/CustomerApplication
+1. approve application individually and add decline option
+
+/manager/order
+1. user address did not show up *FIXED*
+2. assign_order.html needs styling
+
+/manager/PayWage
+1. salary did not save to db *FIXED*
+2. allow input salary individually *FIXED*
+3. start new salary sheet *FIXED*
+
+/manager/CustomerComplain
+1. need to complete
+
+/manager/ManageCustomers
+1. need to complete
+
+------------------------------------------- Delivery ---------------------------------------------
+/deliver_rating
+1. deliver_rating.html needs styling
+2. enforce comment if rating < 3
+
+/deliver/notification
+1. need to complete
+
+------------------------------------------- Cook ---------------------------------------------
+/cook/dropped_notification
+1. need to complete
+
+/cook/warning_notification
+1. need to complete
