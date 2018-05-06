@@ -200,6 +200,8 @@ def registration():
 def checkout():
     if current_user.is_authenticated and request.method == 'GET':
         user = User.query.filter_by(id=current_user.id).first()
+        if user.payment is None:
+            return render_template('customers/checkout.html',user=user)
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
         return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
                            expired_month=expired_month, expired_year=expired_year, cvv=cvv)
@@ -208,7 +210,7 @@ def checkout():
         index = db.session.query(func.max(Cart.order_id)).scalar() + 1
         if user.payment is None:
             flash("You payment is empty, please go to profile and add your payment")
-            return redirect(url_for(customer_edit, id=user.id))
+            return redirect(url_for('customer_edit', id=user.id))
         cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
         for i in cart_cake:
             i.status = "Submitted"
