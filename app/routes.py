@@ -68,6 +68,7 @@ def login():
                 and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
             next_page = request.args.get('next')
+
             if not next_page or url_parse(next_page).netloc != '':
                 if current_user.role_id == 7:
                     next_page = url_for('manager', id=current_user.id)
@@ -77,11 +78,6 @@ def login():
                     next_page = url_for('deliver')
                 else:
                     next_page = url_for('index')
-
-                    #address from session to db
-                    e.address = session['store_address']
-                    db.session.commit()
-
             return redirect(next_page)
         elif e.blacklist:
             flash("Blacklist account will be blocked")
@@ -214,8 +210,9 @@ def checkout():
     elif current_user.is_authenticated and request.method == 'POST':
         user = User.query.filter_by(id=current_user.id).first()
 
-        #Gor: Added address to db, pending on review
-        user.address = session['user_address']
+        # address from session to db
+        user.address = "(" + str(session['user_address'][0]) + "," + str(session['user_address'][1]) + ")"
+        db.session.commit()
 
         index = db.session.query(func.max(Cart.order_id)).scalar() + 1
         if user.payment is None:
@@ -784,11 +781,11 @@ def mapforcoord():
     c_y = request.form.get('c_y', 0, type=int)
     session['store_address'] = [x,y]
     session['user_address'] = [c_x, c_y]
-    print(x)
-    print(y)
-    print(c_x)
-    print(c_y)
-    print(session['store_address'])
+    # print(x)
+    # print(y)
+    # print(c_x)
+    # print(c_y)
+    # print(session['store_address'])
     # x,y --> store -> products model
     return jsonify('success')
 
