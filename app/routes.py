@@ -65,8 +65,9 @@ def login():
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
         if e is None:
-            flash("You need to create an account in order to login.")
-            return redirect(url_for('registration'))
+            flash("Our system does not have your record. "
+                  "Please check your Email or password. "
+                  "Or create a new account.")
         elif e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
@@ -207,6 +208,9 @@ def description(id):
     cooks = User.query.filter_by(role_id=6)  # store_id = ?
     if request.method == 'POST' and current_user.is_anonymous:
         amount = int(request.values.get('amount'))
+        if amount <= 0:
+            flash("Invalid amount")
+            return redirect(url_for('description', id=cake.id))
         cook_id = int(request.values.get('cook'))
         if str(cake.id) not in session:
             cook = User.query.filter_by(id=cook_id).first()
@@ -214,19 +218,20 @@ def description(id):
                                      cook.first_name, cake.visitor_price]
             flash("Successful store to Session")
             return redirect(url_for('menu'))
-        elif amount <= 0:
-            flash("Invalid amount")
-            return redirect(url_for('description', id=cake.id))
         else:
             flash("Initial amount: " + str(session[str(cake.id)][1]))
             session[str(cake.id)][1] = amount
             flash("After changed the amount: " + str(session[str(cake.id)][1]))
             return redirect(url_for('menu'))
     elif request.method == 'POST' and current_user.id:
-        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
+        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").first()
         cook = request.form['cook']
         if cart is None:
-            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
+            amount = int(request.values.get('amount'))
+            if amount <= 0:
+                flash("Invalid amount. Please enter a positive amount")
+                return redirect(url_for('description', id=cake.id))
+            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
                         price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
                         deliver_rating=0, user_rating=0, store_rating=0)
             db.session.add(temp)
@@ -284,6 +289,10 @@ def edit_cart():
             if request.form['action'] == "submit_submit":
                 for i in cart:
                     if request.values.get('amount' + str(i.cake.id)) != "":
+                        amount = int(request.values.get('amount' + str(i.cake.id)))
+                        if amount <= 0:
+                            flash("Invalid amount. Please reenter a amount")
+                            return redirect(url_for('edit_cart'))
                         i.amount = request.values.get('amount' + str(i.cake.id))
             else:  # submit_drop
                 cake_id = request.form['action']
@@ -318,10 +327,11 @@ def edit_cart():
                                 flash("Invalid, please enter again")
                                 return redirect(url_for('edit_cart'))
                             session[i][1] = int(request.values.get('amount' + str(session[i][0])))
-                            flash("Successful updated the amount of cakes")
-                            return redirect(url_for('cart'))
+                            flash("Successful updated one cake")
                         else:
                             flash("You must enter a number")
+                flash("Successful updated the amount of cakes")
+                return redirect(url_for('cart'))
             else:  # submit_drop
                 cake_id = request.form['action']
                 if str(cake_id) in session:
