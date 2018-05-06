@@ -821,13 +821,22 @@ def cookwarning():
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-    me = User.query.filter_by(role_id=1)
+    me = User.query.filter_by(role_id=1, blacklist=False)
     if request.method == 'POST':
-        user_id = int(request.values.get('change'))
-        user = User.query.filter_by(id=user_id).first()
-        user.role_id = 3
-        db.session.commit()
-        flash("Success to update " + user.first_name + " visitor to registered customer")
+        if request.values.get('approve'):
+            user_id = int(request.values.get('approve'))
+            user = User.query.filter_by(id=user_id).first()
+            user.role_id = 3
+            db.session.commit()
+            flash("Success to approve " + user.first_name + " visitor to registered customer")
+        else:
+            user_id = int(request.values.get('decline'))
+            user = User.query.filter_by(id=user_id).first()
+            flash(user.blacklist)
+            user.blacklist = True
+            flash(user.blacklist)
+            db.session.commit()
+            flash("Success to decline " + user.first_name)
     return render_template('managers/CustomerApplication.html', me=me)
 
 
