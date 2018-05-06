@@ -65,8 +65,9 @@ def login():
     if request.method == 'POST':
         e = User.query.filter_by(email=request.values.get('email')).first()
         if e is None:
-            flash("You need to create an account in order to login.")
-            return redirect(url_for('registration'))
+            flash("Our system does not have your record. "
+                  "Please check your Email or password. "
+                  "Or create a new account.")
         elif e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
