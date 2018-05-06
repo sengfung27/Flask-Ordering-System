@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from sshtunnel import SSHTunnelForwarder
 from flask_login import LoginManager
@@ -29,14 +29,13 @@ app.config.update(dict(
 UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.secret_key = 'super secret key'
 from app import routes, models, errors
 from app.models import User, Role, Cake, Cart
 from datetime import datetime
 
-# dicti = {}
-# dicti['a'] = [1,2,3,4]
-# print(dicti['a'][1])
+
+
 # user = User(email="manager@example.com", role_id=7, first_name="mana",last_name="ger",gender="male",
 # store_id=1, order_made=0, rating=0.0)
 # user = User(email="customer@example.com", role_id=3, first_name="mana",last_name="ger",gender="male",
