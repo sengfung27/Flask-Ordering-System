@@ -1,10 +1,11 @@
 /login
-1. type in wrong email will cause error
+1. type in wrong email will cause error *FIXED*
     now :: input: delivery@example.com which is not in the db,
            error: File "/Users/caizhuoying/Documents/Flask-Ordering-System/app/routes.py", line 81, in login
                   elif e.blacklist:
                   AttributeError: 'NoneType' object has no attribute 'blacklist'
     ;seng: resolved, please test again
+
 ------------------------------------------- Customer ---------------------------------------------
 /cart
 1. different status different price
@@ -12,9 +13,10 @@
     seng: need to wait store id
 
 /checkout
-1. allow submit order only if the cart is not empty
+1. allow submit order only if the cart is not empty *FIXED*
     now :: allow submit order even if there is nothing in the cart
     ;seng: resolved, please test again
+2. styling the page (footer)
 
 /customize_cake
 1. styling the page
@@ -23,7 +25,7 @@
 ------------------------------------------- Manager ---------------------------------------------
 /manager/CustomerApplication
 1. approve application individually and add decline option
-;seng: resolved, please test again
+   ;seng: resolved, please test again
 
 /manager/order
 1. user address did not show up *FIXED*
@@ -44,7 +46,8 @@
 /deliver_rating
 1. deliver_rating.html needs styling
 2. enforce comment if rating < 3
-;seng: resolved, please test again
+   ;seng: resolved, please test again
+
 /deliver/notification
 1. need to complete
 
