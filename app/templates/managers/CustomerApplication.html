@@ -36,6 +36,7 @@
                     <th class="col-sm-2">Email</th>
                     <th class="col-sm-2">Address</th>
                     <th class="col-sm-2">Approve</th>
+                    <th class="col-sm-2">Denial</th>
                 </tr>
                 <form action="{{ url_for('application') }}" method="POST">
                     {% for user in me %}
@@ -46,7 +47,10 @@
                                    href={{ url_for('uploaded_file', filename=user.email+'.png') }}>ID</a></td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.address }}</td>
-                            <td><input type="submit" name="change" value="{{ user.id }}" class="btn btn-info"
+                            <td><input type="submit" name="approve" value="{{ user.id }}" class="btn btn-success"
+                                       style="float: right"
+                                       value="Approve"></td>
+                            <td><input type="submit" name="decline" value="{{ user.id }}" class="btn btn-danger"
                                        style="float: right"
                                        value="Approve"></td>
                         </tr>
