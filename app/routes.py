@@ -321,6 +321,9 @@ def checkout():
         user = User.query.filter_by(id=current_user.id).first()
         if user.payment is not None:
             cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+            return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
+                                   expired_month=expired_month, expired_year=expired_year, cvv=cvv,
+                                   billing_address=user.billing_address)
         if request.method == 'POST':
             user = User.query.filter_by(id=current_user.id).first()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
@@ -339,9 +342,7 @@ def checkout():
             db.session.commit()
             flash("You have successful checkout your Cart item")
             return redirect(url_for('order_history'))
-        return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
-                               expired_month=expired_month, expired_year=expired_year, cvv=cvv,
-                               billing_address=user.billing_address)
+        return render_template('customers/checkout.html', user=user)
     else:
         if request.method == 'POST':
             first_name = request.values.get('first_name')
@@ -939,7 +940,14 @@ def mapforcoord():
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
-    session['coord'] = [x, y, c_x, c_y]
+    if 'user_address' not in session:
+        flash("User Address not provide")
+        return redirect(url_for('mapforcust'))
+    if 'store_address' not in session:
+        flash("Store Address not provide")
+        return redirect(url_for('mapforcust'))
+    session['store_address'] = [x, y]
+    session['user_address'] = [c_x, c_y]
     print(x)
     print(y)
     print(c_x)
