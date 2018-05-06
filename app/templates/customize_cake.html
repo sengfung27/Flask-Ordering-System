@@ -57,7 +57,17 @@
             </div>
             <br><br>
 
-            <div class="col-xs-8">
+            <div class="col-xs-1">
+                <div class="quantity-input">
+                    <label>Amount:</label>
+                    <input type="number" class="form-control" name="amount"
+                           value="1">
+                    <!-- set limit-->
+                </div>
+            </div>
+            <br><br>
+
+            <div class="col-xs-4">
                 <label>Select cook:</label>
 
                 <select name="cook">
@@ -67,9 +77,10 @@
                     {% endfor %}
                 </select>
             </div>
+            <br>
 
-            <div class="form-group">
-                    <div class="col-md-2" style="margin: 10px 20px;">
+            <div class="form-group" style="margin: 10px 20px;">
+                    <div class="col-md-2">
                         <button type="submit" class="btn btn-primary">Add to Cart</button>
                     </div>
             </div>
