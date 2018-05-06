@@ -32,7 +32,7 @@
                 <tr>
                     <th>Customer ID</th>
                     <th>Customer Name</th>
-                    <!-- <th>Photo ID</th> -->
+                    <th>Photo ID</th>
                     <th>Email</th>
                     <th>Address</th>
                 </tr>
@@ -40,19 +40,20 @@
                 {% for user in me %}
                     <tr>
                         <td>{{ user.id }}</td>
-                        <td>{{ user.first_name }}{{ user.last_name }}</td>
+                        <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        <td><a style="color: black" target="_blank" href={{ url_for('uploaded_file', filename=user.email+'.png') }} >ID</a></td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.address }}</td>
                     </tr>
                 {% endfor %}
 
-
             </table>
+
+            <form action="{{ url_for('application') }}" method="post">
+                <input type="submit" name="change" class="btn btn-info" style="float: right"
+                       value="Approve">
+            </form>
         </div>
-        <!-- button -->
-        <form action="{{ url_for('application') }}" method="post">
-            <input type="submit" name="change" class="btn btn-info" style="float: right" value="Submit">
-        </form>
     </div>
 
 
