@@ -184,20 +184,15 @@ def description(id):
             cook = User.query.filter_by(id=cook_id).first()
             session[str(cake.id)] = [cake.id, amount, cook.id, cake.cake_name,
                                      cook.first_name, cake.visitor_price]
-            for i in range(6):
-                flash(session[str(cake.id)][i])
-            flash("Successful added to Session")
+            flash("Successful store to Session")
             return redirect(url_for('menu'))
         elif amount <= 0:
             flash("Invalid amount")
             return redirect(url_for('description', id=cake.id))
         else:
-            flash(session[str(cake.id)][1])
+            flash("Initial amount: " + str(session[str(cake.id)][1]))
             session[str(cake.id)][1] = amount
-            flash("Successful change the amount " + str(session[str(cake.id)][1]))
-            flash(session[str(cake.id)][0])
-            flash(session[str(cake.id)][1])
-            flash(session[str(cake.id)][2])
+            flash("After changed the amount: " + str(session[str(cake.id)][1]))
             return redirect(url_for('menu'))
     elif request.method == 'POST' and current_user.id:
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
@@ -358,7 +353,8 @@ def checkout():
                             order_made=0, blacklist=0, number_of_drop=0, payment=payment, billing_address=billing)
             db.session.add(add_user)
             db.session.commit()
-            user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name, address=address).first()
+            user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
+                                        address = address).first()
             cake_total = db.session.query(func.max(Cake.id)).scalar()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
             for j in range(1, int(cake_total) + 1):
