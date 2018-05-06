@@ -211,7 +211,7 @@ def checkout():
         user = User.query.filter_by(id=current_user.id).first()
 
         # address from session to db
-        user.address = "(" + str(session['user_address'][0]) + "," + str(session['user_address'][1]) + ")"
+        user.address = str(session['user_address'][0]) + "," + str(session['user_address'][1])
         db.session.commit()
 
         index = db.session.query(func.max(Cart.order_id)).scalar() + 1
