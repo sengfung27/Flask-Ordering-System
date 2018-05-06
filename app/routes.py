@@ -111,7 +111,14 @@ def description(id):
     cake = Cake.query.filter_by(id=id).first()
     cooks = User.query.filter_by(role_id=6)  # store_id = ?
     if request.method == 'POST' and current_user.is_anonymous:
-        session[cake] = [cake.id, request.values.get('amount'), request.form['cook']]
+        if cake.id not in session:
+            session[cake.id] = [cake.id, request.values.get('amount'), request.form['cook']]
+        elif int(request.values.get('amount')) <= 0:
+            flash("Please enter the amount you want to purchase.")
+        else:
+            session[cake.id][1] = request.values.get('amount')
+            flash('Added to your cart')
+            return redirect(url_for('menu'))
     if request.method == 'POST' and current_user.id:
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
         cook = request.form['cook']
