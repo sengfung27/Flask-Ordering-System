@@ -110,6 +110,8 @@ def customize_cake():
 def description(id):
     cake = Cake.query.filter_by(id=id).first()
     cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    if request.method == 'POST' and current_user.is_anonymous:
+        session[cake] = [cake.id, request.values.get('amount'), request.form['cook']]
     if request.method == 'POST' and current_user.id:
         cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
         cook = request.form['cook']
@@ -201,7 +203,7 @@ def checkout():
     if current_user.is_authenticated and request.method == 'GET':
         user = User.query.filter_by(id=current_user.id).first()
         if user.payment is None:
-            return render_template('customers/checkout.html',user=user)
+            return render_template('customers/checkout.html', user=user)
         cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
         return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
                            expired_month=expired_month, expired_year=expired_year, cvv=cvv)
