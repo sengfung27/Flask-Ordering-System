@@ -10,15 +10,9 @@
     </head>
 
 
-
-    <div class="pageTitle">
-        <div class="container">
-            <h2>Profile</h2>
-        </div>
-    </div>
-
     <div class="container">
         <div class="bodyInner">
+            <h2>Profile</h2>
             <div class="submitBottom" style="float: right; color: deepskyblue;">
                 <a href="{{ url_for("customer_edit",id=current_user.id) }}" style="color: deepskyblue;">Edit</a>
             </div>
@@ -62,7 +56,11 @@
 
                     <tbody>
                     <tr>
-                        <td>{{ user.role.role_type }}</td>
+                        {% if user.role.role_type == "vip" %}
+                            <td>&#9752 {{ user.role.role_type }}</td>
+                        {% else %}
+                            <td>{{ user.role.role_type }}</td>
+                        {% endif %}
                         <td>{{ user.rating }}</td>
 
                     </tr>
