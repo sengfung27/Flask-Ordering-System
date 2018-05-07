@@ -116,7 +116,8 @@ def customize_cake():
 def logout():
     flash("You logged out")
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('mapforcust'))
+    # return redirect(url_for('index'))
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -327,6 +328,9 @@ def checkout():
         if request.method == 'POST':
             user = User.query.filter_by(id=current_user.id).first()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
+
+            user.address = str(session['user_address'][0] + "," + str(session['user_address'][1]))
+            db.session.commit()
             if user.payment is None:
                 flash("You payment is empty, please go to profile and add your payment")
                 return redirect(url_for('customer_edit', id=user.id))
@@ -759,7 +763,8 @@ def deliver_edit(id):
 @app.route('/delivery/route')
 @login_required(5)
 def delivery_route():
-    return render_template('deliveries/route.html', title='Deliver')
+    return render_template('/MapForDelivery.html', title='Deliver')
+    # return render_template('deliveries/route.html', title='Deliver')
 
 
 @app.route('/deliver/notification')
@@ -940,18 +945,15 @@ def mapforcoord():
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
-    if 'user_address' not in session:
-        flash("User Address not provide")
-        return redirect(url_for('mapforcust'))
-    if 'store_address' not in session:
-        flash("Store Address not provide")
-        return redirect(url_for('mapforcust'))
+
     session['store_address'] = [x, y]
     session['user_address'] = [c_x, c_y]
     print(x)
     print(y)
     print(c_x)
     print(c_y)
+    print(session['store_address'])
+    print(session['user_address'])
     # x,y --> store -> products model
     return jsonify('success')
 
