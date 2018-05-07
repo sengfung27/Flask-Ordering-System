@@ -1,17 +1,14 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory, session
-# from app.forms import EditProfileForm, LoginForm, RegistrationForm
 from app.models import User, Cake, Cart
 from werkzeug.urls import url_parse
-from datetime import datetime
 from functools import wraps
-from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-# from app.forms import LoginForm, RegistrationForm
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 from decimal import *
 from sqlalchemy import func, or_
+from flask_login import current_user, login_user, logout_user
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 from base64 import b64encode
@@ -21,7 +18,7 @@ import base64
 # ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-from flask_login import LoginManager, current_user, login_user, logout_user
+
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
@@ -70,6 +67,13 @@ def login():
                   "Or create a new account.")
         elif e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
+            if e.role_id == 1 or e.role_id == 3 or e.role_id == 4:
+                first_index = session['user_address'][0]
+                second_index = session['user_address'][1]
+                print(first_index)
+                print(second_index)
+                e.address = str(first_index) + "," + str(second_index)
+                db.session.commit()
             login_user(e)
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
@@ -103,20 +107,19 @@ def menu():
 
 
 @app.route('/customize_cake', methods=['GET', 'POST'])
-
 def customize_cake():
     if request.method == 'POST':
         cakePic = request.files['cakePic']
 
         if cakePic and allowed_file(cakePic.filename):
 
-            description = request.values.get('description')+","
+            description = request.values.get('description') + ","
             customerPirce = 0.95 * float(request.values.get('price'))
             vipPrice = 0.9 * float(request.values.get('price'))
 
             newCake = Cake(cake_name='Custom Cake',
                            visitor_price=120, customer_price=0.95 * 120, vip_price=0.9 * 120,
-                           photo='CustomCake.png', description=)
+                           photo='CustomCake.png', description=description)
 
             db.session.add(newCake)
             db.session.commit()
@@ -349,8 +352,6 @@ def checkout():
             user = User.query.filter_by(id=current_user.id).first()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
 
-            user.address = str(session['user_address'][0] + "," + str(session['user_address'][1]))
-            db.session.commit()
             if user.payment is None:
                 flash("You payment is empty, please go to profile and add your payment")
                 return redirect(url_for('customer_edit', id=user.id))
@@ -368,11 +369,12 @@ def checkout():
             return redirect(url_for('order_history'))
         return render_template('customers/checkout.html', user=user)
     else:
+        address = str(session['user_address'][0]) + "," + str(session['user_address'][1])
         if request.method == 'POST':
             first_name = request.values.get('first_name')
             last_name = request.values.get('last_name')
             email = request.values.get('email')
-            address = request.values.get('address')
+            address = str(session['user_address'][0]) + "," + str(session['user_address'][1])
             card_name = request.values.get('cardname')
             card_number = request.values.get('cardnumber')
             expmonth = request.values.get('expmonth')
@@ -419,7 +421,7 @@ def checkout():
             db.session.commit()
             flash("You have successful checkout your Cart items")
             return redirect(url_for('index'))
-        return render_template('customers/checkout.html')
+        return render_template('customers/checkout.html', address=address)
 
 
 @app.route('/customer/customer_profile/<id>')
@@ -965,15 +967,15 @@ def mapforcoord():
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
-
-    session['store_address'] = [x, y]
-    session['user_address'] = [c_x, c_y]
-    print(x)
-    print(y)
-    print(c_x)
-    print(c_y)
-    print(session['store_address'])
-    print(session['user_address'])
+    if 'user_address' in session:
+        session['store_address'] = [x, y]
+        session['user_address'] = [c_x, c_y]
+        session.modified = True
+        flash("Updated session")
+    else:
+        session['store_address'] = [x, y]
+        session['user_address'] = [c_x, c_y]
+        flash("Create session")
     # x,y --> store -> products model
     return jsonify('success')
 
