@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {%  block content %}
-        <form action="{{ url_for('additem', id=current_user.id) }}" method="POST" class="form-horizontal"
+
+        <form action="{{ url_for('customize_cake')}}" method="POST" class="form-horizontal"
               enctype="multipart/form-data">
             <h3>Cake Flavors</h3>
             <label><input type="radio" name="cake flavors" value="American Cheese Cake" style="margin: 10px 20px;" required>American Cheese Cake</label><br>
@@ -42,12 +43,14 @@
             <label><input type="radio" name="frosting" value="Cream Cheese" style="margin: 10px 20px;">Cream Cheese</label><br>
             <label><input type="radio" name="frosting" value="Vanilla" style="margin: 10px 20px;">Vanilla</label><br>
             <br><br>
+
             <h3>Toppings</h3>
             <label><input type="radio" name="toppings" value="Almonds" style="margin: 10px 20px;" required>Almonds</label><br>
             <label><input type="radio" name="toppings" value="Coconut" style="margin: 10px 20px;">Coconut</label><br>
             <label><input type="radio" name="toppings" value="Fresh Fruit (Seasonal Restrictions)" style="margin: 10px 20px;">Fresh Fruit (Seasonal Restrictions)</label><br>
             <label><input type="radio" name="toppings" value="Walnuts" style="margin: 10px 20px;">Walnuts</label><br>
             <br><br>
+
             <h3>Choose Size</h3>
             <label><input type="radio" name="size" value="Small (serves 1-3 people)" style="margin: 10px 20px;" required>Small (serves 1-3 people)</label>
             <label><input type="radio" name="size" value="Median (serves 4-7 people)" style="margin: 10px 20px;">Median (serves 4-7 people)</label>
@@ -55,18 +58,33 @@
             </div>
             <br><br>
 
-            <div class="form-group row">
-                <div class="col-xs-2">
-                    <label for="cake">Number of cake:</label>
-                    <input class="form-control" type="text" id="cake" style="margin: 10px 20px;" required>
+
+            <div class="col-xs-1">
+                <div class="quantity-input">
+                    <label>Amount:</label>
+                    <input type="number" class="form-control" name="amount"
+                           value="1">
+                    <!-- set limit-->
                 </div>
+            </div>
+            <br><br>
+
+            <div class="col-xs-4">
+                <label>Select cook:</label>
+
+                <select name="cook">
+                    {% for cook in cooks %}
+                        <option value="{{ cook.id }}">{{ cook.last_name }},
+                            {{ cook.first_name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <br>
 
-            <div class="form-group">
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary" style="margin: 10px 20px;">Submit</button>
-                </div>
+            <div class="form-group" style="margin: 10px 20px;">
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </div>
             </div>
         </form>
     <br><br>
