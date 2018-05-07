@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {%  block content %}
-        <form>
+        <form action="{{ url_for('additem', id=current_user.id) }}" method="POST" class="form-horizontal"
+              enctype="multipart/form-data">
             <h3>Cake Flavors</h3>
-            <label><input type="radio" name="cake flavors" value="American Cheese Cake" style="margin: 10px 20px;">American Cheese Cake</label><br>
+            <label><input type="radio" name="cake flavors" value="American Cheese Cake" style="margin: 10px 20px;" required>American Cheese Cake</label><br>
             <label><input type="radio" name="cake flavors" value="Angel Food" style="margin: 10px 20px;">Angel Food</label><br>
             <label><input type="radio" name="cake flavors" value="Banana Spice" style="margin: 10px 20px;">Banana Spice</label><br>
             <label><input type="radio" name="cake flavors" value="Bizcocho Mojito (Soaked Cake)" style="margin: 10px 20px;">Bizcocho Mojito (Soaked Cake</label>)<br>
@@ -15,11 +16,12 @@
             <label><input type="radio" name="cake flavors" value="Lemon Coconut" style="margin: 10px 20px;">Lemon Coconut</label><br>
             <label><input type="radio" name="cake flavors" value="Pound Cake" style="margin: 10px 20px;">Pound Cake</label><br>
             <label><input type="radio" name="cake flavors" value="Red Velvet" style="margin: 10px 20px;">Red Velvet</label><br>
-            <label><input type="radio" name="cake flavors" value="Red Velvet" style="margin: 10px 20px;">Red Velvet</label><br>
-            <label><input type="radio" name="cake flavors" value="Red Velvet" style="margin: 10px 20px;">Red Velvet</label><br>
+            <label><input type="radio" name="cake flavors" value="Toasted Butter Pecan" style="margin: 10px 20px;">Red Velvet</label><br>
+            <label><input type="radio" name="cake flavors" value="Vanilla" style="margin: 10px 20px;">Red Velvet</label><br>
             <br><br>
+
             <h3>Cake Fillings</h3>
-            <label><input type="radio" name="cake filling" value="Apricot" style="margin: 10px 20px;">Apricot</label><br>
+            <label><input type="radio" name="cake filling" value="Apricot" style="margin: 10px 20px;" required>Apricot</label><br>
             <label><input type="radio" name="cake filling" value="Banana Cream" style="margin: 10px 20px;">Banana Cream</label><br>
             <label><input type="radio" name="cake filling" value="Bavarian Cream" style="margin: 10px 20px;">Bavarian Cream</label><br>
             <label><input type="radio" name="cake filling" value="Cannoli Cream" style="margin: 10px 20px;">Cannoli Cream</label><br>
@@ -33,32 +35,39 @@
             <label><input type="radio" name="cake filling" value="Vanilla Custard" style="margin: 10px 20px;">Vanilla Custard</label><br>
             <label><input type="radio" name="cake filling" value="White Chocolate Mousse" style="margin: 10px 20px;">White Chocolate Mousse</label><br>
             <br><br>
+
             <h3>Frosting</h3>
-            <label><input type="radio" name="frosting" value="Butter Cream" style="margin: 10px 20px;">Butter Cream</label><br>
+            <label><input type="radio" name="frosting" value="Butter Cream" style="margin: 10px 20px;" required>Butter Cream</label><br>
             <label><input type="radio" name="frosting" value="Chocolate" style="margin: 10px 20px;">Chocolate</label><br>
             <label><input type="radio" name="frosting" value="Cream Cheese" style="margin: 10px 20px;">Cream Cheese</label><br>
             <label><input type="radio" name="frosting" value="Vanilla" style="margin: 10px 20px;">Vanilla</label><br>
             <br><br>
             <h3>Toppings</h3>
-            <label><input type="radio" name="toppings" value="Almonds" style="margin: 10px 20px;">Almonds</label><br>
+            <label><input type="radio" name="toppings" value="Almonds" style="margin: 10px 20px;" required>Almonds</label><br>
             <label><input type="radio" name="toppings" value="Coconut" style="margin: 10px 20px;">Coconut</label><br>
             <label><input type="radio" name="toppings" value="Fresh Fruit (Seasonal Restrictions)" style="margin: 10px 20px;">Fresh Fruit (Seasonal Restrictions)</label><br>
             <label><input type="radio" name="toppings" value="Walnuts" style="margin: 10px 20px;">Walnuts</label><br>
             <br><br>
             <h3>Choose Size</h3>
-            <label><input type="radio" name="size" value="Small (serves 1-3 people)" style="margin: 10px 20px;">Small (serves 1-3 people)</label>
+            <label><input type="radio" name="size" value="Small (serves 1-3 people)" style="margin: 10px 20px;" required>Small (serves 1-3 people)</label>
             <label><input type="radio" name="size" value="Median (serves 4-7 people)" style="margin: 10px 20px;">Median (serves 4-7 people)</label>
             <label><input type="radio" name="size" value="Large (serves 8-10 people)" style="margin: 10px 20px;">Median (serves 8-10 people)</label>
             </div>
             <br><br>
+
             <div class="form-group row">
                 <div class="col-xs-2">
                     <label for="cake">Number of cake:</label>
-                    <input class="form-control" type="text" id="cake" style="margin: 10px 20px;">
+                    <input class="form-control" type="text" id="cake" style="margin: 10px 20px;" required>
                 </div>
             </div>
             <br>
-            <input type="submit" style="margin: 10px 20px;">
+
+            <div class="form-group">
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary" style="margin: 10px 20px;">Submit</button>
+                </div>
+            </div>
         </form>
     <br><br>
 {% endblock %}

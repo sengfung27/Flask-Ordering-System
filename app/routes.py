@@ -102,8 +102,28 @@ def menu():
     return render_template('menu.html', cakes=cakes)
 
 
-@app.route('/customize_cake')
+@app.route('/customize_cake', methods=['GET', 'POST'])
+
 def customize_cake():
+    if request.method == 'POST':
+        cakePic = request.files['cakePic']
+
+        if cakePic and allowed_file(cakePic.filename):
+
+            description = request.values.get('description')+","
+            customerPirce = 0.95 * float(request.values.get('price'))
+            vipPrice = 0.9 * float(request.values.get('price'))
+
+            newCake = Cake(cake_name='Custom Cake',
+                           visitor_price=120, customer_price=0.95 * 120, vip_price=0.9 * 120,
+                           photo='CustomCake.png', description=)
+
+            db.session.add(newCake)
+            db.session.commit()
+
+            flash('success')
+        else:
+            flash('invalid file')
     return render_template('customize_cake.html')
 
 
