@@ -101,6 +101,7 @@ def menu():
 
     return render_template('menu.html', cakes=cakes)
 
+
 @app.route('/customize_cake', methods=['GET', 'POST'])
 def customize_cake():
     cooks = User.query.filter_by(role_id=6)  # store_id = ?

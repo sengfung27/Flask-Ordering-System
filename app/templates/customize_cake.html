@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {%  block content %}
+
         <form action="{{ url_for('customize_cake')}}" method="POST" class="form-horizontal"
               enctype="multipart/form-data">
             <h3>Cake Flavors</h3>
@@ -56,6 +57,7 @@
             <label><input type="radio" name="size" value="Large (serves 8-10 people)" style="margin: 10px 20px;">Median (serves 8-10 people)</label>
             </div>
             <br><br>
+
 
             <div class="col-xs-1">
                 <div class="quantity-input">
