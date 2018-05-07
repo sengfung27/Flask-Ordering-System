@@ -97,14 +97,63 @@ def uploaded_file(filename):
 
 @app.route('/menu')
 def menu():
-    cakes = Cake.query.all()
+    cakes = Cake.query.filter(Cake.cake_name != "Custom Cake")
 
     return render_template('menu.html', cakes=cakes)
 
 
-@app.route('/customize_cake')
+@app.route('/customize_cake', methods=['GET', 'POST'])
 def customize_cake():
-    return render_template('customize_cake.html')
+    cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    if request.method == 'POST':
+            description = request.values.get('cake flavors') + ", " + request.values.get('cake filling') + ", " + \
+                          request.values.get('frosting') + ", " + request.values.get('toppings') + ", " +\
+                          request.values.get('size')
+            newCake = Cake(cake_name="Custom Cake",
+                           visitor_price=120, customer_price=0.95*120, vip_price=0.9*120,
+                           photo="CustomCake_Default.png", description=description)
+            db.session.add(newCake)
+
+            cake = Cake.query.filter_by(description=description).first()
+
+            if current_user.is_anonymous:
+                amount = int(request.values.get('amount'))
+                if amount <= 0:
+                    flash("Invalid amount, Please enter a positive amount")
+                    return redirect(url_for('description', id=cake.id))
+                cook_id = int(request.values.get('cook'))
+                if str(cake.id) not in session:
+                    cook = User.query.filter_by(id=cook_id).first()
+                    session[str(cake.id)] = [cake.id, amount, cook.id, cake.cake_name,
+                                             cook.first_name, cake.visitor_price]
+                    flash("Successful store to Session")
+                    return redirect(url_for('menu'))
+                else:
+                    flash("Initial amount: " + str(session[str(cake.id)][1]))
+                    session[str(cake.id)][1] = amount
+                    flash("After changed the amount: " + str(session[str(cake.id)][1]))
+                    return redirect(url_for('menu'))
+
+            else:  # if current_user.id
+                cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id,
+                                            status="Not submitted").one_or_none()
+                cook = request.form['cook']
+
+                amount = int(request.values.get('amount'))
+                if amount <= 0:
+                    flash("Invalid amount. Please enter a positive amount")
+                    return redirect(url_for('description', id=cake.id))
+                if cart is None:
+                    temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=1,
+                                price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
+                                deliver_rating=0, user_rating=0, store_rating=0)
+                    db.session.add(temp)
+                    db.session.commit()
+                    flash('Added to your cart')
+                    return redirect(url_for('cart'))
+
+            flash('Added to your cart successfully')
+    return render_template('customize_cake.html', cooks=cooks)
 
 
 ########################################################################################################################
@@ -183,6 +232,9 @@ def description(id):
     cooks = User.query.filter_by(role_id=6)  # store_id = ?
     if request.method == 'POST' and current_user.is_anonymous:
         amount = int(request.values.get('amount'))
+        if amount <= 0:
+            flash("Invalid amount")
+            return redirect(url_for('description', id=cake.id))
         cook_id = int(request.values.get('cook'))
         if str(cake.id) not in session:
             cook = User.query.filter_by(id=cook_id).first()
@@ -190,19 +242,20 @@ def description(id):
                                      cook.first_name, cake.visitor_price]
             flash("Successful store to Session")
             return redirect(url_for('menu'))
-        elif amount <= 0:
-            flash("Invalid amount")
-            return redirect(url_for('description', id=cake.id))
         else:
             flash("Initial amount: " + str(session[str(cake.id)][1]))
             session[str(cake.id)][1] = amount
             flash("After changed the amount: " + str(session[str(cake.id)][1]))
             return redirect(url_for('menu'))
     elif request.method == 'POST' and current_user.id:
-        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").one_or_none()
+        cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id, status="Not submitted").first()
         cook = request.form['cook']
+        amount = int(request.values.get('amount'))
+        if amount <= 0:
+            flash("Invalid amount. Please enter a positive amount")
+            return redirect(url_for('description', id=cake.id))
         if cart is None:
-            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=request.values.get('amount'),
+            temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
                         price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
                         deliver_rating=0, user_rating=0, store_rating=0)
             db.session.add(temp)
@@ -223,6 +276,7 @@ def cart():
     total = 0
     if current_user.is_authenticated:
         cart = Cart.query.filter_by(user_id=current_user.id, status="Not submitted")
+
         for i in cart:
             total += i.price * i.amount
         return render_template('customers/cart.html', cart=cart, total=total)
@@ -259,6 +313,10 @@ def edit_cart():
             if request.form['action'] == "submit_submit":
                 for i in cart:
                     if request.values.get('amount' + str(i.cake.id)) != "":
+                        amount = int(request.values.get('amount' + str(i.cake.id)))
+                        if amount <= 0:
+                            flash("Invalid amount. Please reenter a amount")
+                            return redirect(url_for('edit_cart'))
                         i.amount = request.values.get('amount' + str(i.cake.id))
             else:  # submit_drop
                 cake_id = request.form['action']
@@ -293,10 +351,11 @@ def edit_cart():
                                 flash("Invalid, please enter again")
                                 return redirect(url_for('edit_cart'))
                             session[i][1] = int(request.values.get('amount' + str(session[i][0])))
-                            flash("Successful updated the amount of cakes")
-                            return redirect(url_for('cart'))
+                            flash("Successful updated one cake")
                         else:
                             flash("You must enter a number")
+                flash("Successful updated the amount of cakes")
+                return redirect(url_for('cart'))
             else:  # submit_drop
                 cake_id = request.form['action']
                 if str(cake_id) in session:
@@ -312,6 +371,9 @@ def checkout():
         user = User.query.filter_by(id=current_user.id).first()
         if user.payment is not None:
             cardname, cardnumber, expired_month, expired_year, cvv = user.payment.split(',')
+            return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
+                                   expired_month=expired_month, expired_year=expired_year, cvv=cvv,
+                                   billing_address=user.billing_address)
         if request.method == 'POST':
             user = User.query.filter_by(id=current_user.id).first()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
@@ -330,9 +392,7 @@ def checkout():
             db.session.commit()
             flash("You have successful checkout your Cart item")
             return redirect(url_for('order_history'))
-        return render_template('customers/checkout.html', user=user, cardname=cardname, cardnumber=cardnumber,
-                               expired_month=expired_month, expired_year=expired_year, cvv=cvv,
-                               billing_address=user.billing_address)
+        return render_template('customers/checkout.html', user=user)
     else:
         if request.method == 'POST':
             first_name = request.values.get('first_name')
@@ -353,7 +413,7 @@ def checkout():
                 return redirect(url_for('checkout'))
             payment = card_name + "," + card_number + "," + expmonth + "," + expyear + "," + cvv
             exist_user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
-                                        address=address).first()
+                                              address=address).first()
             if exist_user is None:
                 add_user = User(email=email, address=address, role_id='1', first_name=first_name,
                                 last_name=last_name, rating=0.0, store_id=1, number_of_warning=0,
@@ -361,7 +421,7 @@ def checkout():
                 db.session.add(add_user)
                 db.session.commit()
             user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name,
-                                        address = address).first()
+                                        address=address).first()
             cake_total = db.session.query(func.max(Cake.id)).scalar()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
             count = 0
@@ -812,13 +872,23 @@ def cookwarning():
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-    me = User.query.filter_by(role_id=1)
+    me = User.query.filter(User.role_id == 1, User.blacklist == False,
+                           User.password_hash != "")
     if request.method == 'POST':
-        user_id = int(request.values.get('change'))
-        user = User.query.filter_by(id=user_id).first()
-        user.role_id = 3
-        db.session.commit()
-        flash("Success to update " + user.first_name + " visitor to registered customer")
+        if request.values.get('approve'):
+            user_id = int(request.values.get('approve'))
+            user = User.query.filter_by(id=user_id).first()
+            user.role_id = 3
+            db.session.commit()
+            flash("Success to approve " + user.first_name + " visitor to registered customer")
+        else:
+            user_id = int(request.values.get('decline'))
+            user = User.query.filter_by(id=user_id).first()
+            flash(user.blacklist)
+            user.blacklist = True
+            flash(user.blacklist)
+            db.session.commit()
+            flash("Success to decline " + user.first_name)
     return render_template('managers/CustomerApplication.html', me=me)
 
 
@@ -920,7 +990,14 @@ def mapforcoord():
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
-    session['coord'] = [x, y, c_x, c_y]
+    if 'user_address' not in session:
+        flash("User Address not provide")
+        return redirect(url_for('mapforcust'))
+    if 'store_address' not in session:
+        flash("Store Address not provide")
+        return redirect(url_for('mapforcust'))
+    session['store_address'] = [x, y]
+    session['user_address'] = [c_x, c_y]
     print(x)
     print(y)
     print(c_x)
