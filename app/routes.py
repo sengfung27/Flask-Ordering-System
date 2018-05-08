@@ -1080,9 +1080,17 @@ def mapforcoord():
 @login_required(5)
 def delivery_route(id):
     customer = Cart.query.filter_by(id=id).first()
-    cust_x, cust_y = customer.checkout_address.split(',')
-    store_id = customer.store_id
+    custaddr = customer.checkout_address.split(',')
+    cust_x = int(custaddr[0])
+    cust_y = int(custaddr[1])
+    print(type(cust_x))
+    print(type(cust_y))
+    store_id = customer.checkout_store
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
     storey = storeaddr.height
-    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, store=storey)
+    # print(storex)
+    # print(storey)
+    # print(type(storex))
+    # print(type(storey))
+    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, storey=storey)
