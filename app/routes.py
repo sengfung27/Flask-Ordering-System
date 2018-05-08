@@ -1079,8 +1079,8 @@ def mapforcoord():
 @app.route('/delivery/route/<id>', methods=['GET'])
 @login_required(5)
 def delivery_route(id):
-    customer = User.query.filter_by(id=id).first()
-    cust_x, cust_y = customer.address.split(',')
+    customer = Cart.query.filter_by(id=id).first()
+    cust_x, cust_y = customer.checkout_address.split(',')
     store_id = customer.store_id
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
