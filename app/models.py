@@ -87,8 +87,15 @@ class Cake(db.Model):
     rating = db.Column(db.DECIMAL(4, 2))
     order_made = db.Column(db.Integer)
     drop_amount = db.Column(db.Integer)
+    store1 = db.Column(db.Integer)
+    store2 = db.Column(db.Integer)
+    store3 = db.Column(db.Integer)
+    store4 = db.Column(db.Integer)
+    store5 = db.Column(db.Integer)
+    store6 = db.Column(db.Integer)
+    store7 = db.Column(db.Integer)
     cart = db.relationship("Cart", back_populates="cake")
-
+    store1 = db.Column(db.Integer)
     def __repr__(self):
         return '<Cake: {}, {}, {}, {}>'.format(self.id, self.cake_name, self.photo, self.description)
 

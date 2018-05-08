@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 from decimal import *
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, desc
 from flask_login import current_user, login_user, logout_user
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -44,7 +44,23 @@ def login_required(*roles):
 
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    store_address = int(session['store_address'])
+    if store_address == 1:
+        cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store1)).all()
+    elif store_address == 2:
+        cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store2)).all()
+    elif store_address == 3:
+        cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store3)).all()
+    elif store_address == 4:
+        cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store4)).all()
+    elif store_address == 5:
+        cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store5)).all()
+    elif store_address == 6:
+        cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store6)).all()
+    else:
+        cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store7)).all()
+
+    return render_template('index.html', cakes=cakes)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -411,6 +427,7 @@ def checkout():
             if cart_cake is None or user.payment == "":
                 flash("You have no cake to checkout")
                 return redirect(url_for('menu'))
+            store_address = int(session['store_address'])
             cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted")
             for i in cart_cake:
                 i.status = "Submitted"
@@ -418,6 +435,41 @@ def checkout():
                 i.checkout_address = user.address
                 i.checkout_store = int(session['store_address'])
                 i.time_submit = datetime.utcnow()
+                if store_address == 1:
+                    if i.store1 is None:
+                        i.store1 = i.amount
+                    else:
+                        i.store1 += i.amount
+                elif store_address == 2:
+                    if i.store2 is None:
+                        i.store2 = i.amount
+                    else:
+                        i.store2 += i.amount
+                elif store_address == 3:
+                    if i.store3 is None:
+                        i.store3 = i.amount
+                    else:
+                        i.store3 += i.amount
+                elif store_address == 4:
+                    if i.store4 is None:
+                        i.store4 = i.amount
+                    else:
+                        i.store4 += i.amount
+                elif store_address == 5:
+                    if i.store5 is None:
+                        i.store5 = i.amount
+                    else:
+                        i.store5 += i.amount
+                elif store_address == 6:
+                    if i.store6 is None:
+                        i.store6 = i.amount
+                    else:
+                        i.store6 += i.amount
+                else:
+                    if i.store7 is None:
+                        i.store7 = i.amount
+                    else:
+                        i.store7 += i.amount
             db.session.commit()
             flash("You have successful checkout your Cart item")
             return redirect(url_for('order_history'))

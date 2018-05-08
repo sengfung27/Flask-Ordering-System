@@ -18,10 +18,9 @@
     <br>
     <div class="mainTitle">
         <div class="container">
-            <h1>Bootstrappage Restaurant</h1>
+            <h1>Welcome to Lady N</h1>
             <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                industry's standard dummy
+                The best cake you've ever taste.
             </p>
         </div>
     </div>
@@ -33,26 +32,19 @@
     <div class="container marketing">
         <!-- Three columns of text below the carousel -->
         <div class="row">
-            <div class="col-lg-4">
-                <img class="img-circle" src="static/themes/assets/images/nepali-momo.png"
-                     alt="Generic placeholder image">
-                <h2>Nepalese MOMO</h2>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh
-                    ultricies</p>
-                <p><a class="btn btn-default" href="#" role="button">&pound; 2.2 Add to cart &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="img-circle" src="static/themes/assets/images/burger.png" alt="Generic placeholder image">
-                <h2>Burger</h2>
-                <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. </p>
-                <p><a class="btn btn-default" href="#" role="button">&pound;5 Add to cart &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="img-circle" src="static/themes/assets/images/gorkha-special-chicken.png" alt="Lam Tikka">
-                <h2>Gurkha Chicken</h2>
-                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. </p>
-                <p><a class="btn btn-default" href="#" role="button">&pound;4 Add to cart &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
+            {% for cake in cakes %}
+                {% if loop.index0 < 3 %}
+                    <div class="col-lg-4">
+                        <img class="img-circle" src="{{ url_for('uploaded_file', filename=cake.photo) }}"
+                             alt="cake_image">
+                        <h2>{{ cake.cake_name }}</h2>
+                        <p>{{ cake.description }}</p>
+                        <p>Price: {{ cake.visitor_price }}</p>
+                    </div><!-- /.col-lg-4 -->
+                {% endif %}
+            {% endfor %}
+
+            <!-- /.col-lg-4 -->
         </div><!-- /.row -->
     </div>
 
