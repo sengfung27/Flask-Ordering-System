@@ -32,7 +32,6 @@
     </head>
     <body>
 
-    <div class="main-page container">
         <script type="text/javascript">
             //by Zw, this can be the field that takes parameter from backend(address/axis)
             var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -180,7 +179,6 @@
                             }
                         }
                     },
-
                 });
                 // suppress select events
                 $(window).bind('selectstart', function (event) {
@@ -191,8 +189,6 @@
                 Panel.init();
                 Controller.init();
 
-
-                //Controller.setStartPosWithoutDeletePrev(10,10);
             });
 
 
@@ -221,15 +217,11 @@
                     Controller.setStartPosWithoutDeletePrev(stores[i].x_grid, stores[i].y_grid);
                 }
             }
-
-
         </script>
-    </div>
 
 
-    <div id="draw_area">
-
-    </div>
+    <div id="draw_area" style="height: 570px ; width: 990px"></div>
+    <div id="img-out"></div>
 
     <a href="/login" id="confirm_address" class="btn btn-info" role="submit">Confirm your address</a>
 

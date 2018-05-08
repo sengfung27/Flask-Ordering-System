@@ -30,6 +30,8 @@ class User(db.Model, UserMixin):
     salary = db.Column(db.DECIMAL(9, 2))
     order_made = db.Column(db.Integer)
     number_of_drop = db.Column(db.Integer)
+    vip_store_id = db.Column(db.Integer)
+
 
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
@@ -85,8 +87,15 @@ class Cake(db.Model):
     rating = db.Column(db.DECIMAL(4, 2))
     order_made = db.Column(db.Integer)
     drop_amount = db.Column(db.Integer)
+    store1 = db.Column(db.Integer)
+    store2 = db.Column(db.Integer)
+    store3 = db.Column(db.Integer)
+    store4 = db.Column(db.Integer)
+    store5 = db.Column(db.Integer)
+    store6 = db.Column(db.Integer)
+    store7 = db.Column(db.Integer)
     cart = db.relationship("Cart", back_populates="cake")
-
+    store1 = db.Column(db.Integer)
     def __repr__(self):
         return '<Cake: {}, {}, {}, {}>'.format(self.id, self.cake_name, self.photo, self.description)
 
@@ -100,8 +109,9 @@ class Cart(db.Model):
     cake_id = db.Column(db.Integer, db.ForeignKey('cakes.id'))
     cook_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     deliver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    checkout_store = db.Column(db.Integer, db.ForeignKey('store.storeid'))
     amount = db.Column(db.Integer)
-    price = db.Column(db.Integer)
+    price = db.Column(db.DECIMAL(6,2))
     status = db.Column(db.VARCHAR(30)) # Not submitted, Submitted, In process, Closed
     cake_rating = db.Column(db.Integer)
     deliver_rating = db.Column(db.Integer)
@@ -115,11 +125,13 @@ class Cart(db.Model):
     is_cake_drop = db.Column(db.Boolean)
     is_cook_warning = db.Column(db.Boolean)
     is_delivery_warning = db.Column(db.Boolean)
+    checkout_address = db.Column(db.VARCHAR(255))
 
     cake = db.relationship("Cake", back_populates="cart")
     user = db.relationship("User", foreign_keys=[user_id], backref="user_cart")
     cook = db.relationship("User", foreign_keys=[cook_id], backref="cook_cart")
     deliver = db.relationship("User", foreign_keys=[deliver_id], backref="deliver_cart")
+    store = db.relationship("Store", foreign_keys=[checkout_store], backref="store_cart")
 
     def __repr__(self):
         return '<Cart: {}, {}>'.format(self.id, self.amount, self.price)
