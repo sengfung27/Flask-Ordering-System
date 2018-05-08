@@ -1,6 +1,6 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory, session
-from app.models import User, Cake, Cart
+from app.models import User, Cake, Cart, Store
 from werkzeug.urls import url_parse
 from functools import wraps
 from datetime import datetime
@@ -67,6 +67,7 @@ def login():
                   "Or create a new account.")
         elif e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
+            login_user(e)
             if e.role_id == 1 or e.role_id == 3 or e.role_id == 4:
                 first_index = session['user_address'][0]
                 second_index = session['user_address'][1]
@@ -74,7 +75,6 @@ def login():
                 print(second_index)
                 e.address = str(first_index) + "," + str(second_index)
                 db.session.commit()
-            login_user(e)
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
                 if current_user.role_id == 7:
@@ -167,7 +167,6 @@ def customize_cake():
 @app.route('/logout')
 @login_required(1, 3, 4, 5, 6, 7)
 def logout():
-    flash("You logged out")
     logout_user()
     return redirect(url_for('mapforcust'))
     # return redirect(url_for('index'))
@@ -998,15 +997,14 @@ def mapforcoord():
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
-    if 'user_address' in session:
-        session['store_address'] = [x, y]
-        session['user_address'] = [c_x, c_y]
-        session.modified = True
-        flash("Updated session")
-    else:
-        session['store_address'] = [x, y]
-        session['user_address'] = [c_x, c_y]
-        flash("Create session")
+    u = Store.query.filter_by(width=x, height=y).first()
+    session['store_address'] = u.storeid
+    session['user_address'] = [c_x, c_y]
+    print(session['user_address'])
+    print(session['store_address'])
+    session.modified = True
+    flash("Updated session")
+
     # x,y --> store -> products model
     return jsonify('success')
 
