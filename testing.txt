@@ -11,6 +11,7 @@
 1. different status different price
     now :: all status use customer price
     seng: need to wait store id
+    5/8: resolved, please test again
 
 /checkout
 1. allow submit order only if the cart is not empty *FIXED*

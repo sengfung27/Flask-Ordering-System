@@ -30,10 +30,75 @@
   <body>
 
  <script type="text/javascript">
+     var customeraddress= "{{custaddr}}"
+     var storex = "{{ storex }}"
+     var storey = "{{ storey }}"
+
+
+
    $(document).ready(function() {
     if (!Raphael.svg) {
         window.location = 'notsupported.html';
     }
+
+    $.extend(Controller, {
+                    //overwrite
+                    mousedown: function (event) {
+                        //set offset to the draw area first, in order to make the event of x,y work
+                        var posX = $('#draw_area').offset().left;
+                        var posY = $('#draw_area').offset().top;
+                        var coord = View.toGridCoordinate(event.pageX - posX, event.pageY - posY),
+                            gridX = coord[0],
+                            gridY = coord[1],
+                            grid = this.grid;
+
+                        console.log(tempStores);
+
+                        for (i in tempStores) {
+                            if (tempStores[i].x_grid == gridX && tempStores[i].y_grid == gridY)
+                                check = true;
+                        }
+
+                        if (check) {
+                            this.setSelectedNode(gridX, gridY);
+                            storeSelection = [];
+                            storeSelection.push(gridX, gridY);
+                            check = false;
+                        }
+                        else if (this.can('eraseWall') && !grid.isWalkableAt(gridX, gridY)) {
+                            this.setEndPos(gridX, gridY);
+                            customerAddress = [];
+                            customerAddress.push(gridX, gridY);
+                            findNearestStores(gridX, gridY);
+                        }
+                    },
+
+                    setDefaultStartEndPos: function () {
+                        var width, height,
+                            marginRight, availWidth,
+                            centerX, centerY,
+                            endX, endY,
+                            nodeSize = View.nodeSize;
+
+                        width = $(window).width();
+                        height = $(window).height();
+
+                        marginRight = $('#algorithm_panel').width();
+                        availWidth = width - marginRight;
+
+                        centerX = Math.ceil(availWidth / 2 / nodeSize);
+                        centerY = Math.floor(height / 2 / nodeSize);
+
+                        //set default blocks
+                        for (height = 0; height < 18; height++) {
+                            for (width = 0; width < 32; width++) {
+                                if ((height % 3 !== 0) && (width % 4 !== 0))
+                                    this.setWalkableAt(width, height, false);
+                            }
+                        }
+                    },
+
+                });
 
     // suppress select events
     $(window).bind('selectstart', function(event) {
@@ -43,13 +108,10 @@
     // initialize visualization
     Panel.init();
     Controller.init();
-
-    View.setStartPosWithoutDeletePrev(10, 20);
-    View.setStartPosWithoutDeletePrev(20, 10);
-    View.setStartPosWithoutDeletePrev(30, 20);
-    View.setStartPosWithoutDeletePrev(20, 30);
 });
+
  </script>
+
 
 
     <div id="draw_area">
