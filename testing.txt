@@ -23,6 +23,14 @@
 1. styling the page
 2. need to complete
 
+****** NEW ******
+1. error after customer login
+
+/customize_cake (suggestion)
+1. initial amount: 1
+   after changed the amount: 2
+   IF put 1 cake into cart first, and put another 3, the amount should be 3??
+
 ------------------------------------------- Manager ---------------------------------------------
 /manager/CustomerApplication
 1. approve application individually and add decline option
