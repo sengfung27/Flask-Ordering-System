@@ -1,7 +1,7 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory, session
 # from app.forms import EditProfileForm, LoginForm, RegistrationForm
-from app.models import User, Cake, Cart
+from app.models import User, Cake, Cart, Store
 from werkzeug.urls import url_parse
 from datetime import datetime
 from functools import wraps
@@ -347,7 +347,7 @@ def rating(id):
         if request.form.get('deliver_rating') is None:
             flash("Deliver rating is empty")
             return redirect(url_for('rating', id=id))
-        deliver_rating = int(request.form.get('deliver_rating'))
+        deliver_rating = int(request.form.get('d    eliver_rating'))
 
         if request.form.get('cake_rating') is None:
             flash("Cake rating is empty")
@@ -618,12 +618,6 @@ def deliver_edit(id):
     return render_template('deliveries/deliver_edit.html', user=user)
 
 
-@app.route('/delivery/route')
-@login_required(5)
-def delivery_route():
-    return render_template('/MapForDelivery.html', title='Deliver')
-
-
 @app.route('/deliver/notification')
 @login_required(5)
 def deliver_notification():
@@ -787,9 +781,21 @@ def mapforcoord():
     # print(c_y)
     # print(session['store_address'])
     # x,y --> store -> products model
+    s = "3,4"
+    print(s[0])
+    print(s[2])
     return jsonify('success')
 
-# @app.route('/mapfordelivery')
-# @login_required(5)
-# def mapfordeli():
-#     return render_template('/MapForDelivery.html')
+
+@app.route('/delivery/route', methods=['GET'])
+@login_required(5)
+def delivery_route():
+
+    addr = User.query.filter_by(id=current_user.id).first()
+    custaddr = addr.address
+    s = "3,4"
+    store_id = addr.storeid
+    storeaddr = Store.query.filter_by(storeid = store_id)
+    storex = storeaddr.width
+    storey = storeaddr.height
+    return render_template('/MapForDelivery', custaddr=custaddr, storex = storex, storey = storey)

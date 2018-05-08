@@ -17,7 +17,7 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
+UPLOAD_FOLDER = '/Users/qmpyv/Desktop/Flask-Ordering-System/app/uploads'
 
 login_manager = LoginManager(app)
 Bootstrap(app)
