@@ -32,17 +32,32 @@
     <div class="container marketing">
         <!-- Three columns of text below the carousel -->
         <div class="row">
-            {% for cake in cakes %}
-                {% if loop.index0 < 3 %}
-                    <div class="col-lg-4">
-                        <img class="img-circle" src="{{ url_for('uploaded_file', filename=cake.photo) }}"
-                             alt="cake_image">
-                        <h2>{{ cake.cake_name }}</h2>
-                        <p>{{ cake.description }}</p>
-                        <p>Price: {{ cake.visitor_price }}</p>
-                    </div><!-- /.col-lg-4 -->
-                {% endif %}
-            {% endfor %}
+            {% if current_user.is_anonymous %}
+                {% for cake in cakes %}
+                    {% if loop.index0 < 3 %}
+                        <div class="col-lg-4">
+                            <img class="img-circle" src="{{ url_for('uploaded_file', filename=cake.photo) }}"
+                                 alt="cake_image">
+                            <h2>{{ cake.cake_name }}</h2>
+                            <p>{{ cake.description }}</p>
+                            <p>Price: {{ cake.visitor_price }}</p>
+                        </div><!-- /.col-lg-4 -->
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>Your previous Order</p>
+                {% for cake in cakes %}
+                    {% if loop.index0 < 3 %}
+                        <div class="col-lg-4">
+                            <img class="img-circle" src="{{ url_for('uploaded_file', filename=cake.cake.photo) }}"
+                                 alt="cake_image">
+                            <h2>{{ cake.cake.cake_name }}</h2>
+                            <p>{{ cake.cake.description }}</p>
+
+                        </div><!-- /.col-lg-4 -->
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
 
             <!-- /.col-lg-4 -->
         </div><!-- /.row -->

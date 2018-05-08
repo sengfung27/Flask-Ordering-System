@@ -45,6 +45,9 @@ def login_required(*roles):
 @app.route('/index')
 def index():
     store_address = int(session['store_address'])
+    if current_user.is_authenticated:
+        cakes = db.session.query(Cart).filter(Cart.checkout_store == store_address).order_by(desc(Cart.order_id)).all()
+        return render_template('index.html', cakes=cakes)
     if store_address == 1:
         cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store1)).all()
     elif store_address == 2:
