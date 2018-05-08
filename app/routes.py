@@ -1,17 +1,14 @@
 from app import app, db, login_manager
 from flask import render_template, flash, redirect, request, url_for, jsonify, send_from_directory, session
-# from app.forms import EditProfileForm, LoginForm, RegistrationForm
-from app.models import User, Cake, Cart
+from app.models import User, Cake, Cart, Store
 from werkzeug.urls import url_parse
-from datetime import datetime
 from functools import wraps
-from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-# from app.forms import LoginForm, RegistrationForm
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 from decimal import *
 from sqlalchemy import func, or_
+from flask_login import current_user, login_user, logout_user
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 from base64 import b64encode
@@ -21,7 +18,7 @@ import base64
 # ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-from flask_login import LoginManager, current_user, login_user, logout_user
+
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
@@ -71,6 +68,13 @@ def login():
         elif e is not None and e.check_password(request.values.get('password')) \
                 and (e.blacklist is None or e.blacklist == 0):
             login_user(e)
+            if e.role_id == 1 or e.role_id == 3 or e.role_id == 4:
+                first_index = session['user_address'][0]
+                second_index = session['user_address'][1]
+                print(first_index)
+                print(second_index)
+                e.address = str(first_index) + "," + str(second_index)
+                db.session.commit()
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
                 if current_user.role_id == 7:
@@ -163,9 +167,9 @@ def customize_cake():
 @app.route('/logout')
 @login_required(1, 3, 4, 5, 6, 7)
 def logout():
-    flash("You logged out")
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('mapforcust'))
+    # return redirect(url_for('index'))
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -377,6 +381,7 @@ def checkout():
         if request.method == 'POST':
             user = User.query.filter_by(id=current_user.id).first()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
+
             if user.payment is None:
                 flash("You payment is empty, please go to profile and add your payment")
                 return redirect(url_for('customer_edit', id=user.id))
@@ -394,11 +399,14 @@ def checkout():
             return redirect(url_for('order_history'))
         return render_template('customers/checkout.html', user=user)
     else:
+        address = str(session['user_address'][0]) + "," + str(session['user_address'][1])
+
+
         if request.method == 'POST':
             first_name = request.values.get('first_name')
             last_name = request.values.get('last_name')
             email = request.values.get('email')
-            address = request.values.get('address')
+            address = str(session['user_address'][0]) + "," + str(session['user_address'][1])
             card_name = request.values.get('cardname')
             card_number = request.values.get('cardnumber')
             expmonth = request.values.get('expmonth')
@@ -445,7 +453,7 @@ def checkout():
             db.session.commit()
             flash("You have successful checkout your Cart items")
             return redirect(url_for('index'))
-        return render_template('customers/checkout.html')
+        return render_template('customers/checkout.html', address=address)
 
 
 @app.route('/customer/customer_profile/<id>')
@@ -805,13 +813,6 @@ def deliver_edit(id):
             flash("Either your information is duplicated in our system or your password is different")
     return render_template('deliveries/deliver_edit.html', user=user)
 
-
-@app.route('/delivery/route')
-@login_required(5)
-def delivery_route():
-    return render_template('deliveries/route.html', title='Deliver')
-
-
 @app.route('/deliver/notification')
 @login_required(5)
 def deliver_notification():
@@ -990,23 +991,21 @@ def mapforcoord():
     y = request.form.get('y', 0, type=int)
     c_x = request.form.get('c_x', 0, type=int)
     c_y = request.form.get('c_y', 0, type=int)
-    if 'user_address' not in session:
-        flash("User Address not provide")
-        return redirect(url_for('mapforcust'))
-    if 'store_address' not in session:
-        flash("Store Address not provide")
-        return redirect(url_for('mapforcust'))
     session['store_address'] = [x, y]
     session['user_address'] = [c_x, c_y]
-    print(x)
-    print(y)
-    print(c_x)
-    print(c_y)
-    # x,y --> store -> products model
+    print(session['user_address'])
+    print(session['store_address'])
     return jsonify('success')
 
 
-@app.route('/mapfordelivery')
+@app.route('/delivery/route', methods=['GET'])
 @login_required(5)
-def mapfordeli():
-    return render_template('/MapForDelivery.html')
+def delivery_route():
+    addr = User.query.filter_by(id=current_user.id).first()
+    custaddr = addr.address
+    s = "3,4"
+    store_id = addr.storeid
+    storeaddr = Store.query.filter_by(storeid = store_id)
+    storex = storeaddr.width
+    storey = storeaddr.height
+    return render_template('/MapForDelivery', custaddr=custaddr, storex = storex, storey = storey)
