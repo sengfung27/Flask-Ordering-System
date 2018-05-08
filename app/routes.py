@@ -401,6 +401,7 @@ def checkout():
         return render_template('customers/checkout.html', user=user)
     else:
         address = str(session['user_address'][0]) + "," + str(session['user_address'][1])
+
         if request.method == 'POST':
             first_name = request.values.get('first_name')
             last_name = request.values.get('last_name')
@@ -813,13 +814,6 @@ def deliver_edit(id):
     return render_template('deliveries/deliver_edit.html', user=user)
 
 
-@app.route('/delivery/route')
-@login_required(5)
-def delivery_route():
-    return render_template('/MapForDelivery.html', title='Deliver')
-    # return render_template('deliveries/route.html', title='Deliver')
-
-
 @app.route('/deliver/notification')
 @login_required(5)
 def deliver_notification():
@@ -1005,12 +999,16 @@ def mapforcoord():
     print(session['store_address'])
     session.modified = True
     flash("Updated session")
-
-    # x,y --> store -> products model
     return jsonify('success')
 
 
-@app.route('/mapfordelivery')
+@app.route('/delivery/route/<id>', methods=['GET'])
 @login_required(5)
-def mapfordeli():
-    return render_template('/MapForDelivery.html')
+def delivery_route(id):
+    customer = User.query.filter_by(id=id).first()
+    cust_x, cust_y = customer.address.split(',')
+    store_id = customer.store_id
+    storeaddr = Store.query.filter_by(storeid=store_id).first()
+    storex = storeaddr.width
+    storey = storeaddr.height
+    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, store=storey)
