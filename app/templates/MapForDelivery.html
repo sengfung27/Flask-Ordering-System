@@ -30,8 +30,9 @@
 <body>
 
 <script type="text/javascript">
-    //var storex = "{{ storex }}"
-    //var storey = "{{ storey }}"
+    var customeraddress = "{{custaddr}}"
+    var storex = "{{ storex }}"
+    var storey = "{{ storey }}"
 
     $(document).ready(function () {
         if (!Raphael.svg) {
@@ -98,8 +99,8 @@
                     //View.setBusyPos(9, 0);
                     //View.setBusyPos(11, 3);
                     //write a function/cond to restrict user choose points that are not default node.
-                    this.setStartPos({{ storex }}, {{ storey }});
-                    this.setEndPos({{ cust_x }}, {{ cust_y }});
+                    this.setStartPos(11, 7);
+                    this.setEndPos(20, 0);
 
                 },
 
