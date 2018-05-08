@@ -11,15 +11,20 @@ from sqlalchemy import func, or_, desc
 from flask_login import current_user, login_user, logout_user
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-from base64 import b64encode
-import base64
-
-# UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
-# ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+########################################################################################################################
+# Customer without login_required
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def login_required(*roles):
@@ -60,7 +65,7 @@ def index():
         cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store5)).all()
     elif store_address == 6:
         cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store6)).all()
-    else:
+    else:  # store_address == 7
         cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store7)).all()
 
     return render_template('index.html', cakes=cakes)
@@ -111,16 +116,9 @@ def login():
     return render_template('login.html', title='Sign In')
 
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
-
-
 @app.route('/menu')
 def menu():
     cakes = Cake.query.filter(Cake.cake_name != "Custom Cake")
-
     return render_template('menu.html', cakes=cakes)
 
 
@@ -135,9 +133,7 @@ def customize_cake():
                        visitor_price=120, customer_price=0.95 * 120, vip_price=0.9 * 120,
                        photo="CustomCake_Default.png", description=description)
         db.session.add(newCake)
-
         cake = Cake.query.filter_by(description=description).first()
-
         if current_user.is_anonymous:
             amount = int(request.values.get('amount'))
             if amount <= 0:
@@ -160,7 +156,6 @@ def customize_cake():
             cart = Cart.query.filter_by(user_id=current_user.id, cake_id=cake.id,
                                         status="Not submitted").one_or_none()
             cook = request.form['cook']
-
             amount = int(request.values.get('amount'))
             if amount <= 0:
                 flash("Invalid amount. Please enter a positive amount")
@@ -173,7 +168,6 @@ def customize_cake():
                 db.session.commit()
                 flash('Added to your cart')
                 return redirect(url_for('cart'))
-
         flash('Added to your cart successfully')
     return render_template('customize_cake.html', cooks=cooks)
 
@@ -246,7 +240,8 @@ def registration():
                                                               email=request.values.get('email')).first()
                             exist_user.set_password(request.values.get('password'))
                             exist_user.store_id = session['store_address']
-                            exist_user.address = (str(session['user_address'][0]) + "," + str(session['user_address'][1]))
+                            exist_user.address = (
+                                    str(session['user_address'][0]) + "," + str(session['user_address'][1]))
                             db.session.commit()
                             flash('You have successfully registered! You may now login.')
                             return redirect(url_for('login'))
@@ -257,7 +252,6 @@ def registration():
                 flash("invalid file")
         else:
             flash('The specified passwords do not match')
-
     return render_template('customers/registerform.html')  # , form=form
 
 
@@ -534,6 +528,10 @@ def checkout():
         return render_template('customers/checkout.html', address=address)
 
 
+#####################################################################################################
+# Customer login required
+
+
 @app.route('/customer/customer_profile/<id>')
 @login_required(1, 3, 4)
 def customer_profile(id):
@@ -696,11 +694,6 @@ def cook():
     return render_template('cooks/cook.html', title='Cook', cakes=cakes)
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 @app.route('/cook/additem', methods=['GET', 'POST'])
 @login_required(6)
 def additem():
@@ -814,7 +807,7 @@ def warning_notification():
 
 
 ########################################################################################################################
-# Delivery
+# Deliver
 
 @app.route('/deliver')
 @login_required(5)
@@ -955,7 +948,7 @@ def cookwarning():
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-    me = User.query.filter(User.role_id == 1, User.blacklist == False,
+    me = User.query.filter(User.role_id == 1, User.blacklist is False,
                            User.password_hash != "")
     if request.method == 'POST':
         if request.values.get('approve'):
@@ -1086,8 +1079,8 @@ def mapforcoord():
 @app.route('/delivery/route/<id>', methods=['GET'])
 @login_required(5)
 def delivery_route(id):
-    customer = User.query.filter_by(id=id).first()
-    cust_x, cust_y = customer.address.split(',')
+    customer = Cart.query.filter_by(id=id).first()
+    cust_x, cust_y = customer.checkout_address.split(',')
     store_id = customer.store_id
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
