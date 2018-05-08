@@ -261,7 +261,8 @@ def description(id):
         if cart is None:
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
                         price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
-                        deliver_rating=0, user_rating=0, store_rating=0)
+                        deliver_rating=0, user_rating=0, store_rating=0, is_cake_drop=0, is_cook_warning=0,
+                        is_delivery_warning=0)
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
@@ -442,7 +443,7 @@ def checkout():
                     temp = Cart(cake_id=cake_id, user_id=user.id, amount=amount,
                                 price=visitor_price, status="Submitted", cook_id=cook_id, cake_rating=0,
                                 deliver_rating=0, user_rating=0, store_rating=0, order_id=index,
-                                time_submit=datetime.utcnow())
+                                time_submit=datetime.utcnow(), is_cake_drop=0, is_cook_warning=0, is_delivery_warning=0)
                     db.session.add(temp)
                     session.pop(i, None)
             if count == 0:

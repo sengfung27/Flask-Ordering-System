@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     order_made = db.Column(db.Integer)
     number_of_drop = db.Column(db.Integer)
 
+
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
 
@@ -112,6 +113,9 @@ class Cart(db.Model):
     user_rating = db.Column(db.Integer)
     user_comments = db.Column(db.VARCHAR(255))
     time_submit = db.Column(db.DateTime)
+    is_cake_drop = db.Column(db.Boolean)
+    is_cook_warning = db.Column(db.Boolean)
+    is_delivery_warning = db.Column(db.Boolean)
 
     cake = db.relationship("Cake", back_populates="cart")
     user = db.relationship("User", foreign_keys=[user_id], backref="user_cart")
