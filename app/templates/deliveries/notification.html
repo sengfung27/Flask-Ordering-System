@@ -14,43 +14,36 @@
     <div class="pageTitle">
         <div class="container">
             <h2>Notification</h2>
+            <p><strong>Now you received {{ delivery.number_of_warning }} warning(s)</strong></p>
         </div>
     </div>
 
     <div class="container">
+        <form action="{{ url_for('notification')}}" method="POST" class="form-horizontal"
+                      enctype="multipart/form-data">
         <div class="bodyInner">
-            <div class="submitBottom" style="float: right;">
-                <button type="button" class="btn btn-primary">Delete</button>
-            </div>
             <table id="notification" class="table table-striped">
                 <thead>
                 <tr>
                     <th class="col-xs-2">Date</th>
                     <th>Message</th>
+                    <th></th>
                 </tr>
                 </thead>
 
                 <!--class="" OR id=""-->
                 <tbody>
+                {% for warning in warnings %}
                 <tr>
-                    <td>3/12/2018</td>
-                    <td>You received 1 warning, you received total of (# warnings) warning(s)</td>
+                    <td>{{ warning.time_submit }}</td>
+                    <td>You received 1 warning, you received total of {{ warning.user.number_of_warning }} warning(s)</td>
+                    <td><button type="submit" name="delete" value="{{ warning.id }}" class="btn btn-danger">Delete</button></td>
                 </tr>
-
-                <tr>
-                    <td>3/13/2018</td>
-                    <td>You received 1 warning, you received total of (# warnings) warning(s)</td>
-                </tr>
-
-                <tr>
-                    <td>3/13/2018</td>
-                    <td>You received 1 warning, you received total of (# warnings) warning(s)</td>
-                </tr>
-
+                {% endfor %}
                 </tbody>
-
             </table>
         </div>
+        </form>
     </div>
     <!-- FOOTER -->
     <footer>

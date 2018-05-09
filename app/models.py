@@ -126,6 +126,7 @@ class Cart(db.Model):
     is_cook_warning = db.Column(db.Boolean)
     is_delivery_warning = db.Column(db.Boolean)
     checkout_address = db.Column(db.VARCHAR(255))
+
     cake = db.relationship("Cake", back_populates="cart")
     user = db.relationship("User", foreign_keys=[user_id], backref="user_cart")
     cook = db.relationship("User", foreign_keys=[cook_id], backref="cook_cart")
