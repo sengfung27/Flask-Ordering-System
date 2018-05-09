@@ -433,40 +433,40 @@ def checkout():
                 i.checkout_store = int(session['store_address'])
                 i.time_submit = datetime.utcnow()
                 if store_address == 1:
-                    if i.store1 is None:
-                        i.store1 = i.amount
+                    if i.cake.store1 is None:
+                        i.cake.store1 = i.amount
                     else:
-                        i.store1 += i.amount
+                        i.cake.store1 += i.amount
                 elif store_address == 2:
-                    if i.store2 is None:
-                        i.store2 = i.amount
+                    if i.cake.store2 is None:
+                        i.cake.store2 = i.amount
                     else:
-                        i.store2 += i.amount
+                        i.cake.store2 += i.amount
                 elif store_address == 3:
-                    if i.store3 is None:
-                        i.store3 = i.amount
+                    if i.cake.store3 is None:
+                        i.cake.store3 = i.amount
                     else:
-                        i.store3 += i.amount
+                        i.cake.store3 += i.amount
                 elif store_address == 4:
-                    if i.store4 is None:
-                        i.store4 = i.amount
+                    if i.cake.store4 is None:
+                        i.cake.store4 = i.amount
                     else:
-                        i.store4 += i.amount
+                        i.cake.store4 += i.amount
                 elif store_address == 5:
-                    if i.store5 is None:
-                        i.store5 = i.amount
+                    if i.cake.store5 is None:
+                        i.cake.store5 = i.amount
                     else:
-                        i.store5 += i.amount
+                        i.cake.store5 += i.amount
                 elif store_address == 6:
-                    if i.store6 is None:
-                        i.store6 = i.amount
+                    if i.cake.store6 is None:
+                        i.cake.store6 = i.amount
                     else:
-                        i.store6 += i.amount
+                        i.cake.store6 += i.amount
                 else:
-                    if i.store7 is None:
-                        i.store7 = i.amount
+                    if i.cake.store7 is None:
+                        i.cake.store7 = i.amount
                     else:
-                        i.store7 += i.amount
+                        i.cake.store7 += i.amount
             db.session.commit()
             flash("You have successful checkout your Cart item")
             return redirect(url_for('order_history'))
@@ -1081,7 +1081,7 @@ def mapforcoord():
 def delivery_route(id):
     customer = Cart.query.filter_by(id=id).first()
     cust_x, cust_y = customer.checkout_address.split(',')
-    store_id = customer.store_id
+    store_id = customer.checkout_store
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
     storey = storeaddr.height

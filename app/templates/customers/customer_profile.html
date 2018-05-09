@@ -10,7 +10,6 @@
     </head>
 
 
-
     <div class="pageTitle">
         <div class="container">
             <h2>Profile</h2>
@@ -57,8 +56,8 @@
                     <tr>
                         <th class="col-xs-2">Status</th>
                         <th class="col-xs-2">Average Rate</th>
-                        {% if user.role_id > 3 %}
-                            <th class="col-xs-2">Store ID</th>
+                        {% if user.role_id == 4 %}
+                            <th class="col-xs-2">Vip Store ID</th>
                         {% endif %}
                     </tr>
                     </thead>
@@ -67,8 +66,8 @@
                     <tr>
                         <td>{{ user.role.role_type }}</td>
                         <td>{{ user.rating }}</td>
-                        {% if user.role_id > 3 %}
-                            <td>{{ session['store_address'] }}</td>
+                        {% if user.role_id == 4 %}
+                            <td>{{ user.vip_store_id }}</td>
                         {% endif %}
                     </tr>
                     </tbody>
