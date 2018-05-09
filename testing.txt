@@ -25,8 +25,6 @@ VIP only in one store
 1. styling the page
 2. need to complete
 
-****** NEW ******
-1. error after customer login
 
 /customize_cake (suggestion)
 1. initial amount: 1
