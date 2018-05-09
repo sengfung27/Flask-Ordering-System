@@ -51,7 +51,7 @@ def login_required(*roles):
 def index():
     store_address = int(session['store_address'])
     if current_user.is_authenticated:
-        cakes = db.session.query(Cart).filter(Cart.checkout_store == store_address).order_by(desc(Cart.order_id)).all()
+        cakes = db.session.query(Cart).filter(Cart.user_id == current_user.id).order_by(desc(Cart.order_id)).all()
         return render_template('index.html', cakes=cakes)
     if store_address == 1:
         cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store1)).all()
@@ -75,7 +75,7 @@ def index():
 def login():
     if current_user.is_authenticated:
         if current_user.role_id == 7:
-            return redirect(url_for('manager'))
+            return redirect(url_for('manager', id=current_user.id))
         if current_user.role_id == 6:
             return redirect(url_for('cook'))
         if current_user.role_id == 5:
@@ -181,7 +181,6 @@ def customize_cake():
 def logout():
     logout_user()
     return redirect(url_for('mapforcust'))
-    # return redirect(url_for('index'))
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -247,7 +246,6 @@ def registration():
                             return redirect(url_for('login'))
                         else:
                             flash("Provided information is duplicated in our system.")
-
             else:
                 flash("invalid file")
         else:
@@ -258,7 +256,7 @@ def registration():
 @app.route('/customer/description/<id>', methods=['GET', 'POST'])
 def description(id):
     cake = Cake.query.filter_by(id=id).first()
-    cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    cooks = User.query.filter_by(role_id=6, store_id=int(session['store_address']))
     if request.method == 'POST' and current_user.is_anonymous:
         amount = int(request.values.get('amount'))
         if amount <= 0:
@@ -273,7 +271,7 @@ def description(id):
             return redirect(url_for('menu'))
         else:
             flash("Initial amount: " + str(session[str(cake.id)][1]))
-            session[str(cake.id)][1] = amount
+            session[str(cake.id)][1] += amount
             flash("After changed the amount: " + str(session[str(cake.id)][1]))
             return redirect(url_for('menu'))
     elif request.method == 'POST' and current_user.is_authenticated:
@@ -293,14 +291,14 @@ def description(id):
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
                         price=price_of, status="Not submitted", cook_id=cook, cake_rating=0,
                         deliver_rating=0, user_rating=0, store_rating=0, is_cake_drop=0, is_cook_warning=0,
-                        is_delivery_warning=0)
+                        is_delivery_warning=0, current_store_id=int(session['store_address']))
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
             return redirect(url_for('cart'))
 
         else:
-            cart.amount = request.values.get('amount')
+            cart.amount += int(request.values.get('amount'))
             db.session.commit()
             flash('Added to your cart')
             return redirect(url_for('cart'))
@@ -314,6 +312,16 @@ def cart():
         cart = Cart.query.filter_by(user_id=current_user.id, status="Not submitted")
 
         for i in cart:
+            if i.current_store_id != int(session['store_address']):
+                current_address = int(session['store_address'])
+                if current_user.role.id == 4 and current_user.vip_store_id == current_address:
+                    i.price = i.cake.vip_price
+                elif current_user.role.id == 3:
+                    i.price = i.cake.customer_price
+                else:
+                    i.price = i.cake.visitor_price
+                i.current_store_id = current_address
+                db.session.commit()
             total += i.price * i.amount
         return render_template('customers/cart.html', cart=cart, total=total)
     else:
@@ -391,7 +399,7 @@ def edit_cart():
                         else:
                             flash("You must enter a number")
                 flash("Successful updated the amount of cakes")
-                return redirect(url_for('cart'))
+                return redirect(url_for('edit_cart'))
             else:  # submit_drop
                 cake_id = request.form['action']
                 if str(cake_id) in session:
@@ -421,7 +429,7 @@ def checkout():
                 flash("You payment is empty, please go to profile and add your payment")
                 return redirect(url_for('customer_edit', id=user.id))
             cart_cake = Cart.query.filter_by(user_id=user.id, status="Not submitted").first()
-            if cart_cake is None or user.payment == "":
+            if cart_cake is None:
                 flash("You have no cake to checkout")
                 return redirect(url_for('menu'))
             store_address = int(session['store_address'])
@@ -432,41 +440,7 @@ def checkout():
                 i.checkout_address = user.address
                 i.checkout_store = int(session['store_address'])
                 i.time_submit = datetime.utcnow()
-                if store_address == 1:
-                    if i.cake.store1 is None:
-                        i.cake.store1 = i.amount
-                    else:
-                        i.cake.store1 += i.amount
-                elif store_address == 2:
-                    if i.cake.store2 is None:
-                        i.cake.store2 = i.amount
-                    else:
-                        i.cake.store2 += i.amount
-                elif store_address == 3:
-                    if i.cake.store3 is None:
-                        i.cake.store3 = i.amount
-                    else:
-                        i.cake.store3 += i.amount
-                elif store_address == 4:
-                    if i.cake.store4 is None:
-                        i.cake.store4 = i.amount
-                    else:
-                        i.cake.store4 += i.amount
-                elif store_address == 5:
-                    if i.cake.store5 is None:
-                        i.cake.store5 = i.amount
-                    else:
-                        i.cake.store5 += i.amount
-                elif store_address == 6:
-                    if i.cake.store6 is None:
-                        i.cake.store6 = i.amount
-                    else:
-                        i.cake.store6 += i.amount
-                else:
-                    if i.cake.store7 is None:
-                        i.cake.store7 = i.amount
-                    else:
-                        i.cake.store7 += i.amount
+                store_based(i.id, store_address)
             db.session.commit()
             flash("You have successful checkout your Cart item")
             return redirect(url_for('order_history'))
@@ -478,7 +452,6 @@ def checkout():
             first_name = request.values.get('first_name')
             last_name = request.values.get('last_name')
             email = request.values.get('email')
-            address = str(session['user_address'][0]) + "," + str(session['user_address'][1])
             card_name = request.values.get('cardname')
             card_number = request.values.get('cardnumber')
             expmonth = request.values.get('expmonth')
@@ -523,10 +496,52 @@ def checkout():
                 flash("You have no items in Cart")
                 return redirect(url_for('menu'))
             db.session.commit()
+            carts = Cart.query.filter_by(user_id=user.id, order_id=index)
+            for cake in carts:
+                store_based(cake.id, int(session['store_address']))
             flash("You have successful checkout your Cart items")
             return redirect(url_for('index'))
         return render_template('customers/checkout.html', address=address)
 
+
+def store_based(id, store_address):
+    cart = Cart.query.filter_by(id=id).first()
+    if store_address == 1:
+        if cart.cake.store1 is None:
+            cart.cake.store1 = cart.amount
+        else:
+            cart.cake.store1 += cart.amount
+    elif store_address == 2:
+        if cart.cake.store2 is None:
+            cart.cake.store2 = cart.amount
+        else:
+            cart.cake.store2 += cart.amount
+    elif store_address == 3:
+        if cart.cake.store3 is None:
+            cart.cake.store3 = cart.amount
+        else:
+            cart.cake.store3 += cart.amount
+    elif store_address == 4:
+        if cart.cake.store4 is None:
+            cart.cake.store4 = cart.amount
+        else:
+            cart.cake.store4 += cart.amount
+    elif store_address == 5:
+        if cart.cake.store5 is None:
+            cart.cake.store5 = cart.amount
+        else:
+            cart.cake.store5 += cart.amount
+    elif store_address == 6:
+        if cart.cake.store6 is None:
+            cart.cake.store6 = cart.amount
+        else:
+            cart.cake.store6 += cart.amount
+    else:
+        if cart.cake.store7 is None:
+            cart.cake.store7 = cart.amount
+        else:
+            cart.cake.store7 += cart.amount
+    db.session.commit()
 
 #####################################################################################################
 # Customer login required
@@ -598,8 +613,9 @@ def customer_edit(id):
 @login_required(1, 3, 4)
 def order_history():
     counts = db.session.query(func.max(Cart.order_id)).scalar()
-    carts = Cart.query.filter(or_(Cart.user_id == current_user.id, Cart.status == "Submitted",
-                                  Cart.status == "In Process", Cart.status == "Closed"))
+    carts = Cart.query.filter(or_(Cart.status == "Submitted",
+                                  Cart.status == "In Process", Cart.status == "Closed")) \
+            .filter(Cart.user_id == current_user.id)
     return render_template('customers/order_history.html', carts=carts, counts=counts)
 
 
@@ -835,7 +851,7 @@ def warning_notification():
 @app.route('/deliver')
 @login_required(5)
 def deliver():
-    logs = Cart.query.filter_by(deliver_id=current_user.id, status="In process")
+    logs = Cart.query.filter_by(deliver_id=current_user.id, status="In process", checkout_store=current_user.store_id)
     return render_template('deliveries/delivery.html', title='Deliver', logs=logs)
 
 
@@ -1009,7 +1025,7 @@ def complaint():
 @app.route('/manager/order')
 @login_required(7)
 def order():
-    carts = Cart.query.filter_by(status="Submitted")
+    carts = Cart.query.filter_by(status="Submitted", checkout_store=current_user.store_id)
     return render_template('managers/order.html', carts=carts)
 
 
@@ -1017,9 +1033,12 @@ def order():
 @login_required(7)
 def assign_order(id):
     cart = Cart.query.filter_by(id=id).first()
-    delivers = User.query.filter_by(role_id=5)  # store_id = ?
+    delivers = User.query.filter_by(role_id=5, store_id=current_user.store_id)  # store_id = ?
     if request.method == 'POST':
         deliver_id = request.form['deliver']
+        if len(deliver_id) != 1:
+            flash("You need to assign exactly one deliver")
+            return redirect(url_for('assign_order',id=id))
         cart.status = "In process"
         cart.deliver_id = deliver_id
         db.session.commit()
@@ -1115,14 +1134,8 @@ def delivery_route(id):
     custaddr = customer.checkout_address.split(',')
     cust_x = int(custaddr[0])
     cust_y = int(custaddr[1])
-    print(type(cust_x))
-    print(type(cust_y))
     store_id = customer.checkout_store
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
     storey = storeaddr.height
-    # print(storex)
-    # print(storey)
-    # print(type(storex))
-    # print(type(storey))
     return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, storey=storey)

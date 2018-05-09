@@ -126,6 +126,7 @@ class Cart(db.Model):
     is_cook_warning = db.Column(db.Boolean)
     is_delivery_warning = db.Column(db.Boolean)
     checkout_address = db.Column(db.VARCHAR(255))
+    current_store_id = db.Column(db.Integer)
 
     cake = db.relationship("Cake", back_populates="cart")
     user = db.relationship("User", foreign_keys=[user_id], backref="user_cart")
@@ -139,18 +140,4 @@ class Cart(db.Model):
     def set_time(self, time):
         self.time_submit = time
 
-# class Log(db.Model):
-#     __tablename__ = 'logs'
-#
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     payment = db.Column(db.VARCHAR(255))
-#     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
-#     deliver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#
-#     cart = db.relationship("Cart", back_populates="log")
-#     deliver = db.relationship("User", foreign_keys=[deliver_id], backref="deliver_log")
 
-# Vip only in one store 2 2
-#                       1 3
-#  deliver check registered customer ratng, when rating > 4, it will
-#  automatically become vip
