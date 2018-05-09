@@ -148,7 +148,7 @@ def customize_cake():
                 return redirect(url_for('menu'))
             else:
                 flash("Initial amount: " + str(session[str(cake.id)][1]))
-                session[str(cake.id)][1] = amount
+                session[str(cake.id)][1] += amount
                 flash("After changed the amount: " + str(session[str(cake.id)][1]))
                 return redirect(url_for('menu'))
 
