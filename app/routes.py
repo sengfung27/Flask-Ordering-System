@@ -543,6 +543,7 @@ def store_based(id, store_address):
             cart.cake.store7 += cart.amount
     db.session.commit()
 
+
 #####################################################################################################
 # Customer login required
 
@@ -615,7 +616,7 @@ def order_history():
     counts = db.session.query(func.max(Cart.order_id)).scalar()
     carts = Cart.query.filter(or_(Cart.status == "Submitted",
                                   Cart.status == "In Process", Cart.status == "Closed")) \
-            .filter(Cart.user_id == current_user.id)
+        .filter(Cart.user_id == current_user.id)
     return render_template('customers/order_history.html', carts=carts, counts=counts)
 
 
@@ -1033,12 +1034,12 @@ def order():
 @login_required(7)
 def assign_order(id):
     cart = Cart.query.filter_by(id=id).first()
-    delivers = User.query.filter_by(role_id=5, store_id=current_user.store_id)  # store_id = ?
+    delivers = User.query.filter_by(role_id=5, store_id=current_user.store_id)
     if request.method == 'POST':
         deliver_id = request.form['deliver']
         if len(deliver_id) != 1:
             flash("You need to assign exactly one deliver")
-            return redirect(url_for('assign_order',id=id))
+            return redirect(url_for('assign_order', id=id))
         cart.status = "In process"
         cart.deliver_id = deliver_id
         db.session.commit()
@@ -1050,7 +1051,7 @@ def assign_order(id):
 @app.route('/manager/DeliverWarning', methods=['GET', 'POST'])
 @login_required(7)
 def deliverwarning():
-    delivery = User.query.filter_by(role_id=5)
+    delivery = User.query.filter_by(role_id=5, store_id=current_user.store_id)
     if request.method == "POST":
         target = int(request.form['erase'])
         delivery_target = User.query.filter_by(id=target).first()
@@ -1070,8 +1071,8 @@ def managecustomers():
 @app.route('/manager/PayWage', methods=['GET', 'POST'])
 @login_required(7)
 def paywage():
-    delivery = User.query.filter_by(role_id=5)
-    cook = User.query.filter_by(role_id=6)
+    delivery = User.query.filter_by(role_id=5, store_id=current_user.store_id)
+    cook = User.query.filter_by(role_id=6, store_id=current_user.store_id)
     if request.method == 'POST':
         if request.form['action'] == "new_sheet":
             for i in delivery:
