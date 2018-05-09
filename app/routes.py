@@ -119,6 +119,7 @@ def login():
 @app.route('/menu')
 def menu():
     cakes = Cake.query.filter(Cake.cake_name != "Custom Cake")
+
     return render_template('menu.html', cakes=cakes)
 
 
@@ -465,7 +466,9 @@ def checkout():
                 flash("Payment field should not be empty")
                 return redirect(url_for('checkout'))
             payment = card_name + "," + card_number + "," + expmonth + "," + expyear + "," + cvv
+
             exist_user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name).first()
+
             if exist_user is None:
                 add_user = User(email=email, address=address, role_id=1, first_name=first_name,
                                 last_name=last_name, rating=0.0, number_of_warning=0,
@@ -473,7 +476,9 @@ def checkout():
                                 vip_store_id=0)
                 db.session.add(add_user)
                 db.session.commit()
+
             user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name).first()
+
             cake_total = db.session.query(func.max(Cake.id)).scalar()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
             count = 0
@@ -997,8 +1002,9 @@ def cookwarning():
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-    me = User.query.filter(User.role_id == 1, User.blacklist is False,
-                           User.password_hash != "")
+
+
+    me = User.query.filter(User.role_id == 1, User.blacklist is False, User.password_hash != "")
     if request.method == 'POST':
         if request.values.get('approve'):
             user_id = int(request.values.get('approve'))

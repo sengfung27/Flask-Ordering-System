@@ -16,6 +16,9 @@ engine = create_engine('mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F173
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://F17336Pwhuang:23242077@127.0.0.1:%s/F17336Pwhuang' % server.local_bind_port
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+UPLOAD_FOLDER = '/Users/caizhuoying/Documents/Flask-Ordering-System/app/uploads'
+
 login_manager = LoginManager(app)
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -23,10 +26,8 @@ app.config.update(dict(
     SECRET_KEY="powerful secretkey",
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
-UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
+# UPLOAD_FOLDER = '/Users/James/Desktop/Flask-Ordering-System/app/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'super secret key'
 from app import routes, models, errors
-
-

@@ -43,7 +43,7 @@
             <li>{{ session['store_address'] }}</li>
         </ul>
 
-    <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right">
             {% if current_user.is_anonymous or current_user.role_id == 1 or current_user.role_id == 3 or current_user.role_id == 4 %}
                 <li><a href="{{ url_for('menu') }}">Menu</a></li>
                 <li><a href="{{ url_for('cart') }}">Cart</a></li>
@@ -88,12 +88,11 @@
     </div>
 </nav>
 
-<hr>
 {% with messages = get_flashed_messages() %}
     {% if messages %}
-        <ul>
+        <ul style="padding-left: 120px">
             {% for message in messages %}
-                <li>
+                <li style="font-weight: bold">
                     {{ message }}
                 </li>
 
