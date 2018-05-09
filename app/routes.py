@@ -1028,7 +1028,7 @@ def order():
 @login_required(7)
 def assign_order(id):
     cart = Cart.query.filter_by(id=id).first()
-    delivers = User.query.filter_by(role_id=5)  # store_id = ?
+    delivers = User.query.filter_by(role_id=5, store_id=current_user.store_id)  # store_id = ?
     if request.method == 'POST':
         deliver_id = request.form['deliver']
         cart.status = "In process"
