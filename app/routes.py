@@ -653,9 +653,11 @@ def rating(id):
                 db.session.delete(temp)
                 flash("Cake " + str(cart.cake.cake_name) + " has been dropped.")
                 cart.cook.number_of_drop += 1
+                cart.is_cake_drop = True  # record this order will send a cake drop to cook
                 flash("Cook " + str(cart.cook_id) + " has been added a number of dropped")
                 if cart.cook.number_of_drop >= 2:
                     cart.cook.number_of_warning += 1
+                    cart.is_cook_warning = True  # record this order will send a warning to cook
                     flash("Cook has cake was dropped twice before, so there is a warning on his acc")
                     if cart.cook.number_of_warning > 3:
                         cart.cook.blacklist = True
@@ -673,6 +675,7 @@ def rating(id):
             cart.deliver.rating = (deliver_rating + (2 * cart.deliver.rating)) / Decimal(3.0)
             if cart.deliver.rating < Decimal(2.0):
                 cart.deliver.number_of_warning += 1
+                cart.is_delivery_warning = True  # record this order will send a warning to delivery man
                 flash("Deliver " + str(cart.deliver_id) + " has rating less than 2.0, therefore received a warning")
                 if cart.deliver.number_of_warning > 3:
                     cart.deliver.blacklist = True
@@ -794,16 +797,36 @@ def cook_edit(id):
     return render_template('cooks/cook_edit.html', user=user)
 
 
-@app.route('/cook/dropped_notification')
+@app.route('/cook/dropped_notification', methods=['GET', 'POST'])
 @login_required(6)
 def dropped_notification():
-    return render_template('cooks/dropped_noti.html', title='Cook')
+    cook = User.query.filter_by(id=current_user.id).first()
+    dropped_cakes = Cart.query.filter(Cart.status == "Closed", Cart.cook_id == current_user.id,
+                                      Cart.is_cake_drop == 1)
+    if request.method == "POST":
+        target = int(request.form['delete'])
+        cart_target = Cart.query.filter_by(id=target).first()
+        cart_target.is_cake_drop = False
+        db.session.commit()
+        flash("Delete Successfully!")
+
+    return render_template('cooks/dropped_noti.html', title='Cook', cook=cook, dropped_cakes=dropped_cakes)
 
 
-@app.route('/cook/warning_notification')
+@app.route('/cook/warning_notification', methods=['GET', 'POST'])
 @login_required(6)
 def warning_notification():
-    return render_template('cooks/warning_noti.html', title='Cook')
+    cook = User.query.filter_by(id=current_user.id).first()
+    warnings = Cart.query.filter(Cart.status == "Closed", Cart.cook_id == current_user.id,
+                                 Cart.is_cook_warning == 1)
+    if request.method == "POST":
+        target = int(request.form['delete'])
+        cart_target = Cart.query.filter_by(id=target).first()
+        cart_target.is_cook_warning = False
+        db.session.commit()
+        flash("Delete Successfully!")
+
+    return render_template('cooks/warning_noti.html', title='Cook', cook=cook, warnings=warnings)
 
 
 ########################################################################################################################
@@ -849,10 +872,19 @@ def deliver_rating(id):
     return render_template('deliveries/deliver_rating.html', cart=cart)
 
 
-@app.route('/deliver/notification')
+@app.route('/deliver/notification', methods=['GET', 'POST'])
 @login_required(5)
 def notification():
-    return render_template('deliveries/notification.html', title='Deliver')
+    delivery = User.query.filter_by(id=current_user.id).first()
+    warnings = Cart.query.filter(Cart.status == "Closed", Cart.deliver_id == current_user.id,
+                                 Cart.is_delivery_warning == 1)
+    if request.method == "POST":
+        target = int(request.form['delete'])
+        cart_target = Cart.query.filter_by(id=target).first()
+        cart_target.is_delivery_warning = False
+        db.session.commit()
+        flash("Delete Successfully!")
+    return render_template('deliveries/notification.html', title='Deliver', delivery=delivery, warnings=warnings)
 
 
 @app.route('/deliver/profile/<id>')
@@ -1080,9 +1112,17 @@ def mapforcoord():
 @login_required(5)
 def delivery_route(id):
     customer = Cart.query.filter_by(id=id).first()
-    cust_x, cust_y = customer.checkout_address.split(',')
+    custaddr = customer.checkout_address.split(',')
+    cust_x = int(custaddr[0])
+    cust_y = int(custaddr[1])
+    print(type(cust_x))
+    print(type(cust_y))
     store_id = customer.checkout_store
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
     storey = storeaddr.height
-    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, store=storey)
+    # print(storex)
+    # print(storey)
+    # print(type(storex))
+    # print(type(storey))
+    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, storey=storey)
