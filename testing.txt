@@ -1,3 +1,5 @@
+VIP only in one store
+
 /login
 1. type in wrong email will cause error *FIXED*
     now :: input: delivery@example.com which is not in the db,
