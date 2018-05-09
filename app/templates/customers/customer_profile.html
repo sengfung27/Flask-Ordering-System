@@ -8,7 +8,7 @@
         <link href="{{ url_for('static', filename='themes/dist/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ url_for('static', filename='themes/assets/css/carousel.css') }}" rel="stylesheet">
     </head>
-    
+
     <div class="container">
         <div class="bodyInner">
             <h2>Profile</h2>
@@ -45,13 +45,13 @@
 
                 <br>
 
-                <table id="profileStatus" class="table" style="width: 300px;">
+                <table id="profileStatus" class="table" style="width: 330px;">
                     <thead>
                     <tr>
                         <th class="col-xs-2">Status</th>
                         <th class="col-xs-2">Average Rate</th>
                         {% if user.role_id == 4 %}
-                            <th class="col-xs-2">Vip Store ID</th>
+                            <th class="col-xs-3">Vip Store ID</th>
                         {% endif %}
                     </tr>
                     </thead>
