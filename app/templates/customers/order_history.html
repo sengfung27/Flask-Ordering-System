@@ -31,6 +31,7 @@
                     <th class="col-sm-3">Order Detail</th>
                     <th class="col-sm-2">Amount</th>
                     <th class="col-sm-2">Price</th>
+                    <th class="col-sm-2">Checkout Store</th>
                     <th class="col-sm-2">Rate</th>
                 </tr>
                 </thead>
@@ -61,6 +62,9 @@
                                         <li>${{ cart_user.amount * cart_user.price }}</li>
 
                                     </ul>
+                                </td>
+                                <td>
+                                    {{ cart_user.checkout_store }}
                                 </td>
                                 {% if cart_user.status == "Closed" and cart_user.deliver_rating == 0
                                 and cart_user.cake_rating == 0 %}

@@ -51,7 +51,7 @@ def login_required(*roles):
 def index():
     store_address = int(session['store_address'])
     if current_user.is_authenticated:
-        cakes = db.session.query(Cart).filter(Cart.checkout_store == store_address).order_by(desc(Cart.order_id)).all()
+        cakes = db.session.query(Cart).filter(Cart.user_id == current_user.id).order_by(desc(Cart.order_id)).all()
         return render_template('index.html', cakes=cakes)
     if store_address == 1:
         cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store1)).all()
@@ -608,8 +608,9 @@ def customer_edit(id):
 @login_required(1, 3, 4)
 def order_history():
     counts = db.session.query(func.max(Cart.order_id)).scalar()
-    carts = Cart.query.filter(or_(Cart.user_id == current_user.id, Cart.status == "Submitted",
-                                  Cart.status == "In Process", Cart.status == "Closed"))
+    carts = Cart.query.filter(or_(Cart.status == "Submitted",
+                                  Cart.status == "In Process", Cart.status == "Closed")) \
+        .filter(Cart.user_id == current_user.id)
     return render_template('customers/order_history.html', carts=carts, counts=counts)
 
 
