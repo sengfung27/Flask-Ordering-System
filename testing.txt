@@ -34,6 +34,7 @@
 1. initial amount: 1
    after changed the amount: 2
    IF put 1 cake into cart first, and put another 3, the amount should be 3??
+   seng: *Fixed
 
 ************** NEW ***************
 1. Main page show history even if not purchased
