@@ -75,7 +75,7 @@ def index():
 def login():
     if current_user.is_authenticated:
         if current_user.role_id == 7:
-            return redirect(url_for('manager'))
+            return redirect(url_for('manager', id=current_user.id))
         if current_user.role_id == 6:
             return redirect(url_for('cook'))
         if current_user.role_id == 5:
