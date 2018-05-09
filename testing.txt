@@ -1,4 +1,8 @@
-VIP only in one store
+************** NEW ***************
+1. Show delivery men and cooks by store id
+   (paywage, warning, customize cake)
+
+2. session CANNOT GET address on safari (only works on chrome)
 
 /login
 1. type in wrong email will cause error *FIXED*
@@ -31,6 +35,14 @@ VIP only in one store
    after changed the amount: 2
    IF put 1 cake into cart first, and put another 3, the amount should be 3??
 
+************** NEW ***************
+1. Main page show history even if not purchased
+   Now: show thing in cart
+
+2. Show store id at profile
+
+3. Customize cake does not work
+   sqlalchemy.exc.IntegrityError: (pymysql.err.IntegrityError) (1048, "Column 'is_cake_drop' cannot be null")
 ------------------------------------------- Manager ---------------------------------------------
 /manager/CustomerApplication
 1. approve application individually and add decline option
@@ -50,6 +62,14 @@ VIP only in one store
 
 /manager/ManageCustomers
 1. need to complete
+
+************** NEW ***************
+1. Manager did not receive application
+
+2. Cannot assign order
+   manager1: when assign order 12
+   flash: You need to assign exactly one deliver
+
 
 ------------------------------------------- Delivery ---------------------------------------------
 /deliver_rating
