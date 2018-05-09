@@ -119,6 +119,7 @@ def login():
 @app.route('/menu')
 def menu():
     cakes = Cake.query.filter(Cake.cake_name != "Custom Cake")
+
     return render_template('menu.html', cakes=cakes)
 
 
@@ -465,7 +466,9 @@ def checkout():
                 flash("Payment field should not be empty")
                 return redirect(url_for('checkout'))
             payment = card_name + "," + card_number + "," + expmonth + "," + expyear + "," + cvv
+
             exist_user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name).first()
+
             if exist_user is None:
                 add_user = User(email=email, address=address, role_id=1, first_name=first_name,
                                 last_name=last_name, rating=0.0, number_of_warning=0,
@@ -473,7 +476,9 @@ def checkout():
                                 vip_store_id=0)
                 db.session.add(add_user)
                 db.session.commit()
+
             user = User.query.filter_by(email=email, first_name=first_name, last_name=last_name).first()
+
             cake_total = db.session.query(func.max(Cake.id)).scalar()
             index = db.session.query(func.max(Cart.order_id)).scalar() + 1
             count = 0
@@ -542,6 +547,7 @@ def store_based(id, store_address):
         else:
             cart.cake.store7 += cart.amount
     db.session.commit()
+
 
 #####################################################################################################
 # Customer login required
@@ -615,7 +621,7 @@ def order_history():
     counts = db.session.query(func.max(Cart.order_id)).scalar()
     carts = Cart.query.filter(or_(Cart.status == "Submitted",
                                   Cart.status == "In Process", Cart.status == "Closed")) \
-            .filter(Cart.user_id == current_user.id)
+        .filter(Cart.user_id == current_user.id)
     return render_template('customers/order_history.html', carts=carts, counts=counts)
 
 
@@ -996,8 +1002,9 @@ def cookwarning():
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-    me = User.query.filter(User.role_id == 1, User.blacklist is False,
-                           User.password_hash != "")
+
+
+    me = User.query.filter(User.role_id == 1, User.blacklist is False, User.password_hash != "")
     if request.method == 'POST':
         if request.values.get('approve'):
             user_id = int(request.values.get('approve'))
@@ -1033,12 +1040,12 @@ def order():
 @login_required(7)
 def assign_order(id):
     cart = Cart.query.filter_by(id=id).first()
-    delivers = User.query.filter_by(role_id=5, store_id=current_user.store_id)  # store_id = ?
+    delivers = User.query.filter_by(role_id=5, store_id=current_user.store_id)
     if request.method == 'POST':
         deliver_id = request.form['deliver']
         if len(deliver_id) != 1:
             flash("You need to assign exactly one deliver")
-            return redirect(url_for('assign_order',id=id))
+            return redirect(url_for('assign_order', id=id))
         cart.status = "In process"
         cart.deliver_id = deliver_id
         db.session.commit()
@@ -1050,7 +1057,7 @@ def assign_order(id):
 @app.route('/manager/DeliverWarning', methods=['GET', 'POST'])
 @login_required(7)
 def deliverwarning():
-    delivery = User.query.filter_by(role_id=5)
+    delivery = User.query.filter_by(role_id=5, store_id=current_user.store_id)
     if request.method == "POST":
         target = int(request.form['erase'])
         delivery_target = User.query.filter_by(id=target).first()
@@ -1070,8 +1077,8 @@ def managecustomers():
 @app.route('/manager/PayWage', methods=['GET', 'POST'])
 @login_required(7)
 def paywage():
-    delivery = User.query.filter_by(role_id=5)
-    cook = User.query.filter_by(role_id=6)
+    delivery = User.query.filter_by(role_id=5, store_id=current_user.store_id)
+    cook = User.query.filter_by(role_id=6, store_id=current_user.store_id)
     if request.method == 'POST':
         if request.form['action'] == "new_sheet":
             for i in delivery:
