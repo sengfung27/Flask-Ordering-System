@@ -273,7 +273,7 @@ def description(id):
             return redirect(url_for('menu'))
         else:
             flash("Initial amount: " + str(session[str(cake.id)][1]))
-            session[str(cake.id)][1] = amount
+            session[str(cake.id)][1] += amount
             flash("After changed the amount: " + str(session[str(cake.id)][1]))
             return redirect(url_for('menu'))
     elif request.method == 'POST' and current_user.is_authenticated:
@@ -293,14 +293,14 @@ def description(id):
             temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
                         price=price_of, status="Not submitted", cook_id=cook, cake_rating=0,
                         deliver_rating=0, user_rating=0, store_rating=0, is_cake_drop=0, is_cook_warning=0,
-                        is_delivery_warning=0)
+                        is_delivery_warning=0, current_store_id=int(session['store_address']))
             db.session.add(temp)
             db.session.commit()
             flash('Added to your cart')
             return redirect(url_for('cart'))
 
         else:
-            cart.amount = request.values.get('amount')
+            cart.amount += int(request.values.get('amount'))
             db.session.commit()
             flash('Added to your cart')
             return redirect(url_for('cart'))
@@ -314,6 +314,16 @@ def cart():
         cart = Cart.query.filter_by(user_id=current_user.id, status="Not submitted")
 
         for i in cart:
+            if i.current_store_id != int(session['store_address']):
+                current_address = int(session['store_address'])
+                if current_user.role.id == 4 and current_user.vip_store_id == current_address:
+                    i.price = i.cake.vip_price
+                elif current_user.role.id == 3:
+                    i.price = i.cake.customer_price
+                else:
+                    i.price = i.cake.visitor_price
+                i.current_store_id = current_address
+                db.session.commit()
             total += i.price * i.amount
         return render_template('customers/cart.html', cart=cart, total=total)
     else:
@@ -835,7 +845,7 @@ def warning_notification():
 @app.route('/deliver')
 @login_required(5)
 def deliver():
-    logs = Cart.query.filter_by(deliver_id=current_user.id, status="In process")
+    logs = Cart.query.filter_by(deliver_id=current_user.id, status="In process", checkout_store=current_user.store_id)
     return render_template('deliveries/delivery.html', title='Deliver', logs=logs)
 
 
@@ -1009,7 +1019,7 @@ def complaint():
 @app.route('/manager/order')
 @login_required(7)
 def order():
-    carts = Cart.query.filter_by(status="Submitted")
+    carts = Cart.query.filter_by(status="Submitted", checkout_store=current_user.store_id)
     return render_template('managers/order.html', carts=carts)
 
 
