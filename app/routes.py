@@ -163,8 +163,14 @@ def customize_cake():
                 flash("Invalid amount. Please enter a positive amount")
                 return redirect(url_for('description', id=cake.id))
             if cart is None:
+                if current_user.role.id == 4 and current_user.vip_store_id == int(session['store_address']):
+                    price_of = cake.vip_price
+                elif current_user.role.id == 3:
+                    price_of = cake.customer_price
+                else:
+                    price_of = cake.visitor_price
                 temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
-                            price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
+                            price=price_of, status="Not submitted", cook_id=cook, cake_rating=0,
                             deliver_rating=0, user_rating=0, store_rating=0, is_cake_drop=0, is_cook_warning=0,
                             is_delivery_warning=0, current_store_id=int(session['store_address']))
                 db.session.add(temp)
