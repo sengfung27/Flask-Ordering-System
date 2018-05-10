@@ -70,7 +70,6 @@
                 <li><a href="{{ url_for('warning_notification') }}">Warning Notification</a></li>
 
             {% elif (current_user.role_id == 1 or current_user.role_id == 3 or current_user.role_id == 4) and current_user.is_authenticated %}
-                <li><a href="{{ url_for('checkout') }}">Checkout</a></li>
                 <li><a href="{{ url_for('customer_profile',id=current_user.id) }}">Customer Profile</a></li>
                 <li><a href="{{ url_for('order_history') }}">Customer Order History</a></li>
             {% else %}

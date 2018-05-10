@@ -3,12 +3,12 @@ from flask import render_template, flash, redirect, request, url_for, jsonify, s
 from app.models import User, Cake, Cart, Store
 from werkzeug.urls import url_parse
 from functools import wraps
-from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 from decimal import *
 from sqlalchemy import func, or_, desc
 from flask_login import current_user, login_user, logout_user
+from datetime import datetime
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
@@ -51,7 +51,8 @@ def login_required(*roles):
 def index():
     store_address = int(session['store_address'])
     if current_user.is_authenticated:
-        cakes = db.session.query(Cart).filter(Cart.user_id == current_user.id).order_by(desc(Cart.order_id)).all()
+        cakes = db.session.query(Cart).filter(Cart.user_id == current_user.id, Cart.order_id is not None).order_by(
+            desc(Cart.order_id)).all()
         return render_template('index.html', cakes=cakes)
     if store_address == 1:
         cakes = db.session.query(Cake).filter(Cake.cake_name != "Custom Cake").order_by(desc(Cake.store1)).all()
@@ -89,7 +90,7 @@ def login():
                   "Please check your Email or password. "
                   "Or create a new account.")
         elif e is not None and e.check_password(request.values.get('password')) \
-                and (e.blacklist is None or e.blacklist == 0):
+                and e.blacklist == 0:
             login_user(e)
             if e.role_id == 1 or e.role_id == 3 or e.role_id == 4:
                 first_index = session['user_address'][0]
@@ -109,7 +110,7 @@ def login():
                 else:
                     next_page = url_for('index')
             return redirect(next_page)
-        elif e.blacklist:
+        elif e.blacklist == 1:
             flash("Blacklist account will be blocked")
         else:
             flash('Invalid email or password')
@@ -125,7 +126,7 @@ def menu():
 
 @app.route('/customize_cake', methods=['GET', 'POST'])
 def customize_cake():
-    cooks = User.query.filter_by(role_id=6)  # store_id = ?
+    cooks = User.query.filter_by(role_id=6, store_id=int(session['store_address']))  # store_id = ?
     if request.method == 'POST':
         description = request.values.get('cake flavors') + ", " + request.values.get('cake filling') + ", " + \
                       request.values.get('frosting') + ", " + request.values.get('toppings') + ", " + \
@@ -145,7 +146,7 @@ def customize_cake():
                 cook = User.query.filter_by(id=cook_id).first()
                 session[str(cake.id)] = [cake.id, amount, cook.id, cake.cake_name,
                                          cook.first_name, cake.visitor_price]
-                flash("Successful store to Session")
+                flash("Successful added your cake.")
                 return redirect(url_for('menu'))
             else:
                 flash("Initial amount: " + str(session[str(cake.id)][1]))
@@ -162,19 +163,16 @@ def customize_cake():
                 flash("Invalid amount. Please enter a positive amount")
                 return redirect(url_for('description', id=cake.id))
             if cart is None:
-                temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=1,
+                temp = Cart(cake_id=cake.id, user_id=current_user.id, amount=amount,
                             price=cake.customer_price, status="Not submitted", cook_id=cook, cake_rating=0,
-                            deliver_rating=0, user_rating=0, store_rating=0)
+                            deliver_rating=0, user_rating=0, store_rating=0, is_cake_drop=0, is_cook_warning=0,
+                            is_delivery_warning=0, current_store_id=int(session['store_address']))
                 db.session.add(temp)
                 db.session.commit()
                 flash('Added to your cart')
                 return redirect(url_for('cart'))
         flash('Added to your cart successfully')
-    return render_template('customize_cake.html', cooks=cooks)
-
-
-########################################################################################################################
-# Customer
+    return render_template('customers/customize_cake.html', cooks=cooks)
 
 
 @app.route('/logout')
@@ -220,7 +218,7 @@ def registration():
                                  role_id='1', first_name=request.values.get('firstname'),
                                  last_name=request.values.get('lastname'),
                                  id_photo=newname, rating=0.0, number_of_warning=0, order_made=0,
-                                 blacklist=0, number_of_drop=0, vip_store_id=0)
+                                 blacklist=0, number_of_drop=0, vip_store_id=0, store_id=int(session['store_address']))
 
                         u.set_password(request.values.get('password'))
                         db.session.add(u)
@@ -251,7 +249,7 @@ def registration():
                 flash("invalid file")
         else:
             flash('The specified passwords do not match')
-    return render_template('customers/registerform.html')  # , form=form
+    return render_template('customers/registerform.html')
 
 
 @app.route('/customer/description/<id>', methods=['GET', 'POST'])
@@ -493,7 +491,7 @@ def checkout():
                     temp = Cart(cake_id=cake_id, user_id=user.id, amount=amount,
                                 price=visitor_price, status="Submitted", cook_id=cook_id, cake_rating=0,
                                 deliver_rating=0, user_rating=0, store_rating=0, order_id=index,
-                                time_submit=datetime.utcnow(), is_cake_drop=0, is_cook_warning=0, is_delivery_warning=0
+                                time_submit=datetime.now(), is_cake_drop=0, is_cook_warning=0, is_delivery_warning=0
                                 , checkout_address=address, checkout_store=session['store_address'])
                     db.session.add(temp)
                     session.pop(i, None)
@@ -682,7 +680,7 @@ def rating(id):
                     cart.is_cook_warning = True  # record this order will send a warning to cook
                     flash("Cook has cake was dropped twice before, so there is a warning on his acc")
                     if cart.cook.number_of_warning > 3:
-                        cart.cook.blacklist = True
+                        cart.cook.blacklist = 1
                         flash("Cook has more than 3 warnings, therefore he/she is laid off")
                     cart.cook.number_of_drop = 0
 
@@ -700,7 +698,7 @@ def rating(id):
                 cart.is_delivery_warning = True  # record this order will send a warning to delivery man
                 flash("Deliver " + str(cart.deliver_id) + " has rating less than 2.0, therefore received a warning")
                 if cart.deliver.number_of_warning > 3:
-                    cart.deliver.blacklist = True
+                    cart.deliver.blacklist = 1
                     flash("Deliver has more than 3 warnings, therefore he/she is laid off")
         db.session.commit()
         flash("Thank you for your rating")
@@ -709,150 +707,8 @@ def rating(id):
 
 
 ########################################################################################################################
-# Cook
-
-
-@app.route('/cook')
-@login_required(6)
-def cook():
-    cakes = Cake.query.all()
-    return render_template('cooks/cook.html', title='Cook', cakes=cakes)
-
-
-@app.route('/cook/additem', methods=['GET', 'POST'])
-@login_required(6)
-def additem():
-    if request.method == 'POST':
-        cakePic = request.files['cakePic']
-
-        if cakePic and allowed_file(cakePic.filename):
-            filename = secure_filename(cakePic.filename)
-            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            cakePic.save(path)
-            newname = (request.values.get('cakeName')).replace(" ", "") + '.png'
-            target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
-            os.rename(path, target)
-
-            customerPrice = 0.95 * float(request.values.get('price'))
-            vipPrice = 0.9 * float(request.values.get('price'))
-
-            newCake = Cake(cake_name=request.values.get('cakeName'),
-                           visitor_price=request.values.get('price'), customer_price=customerPrice, vip_price=vipPrice,
-                           photo=newname, description=request.values.get('description'), drop_amount=0, order_made=0,
-                           rating=0.00)
-
-            db.session.add(newCake)
-            db.session.commit()
-
-            flash('success')
-        else:
-            flash('invalid file')
-    return render_template('cooks/cookadditem.html', title='Cook')
-
-
-@app.route('/cook/dropitem', methods=['GET', 'POST'])
-def dropitem():
-    cakes = Cake.query.all()
-
-    if request.method == "POST":
-        cake_name = request.values.get('cake')
-        drop_cake = Cake.query.filter_by(cake_name=cake_name).first()
-        if drop_cake is not None:
-            db.session.delete(drop_cake)
-            db.session.commit()
-            flash("Successful delete item")
-
-    return render_template('cooks/drop_item.html', title='Cook', cakes=cakes)
-
-
-@app.route('/cook/edititem', methods=['GET', 'POST'])
-def edititem():
-    cakes = Cake.query.all()
-
-    if request.method == "POST":
-        cake_name = request.values.get('cake')
-        edit_cake = Cake.query.filter_by(cake_name=cake_name).first()
-
-        price = request.form.get('price')
-        description = request.form.get('description')
-
-        if price != "":
-            edit_cake.visitor_price = price
-            edit_cake.customer_price = 0.95 * float(price)
-            edit_cake.vip_price = 0.9 * float(price)
-        if description != "":
-            edit_cake.description = description
-        db.session.commit()
-        flash('You have successfully edit item!')
-    return render_template('cooks/edit_item.html', title='Cook', cakes=cakes)
-
-
-@app.route('/cook/cook_profile/<id>')
-@login_required(6)
-def cook_profile(id):
-    user = User.query.filter_by(id=id).first_or_404()
-    return render_template('cooks/cook_profile.html', user=user)
-
-
-@app.route('/cook/cook_edit/<id>', methods=['GET', 'POST'])
-@login_required(6)
-def cook_edit(id):
-    user = User.query.filter_by(id=id).first_or_404()
-    if request.method == "POST":
-        email = request.form.get('new_email')
-        address = request.form.get('new_address')
-        password = request.form.get('new_password')
-        confirm_password = request.form.get('confirm_new_password')
-        try:
-            if email != "":
-                user.email = email
-            if address != "":
-                user.address = address
-            if password != "" and confirm_password != "":
-                if password == confirm_password:
-                    user.set_password(password)
-            db.session.commit()
-            flash('You have successfully edit your profile!')
-            return redirect(url_for('cook_profile', id=current_user.id))
-        except:
-            flash("Either your information is duplicated in our system or your password is different")
-    return render_template('cooks/cook_edit.html', user=user)
-
-
-@app.route('/cook/dropped_notification', methods=['GET', 'POST'])
-@login_required(6)
-def dropped_notification():
-    cook = User.query.filter_by(id=current_user.id).first()
-    dropped_cakes = Cart.query.filter(Cart.status == "Closed", Cart.cook_id == current_user.id,
-                                      Cart.is_cake_drop == 1)
-    if request.method == "POST":
-        target = int(request.form['delete'])
-        cart_target = Cart.query.filter_by(id=target).first()
-        cart_target.is_cake_drop = False
-        db.session.commit()
-        flash("Delete Successfully!")
-
-    return render_template('cooks/dropped_noti.html', title='Cook', cook=cook, dropped_cakes=dropped_cakes)
-
-
-@app.route('/cook/warning_notification', methods=['GET', 'POST'])
-@login_required(6)
-def warning_notification():
-    cook = User.query.filter_by(id=current_user.id).first()
-    warnings = Cart.query.filter(Cart.status == "Closed", Cart.cook_id == current_user.id,
-                                 Cart.is_cook_warning == 1)
-    if request.method == "POST":
-        target = int(request.form['delete'])
-        cart_target = Cart.query.filter_by(id=target).first()
-        cart_target.is_cook_warning = False
-        db.session.commit()
-        flash("Delete Successfully!")
-
-    return render_template('cooks/warning_noti.html', title='Cook', cook=cook, warnings=warnings)
-
-
-########################################################################################################################
 # Deliver
+
 
 @app.route('/deliver')
 @login_required(5)
@@ -949,6 +805,151 @@ def deliver_notification():
 
 
 ########################################################################################################################
+# Cook
+
+
+@app.route('/cook')
+@login_required(6)
+def cook():
+    cakes = Cake.query.all()
+    return render_template('cooks/cook.html', title='Cook', cakes=cakes)
+
+
+@app.route('/cook/additem', methods=['GET', 'POST'])
+@login_required(6)
+def additem():
+    if request.method == 'POST':
+        cakePic = request.files['cakePic']
+
+        if cakePic and allowed_file(cakePic.filename):
+            filename = secure_filename(cakePic.filename)
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            cakePic.save(path)
+            newname = (request.values.get('cakeName')).replace(" ", "") + '.png'
+            target = os.path.join(app.config['UPLOAD_FOLDER'], newname)
+            os.rename(path, target)
+
+            customerPrice = 0.95 * float(request.values.get('price'))
+            vipPrice = 0.9 * float(request.values.get('price'))
+
+            newCake = Cake(cake_name=request.values.get('cakeName'),
+                           visitor_price=request.values.get('price'), customer_price=customerPrice, vip_price=vipPrice,
+                           photo=newname, description=request.values.get('description'), drop_amount=0, order_made=0,
+                           rating=0.00)
+
+            db.session.add(newCake)
+            db.session.commit()
+
+            flash('success')
+        else:
+            flash('invalid file')
+    return render_template('cooks/cookadditem.html', title='Cook')
+
+
+@app.route('/cook/dropitem', methods=['GET', 'POST'])
+@login_required(6)
+def dropitem():
+    cakes = Cake.query.all()
+
+    if request.method == "POST":
+        cake_name = request.values.get('cake')
+        drop_cake = Cake.query.filter_by(cake_name=cake_name).first()
+        if drop_cake is not None:
+            db.session.delete(drop_cake)
+            db.session.commit()
+            flash("Successful delete item")
+
+    return render_template('cooks/drop_item.html', title='Cook', cakes=cakes)
+
+
+@app.route('/cook/edititem', methods=['GET', 'POST'])
+@login_required(6)
+def edititem():
+    cakes = Cake.query.all()
+
+    if request.method == "POST":
+        cake_name = request.values.get('cake')
+        edit_cake = Cake.query.filter_by(cake_name=cake_name).first()
+
+        price = request.form.get('price')
+        description = request.form.get('description')
+
+        if price != "":
+            edit_cake.visitor_price = price
+            edit_cake.customer_price = 0.95 * float(price)
+            edit_cake.vip_price = 0.9 * float(price)
+        if description != "":
+            edit_cake.description = description
+        db.session.commit()
+        flash('You have successfully edit item!')
+    return render_template('cooks/edit_item.html', title='Cook', cakes=cakes)
+
+
+@app.route('/cook/cook_profile/<id>')
+@login_required(6)
+def cook_profile(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    return render_template('cooks/cook_profile.html', user=user)
+
+
+@app.route('/cook/cook_edit/<id>', methods=['GET', 'POST'])
+@login_required(6)
+def cook_edit(id):
+    user = User.query.filter_by(id=id).first_or_404()
+    if request.method == "POST":
+        email = request.form.get('new_email')
+        address = request.form.get('new_address')
+        password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_new_password')
+        try:
+            if email != "":
+                user.email = email
+            if address != "":
+                user.address = address
+            if password != "" and confirm_password != "":
+                if password == confirm_password:
+                    user.set_password(password)
+            db.session.commit()
+            flash('You have successfully edit your profile!')
+            return redirect(url_for('cook_profile', id=current_user.id))
+        except:
+            flash("Either your information is duplicated in our system or your password is different")
+    return render_template('cooks/cook_edit.html', user=user)
+
+
+@app.route('/cook/dropped_notification', methods=['GET', 'POST'])
+@login_required(6)
+def dropped_notification():
+    cook = User.query.filter_by(id=current_user.id).first()
+    dropped_cakes = Cart.query.filter(Cart.status == "Closed", Cart.cook_id == current_user.id,
+                                      Cart.is_cake_drop == 1)
+    if request.method == "POST":
+        target = int(request.form['delete'])
+        cart_target = Cart.query.filter_by(id=target).first()
+        cart_target.is_cake_drop = False
+        db.session.commit()
+        flash("Delete Successfully!")
+
+    return render_template('cooks/dropped_noti.html', title='Cook', cook=cook, dropped_cakes=dropped_cakes)
+
+
+@app.route('/cook/warning_notification', methods=['GET', 'POST'])
+@login_required(6)
+def warning_notification():
+    cook = User.query.filter_by(id=current_user.id).first()
+    warnings = Cart.query.filter(Cart.status == "Closed", Cart.cook_id == current_user.id,
+                                 Cart.is_cook_warning == 1)
+    if request.method == "POST":
+        target = int(request.form['delete'])
+        cart_target = Cart.query.filter_by(id=target).first()
+        cart_target.is_cook_warning = False
+        db.session.commit()
+        flash("Delete Successfully!")
+
+    return render_template('cooks/warning_noti.html', title='Cook', cook=cook, warnings=warnings)
+
+
+########################################################################################################################
 # Manager
 
 
@@ -1002,21 +1003,21 @@ def cookwarning():
 @app.route('/manager/CustomerApplication', methods=['GET', 'POST'])
 @login_required(7)
 def application():
-
-
-    me = User.query.filter(User.role_id == 1, User.blacklist is False, User.password_hash != "")
+    me = User.query.filter(User.role_id == 1, User.blacklist != 1, User.store_id == current_user.store_id).all()
     if request.method == 'POST':
         if request.values.get('approve'):
             user_id = int(request.values.get('approve'))
             user = User.query.filter_by(id=user_id).first()
             user.role_id = 3
+            user.store_id = None
             db.session.commit()
             flash("Success to approve " + user.first_name + " visitor to registered customer")
         else:
             user_id = int(request.values.get('decline'))
             user = User.query.filter_by(id=user_id).first()
             flash(user.blacklist)
-            user.blacklist = True
+            user.blacklist = 1
+            user.store_id = None
             flash(user.blacklist)
             db.session.commit()
             flash("Success to decline " + user.first_name)
@@ -1044,6 +1045,7 @@ def complaint():
 
     return render_template('managers/CustomerComplaint.html', all_complaints=all_complaints, message=message)
 
+
 @app.route('/manager/order')
 @login_required(7)
 def order():
@@ -1058,9 +1060,6 @@ def assign_order(id):
     delivers = User.query.filter_by(role_id=5, store_id=current_user.store_id)
     if request.method == 'POST':
         deliver_id = request.form['deliver']
-        if len(deliver_id) != 1:
-            flash("You need to assign exactly one deliver")
-            return redirect(url_for('assign_order', id=id))
         cart.status = "In process"
         cart.deliver_id = deliver_id
         db.session.commit()
@@ -1140,7 +1139,7 @@ def paywage():
 @app.route('/')
 @app.route('/mapforcustomers')
 def mapforcust():
-    return render_template('/MapForCustomer.html')
+    return render_template('customers/MapForCustomer.html')
 
 
 @app.route('/mapforcustomers/ajax', methods=['POST'])
@@ -1170,4 +1169,5 @@ def delivery_route(id):
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
     storey = storeaddr.height
-    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, storey=storey, store_id=store_id)
+    return render_template('deliveries/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, storey=storey,
+                           store_id=store_id)

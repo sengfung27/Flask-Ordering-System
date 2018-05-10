@@ -49,6 +49,7 @@
                     <thead>
                     <tr>
                         <th class="col-xs-2">Status</th>
+                        <th class="col-xs-2">Store ID</th>
                         <th class="col-xs-2">Average Rate</th>
                         {% if user.role_id == 4 %}
                             <th class="col-xs-3">Vip Store ID</th>
@@ -63,6 +64,7 @@
                         {% else %}
                             <td>{{ user.role.role_type }}</td>
                         {% endif %}
+                        <td>{{ session['store_address'] }}</td>
                         <td>{{ user.rating }}</td>
                         {% if user.role_id == 4 %}
                             <td>{{ user.vip_store_id }}</td>

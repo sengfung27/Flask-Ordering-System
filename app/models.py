@@ -31,9 +31,6 @@ class User(db.Model, UserMixin):
     number_of_drop = db.Column(db.Integer)
     vip_store_id = db.Column(db.Integer)
 
-    # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
-    # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
-
     role = db.relationship("Role", foreign_keys=[role_id], back_populates="user")
     store = db.relationship("Store", foreign_keys=[store_id], backref="user")
 

@@ -7,28 +7,28 @@
         <title>Welcome to LadyN</title>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="../static/lib/themes/jquery.ui.all.css"/>
-        <link rel="stylesheet" href="../static/themes/assets/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../static/lib/themes/jquery.ui.all.css"/>
+        <link rel="stylesheet" href="../../static/themes/assets/css/bootstrap.min.css"/>
 
-        <script type="text/javascript" src="../static/lib/raphael-min.js"></script>
-        <script type="text/javascript" src="../static/lib/es5-shim.min.js"></script>
-        <script type="text/javascript" src="../static/lib/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="../static/lib/state-machine.min.js"></script>
-        <script type="text/javascript" src="../static/lib/async.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/raphael-min.js"></script>
+        <script type="text/javascript" src="../../static/lib/es5-shim.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/state-machine.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/async.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <script type="text/javascript" src="../static/lib/ui/jquery.ui.core.min.js"></script>
-        <script type="text/javascript" src="../static/lib/ui/jquery.ui.widget.min.js"></script>
-        <script type="text/javascript" src="../static/lib/ui/jquery.ui.mouse.min.js"></script>
-        <script type="text/javascript" src="../static/lib/ui/jquery.ui.draggable.min.js"></script>
-        <script type="text/javascript" src="../static/lib/ui/jquery.ui.accordion.min.js"></script>
-        <script type="text/javascript" src="../static/lib/ui/jquery.ui.slider.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/ui/jquery.ui.core.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/ui/jquery.ui.widget.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/ui/jquery.ui.mouse.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/ui/jquery.ui.draggable.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/ui/jquery.ui.accordion.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/ui/jquery.ui.slider.min.js"></script>
 
-        <script type="text/javascript" src="../static/lib/pathfinding-browser.min.js"></script>
+        <script type="text/javascript" src="../../static/lib/pathfinding-browser.min.js"></script>
 
-        <script type="text/javascript" src="../static/js/view.js"></script>
-        <script type="text/javascript" src="../static/js/controller.js"></script>
-        <script type="text/javascript" src="../static/js/panel.js"></script>
+        <script type="text/javascript" src="../../static/js/view.js"></script>
+        <script type="text/javascript" src="../../static/js/controller.js"></script>
+        <script type="text/javascript" src="../../static/js/panel.js"></script>
         <!-- <script type="text/javascript" src=".../static/js/main.js"></script> -->
     </head>
     <body>
@@ -107,7 +107,7 @@
         var customerAddress = [];
         $(document).ready(function () {
             if (!Raphael.svg) {
-                window.location = 'notsupported.html';
+                window.location = '../notsupported.html';
             }
             $('#confirm_address').click(function (event) {
                 $.ajax({
