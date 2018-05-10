@@ -52,7 +52,6 @@
              * It will detect user's display size, and compute the best positions.
              */
             setDefaultStartEndPos: function () {
-
                 var width, height,
                     marginRight, availWidth,
                     centerX, centerY,
@@ -70,7 +69,6 @@
                 centerY = Math.floor(height / 2 / nodeSize);
 
 
-
                 //set default blocks
                 for (height = 0; height < 18; height++) {
                     for (width = 0; width < 32; width++) {
@@ -78,7 +76,8 @@
                             this.setWalkableAt(width, height, false);
                     }
                 }
-                this.setEndPos(5, 8);
+                this.setWalkableAt(customer_x, customer_y, true);
+                this.setEndPos(customer_x, customer_y);
 
                 //Gor: random generate busy conditions
                 for (var value = 0; value < 30; value++) {
@@ -94,10 +93,7 @@
                     if ((height % 3 == 0) || (width % 4 == 0))
                         this.setWalkableAt(width, height, false);
                 }
-
-
-
-                this.setStartPos(22, 10);
+                this.setStartPos(store_x, store_y);
 
             },
 

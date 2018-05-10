@@ -1,7 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager
-from sqlalchemy.dialects.mysql import MEDIUMBLOB
 
 
 # Set up user_loader
@@ -31,7 +30,6 @@ class User(db.Model, UserMixin):
     order_made = db.Column(db.Integer)
     number_of_drop = db.Column(db.Integer)
     vip_store_id = db.Column(db.Integer)
-
 
     # payment = cardname + "," + cardnumber + "," + expired_month + "," + expired_year + "," + cvv
     # cardname, cardnumber, expired_month, expired_year, cvv = payment.split(',')
@@ -96,6 +94,7 @@ class Cake(db.Model):
     store7 = db.Column(db.Integer)
     cart = db.relationship("Cart", back_populates="cake")
     store1 = db.Column(db.Integer)
+
     def __repr__(self):
         return '<Cake: {}, {}, {}, {}>'.format(self.id, self.cake_name, self.photo, self.description)
 
@@ -111,8 +110,8 @@ class Cart(db.Model):
     deliver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     checkout_store = db.Column(db.Integer, db.ForeignKey('store.storeid'))
     amount = db.Column(db.Integer)
-    price = db.Column(db.DECIMAL(6,2))
-    status = db.Column(db.VARCHAR(30)) # Not submitted, Submitted, In process, Closed
+    price = db.Column(db.DECIMAL(6, 2))
+    status = db.Column(db.VARCHAR(30))  # Not submitted, Submitted, In process, Closed
     cake_rating = db.Column(db.Integer)
     deliver_rating = db.Column(db.Integer)
     store_rating = db.Column(db.Integer)
@@ -126,6 +125,7 @@ class Cart(db.Model):
     is_cook_warning = db.Column(db.Boolean)
     is_delivery_warning = db.Column(db.Boolean)
     checkout_address = db.Column(db.VARCHAR(255))
+    current_store_id = db.Column(db.Integer)
 
     cake = db.relationship("Cake", back_populates="cart")
     user = db.relationship("User", foreign_keys=[user_id], backref="user_cart")
@@ -138,19 +138,3 @@ class Cart(db.Model):
 
     def set_time(self, time):
         self.time_submit = time
-
-# class Log(db.Model):
-#     __tablename__ = 'logs'
-#
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     payment = db.Column(db.VARCHAR(255))
-#     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
-#     deliver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#
-#     cart = db.relationship("Cart", back_populates="log")
-#     deliver = db.relationship("User", foreign_keys=[deliver_id], backref="deliver_log")
-
-# Vip only in one store 2 2
-#                       1 3
-#  deliver check registered customer ratng, when rating > 4, it will
-#  automatically become vip

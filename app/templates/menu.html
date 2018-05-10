@@ -9,11 +9,11 @@
             <div class="container">
                 <div class="left-space" style="padding-left: 75px; padding-right: 0px" ;>
                     <div class="inner-space" style="margin-top: 7px; min-height: 1000px" ;>
+                        <div class="button-left" style="margin-right: 85px">
+                            <a href="{{ url_for('customize_cake') }}" type="button" style="float: right"
+                               class="btn btn-warning">Customize your own cake</a>
+                        </div>
                         <div class="row">
-                            <div class="button-left" style="margin-left: 50px">
-                                <a href="{{ url_for('customize_cake') }}" type="button" style="float: right"
-                                   class="btn btn-warning">Customize your own cake</a>
-                            </div>
                             <h1 style="margin: 10px 40px">Cakes</h1>
                             {% for cake in cakes %}
                                 <div class="cake">
