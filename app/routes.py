@@ -1145,4 +1145,4 @@ def delivery_route(id):
     storeaddr = Store.query.filter_by(storeid=store_id).first()
     storex = storeaddr.width
     storey = storeaddr.height
-    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, storey=storey)
+    return render_template('/MapForDelivery.html', cust_x=cust_x, cust_y=cust_y, storex=storex, storey=storey, store_id=store_id)

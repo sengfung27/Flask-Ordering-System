@@ -32,8 +32,10 @@
         <!-- <script type="text/javascript" src=".../static/js/main.js"></script> -->
     </head>
     <body>
-    <h3>Please comfirm your address and store</h3>
-
+    <div class="container; text-center">
+            <dt>Please comfirm your address and store</dt>
+    </div>
+    <br>
     <script type="text/javascript">
         //by Zw, this can be the field that takes parameter from backend(address/axis)
         var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -223,11 +225,11 @@
 
 
     <div class="container">
-        <div id="draw_area"></div>
+        <div id="draw_area" style="margin: auto; height: 570px; width: 990px;"></div>
     </div>
     <div id="img-out"></div>
 
-    <div class="col-md- text-center">
+    <div class="text-center">
         <a href="/login" id="confirm_address" class="btn btn-info" role="submit">Confirm your address</a>
     </div>
 
