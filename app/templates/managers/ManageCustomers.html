@@ -21,6 +21,15 @@
 </div>
 
 <br><br>
+    <p style="text-align: center; color:red;"><strong>{{ message }}</strong></p>
+    <form action="{{ url_for('managecustomers') }}" method="POST">
+    <div style="margin-left:62%">
+        <label><input type="search" class="form-control" id="name" name="customer_name"
+                      placeholder="First_name Last_name"></label>
+        <input type="submit" class="btn btn-info" value="Search">
+    </div>
+    </form>
+    <br>
 <!--Registered customers table-->
 <div class="container" style="min-height: 35vh">
     <div class ="table-responsive">
@@ -29,23 +38,26 @@
         <tr>
             <th class="col-sm-2">Customer ID</th>
             <th class="col-sm-3">Customer Name</th>
+            <th class="col-sm-2">Photo ID</th>
             <th class="col-sm-5">Email</th>
             <th class="col-sm-2">Address</th>
+            <th class="col-sm-2">Store ID (VIP)</th>
+            <th class="col-sm-2">Blacklist</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td name="id1234">1234</td>
-            <td>Example</td>
-            <td>/</td>
-            <td>/</td>
-        </tr>
-        <tr>
-            <td>5678</td>
-            <td>Example2</td>
-            <td>/</td>
-            <td>/</td>
-        </tr>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                <td><a style="color: black" target="_blank"
+                                   href={{ url_for('uploaded_file', filename=customer.email+'.png') }}>ID</a></td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.vip_store_id }}</td>
+                <td>{{ customer.blacklist }}</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
     </div>

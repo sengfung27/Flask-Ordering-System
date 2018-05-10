@@ -988,7 +988,7 @@ def manager_edit(id):
 @app.route('/manager/CookWarning', methods=['GET', 'POST'])
 @login_required(7)
 def cookwarning():
-    cook = User.query.filter_by(role_id=6)
+    cook = User.query.filter_by(role_id=6, store_id=current_user.store_id)
     if request.method == "POST":
         target = int(request.form['erase'])
         cook_target = User.query.filter_by(id=target).first()
@@ -1023,11 +1023,26 @@ def application():
     return render_template('managers/CustomerApplication.html', me=me)
 
 
-@app.route('/manager/CustomerComplaint')
+@app.route('/manager/CustomerComplaint', methods=['GET', 'POST'])
 @login_required(7)
 def complaint():
-    return render_template('managers/CustomerComplaint.html')
+    import datetime
+    seven_days_ago = datetime.datetime.now() - datetime.timedelta(days=7)
+    message = "7 days ago"
+    all_complaints = Cart.query.filter(Cart.status == "Closed", (Cart.store_rating < 3) | (Cart.deliver_rating < 3) |
+                                       (Cart.cake_rating < 3), Cart.store_rating > 0, Cart.deliver_rating > 0,
+                                       Cart.cake_rating > 0, Cart.time_submit > seven_days_ago)
 
+    if request.method == "POST":
+        message = "All Complaints"
+        all_complaints = Cart.query.filter(Cart.status == "Closed",
+                                           (Cart.store_rating < 3) | (Cart.deliver_rating < 3) |
+                                           (Cart.cake_rating < 3), Cart.store_rating > 0, Cart.deliver_rating > 0,
+                                           Cart.cake_rating > 0)
+        db.session.commit()
+        flash("Display All Customer Complaints!")
+
+    return render_template('managers/CustomerComplaint.html', all_complaints=all_complaints, message=message)
 
 @app.route('/manager/order')
 @login_required(7)
@@ -1068,10 +1083,20 @@ def deliverwarning():
     return render_template('managers/DeliverWarning.html', delivery=delivery)
 
 
-@app.route('/manager/ManageCustomers')
+@app.route('/manager/ManageCustomers', methods=['GET', 'POST'])
 @login_required(7)
 def managecustomers():
-    return render_template('managers/ManageCustomers.html')
+    customers = User.query.filter_by(role_id=1)
+    message = ""
+    if request.method == "POST":
+        name = str(request.form['customer_name'])
+        name = name.split()
+        if len(name) != 2:
+            message = "Please follow the format (First_name Last_name)"
+        else:
+            customers = User.query.filter_by(first_name=name[0], last_name=name[1])
+            message = ""
+    return render_template('managers/ManageCustomers.html', customers=customers, message=message)
 
 
 @app.route('/manager/PayWage', methods=['GET', 'POST'])
