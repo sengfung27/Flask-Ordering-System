@@ -817,7 +817,7 @@ def deliver_notification():
 @app.route('/cook')
 @login_required(6)
 def cook():
-    cakes = Cake.query.all()
+    cakes = Cake.query.filter(Cake.cake_name != "Custom Cake")
     return render_template('cooks/cook.html', title='Cook', cakes=cakes)
 
 
@@ -1091,7 +1091,7 @@ def deliverwarning():
 @app.route('/manager/ManageCustomers', methods=['GET', 'POST'])
 @login_required(7)
 def managecustomers():
-    customers = User.query.filter_by(role_id=1)
+    customers = User.query.filter((User.role_id == 1) | (User.role_id == 3) | (User.role_id == 4))
     message = ""
     if request.method == "POST":
         name = str(request.form['customer_name'])

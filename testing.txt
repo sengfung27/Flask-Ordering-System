@@ -27,8 +27,8 @@
 2. styling the page (footer)
 
 /customize_cake
-1. styling the page
-2. need to complete
+1. styling the page *FIXED*
+2. need to complete *FIXED*
 
 
 /customize_cake (suggestion)        *Fixed
@@ -65,7 +65,7 @@
    page need to refresh
 
 /manager/ManageCustomers
-1. filter all customers, visitor, customer and vip
+1. filter all customers, visitor, customer and vip *FIXED*
    now: only filter visitor
 
 /manager/order
@@ -78,10 +78,10 @@
 3. start new salary sheet *FIXED*
 
 /manager/CustomerComplain
-1. need to complete
+1. need to complete *Complete*
 
 /manager/ManageCustomers
-1. need to complete
+1. need to complete *Complete*
 
 1. Manager did not receive application   *Fixed
    seng: resolved, please test again 5/10
@@ -100,7 +100,7 @@
    ;seng: resolved, please test again
 
 /deliver/notification
-1. need to complete
+1. need to complete *Complete*
 
 ************** NEW ***************
 /delivery/route/<id>
@@ -109,7 +109,9 @@
 
 ------------------------------------------- Cook ---------------------------------------------
 /cook/dropped_notification
-1. need to complete
+1. need to complete *Complete*
 
 /cook/warning_notification
-1. need to complete
+1. need to complete *Complete*
+
+1. don't display custom cakes  *Fixed*
