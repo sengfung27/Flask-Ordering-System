@@ -27,7 +27,8 @@
 2. styling the page (footer)
 
 /customize_cake
-1. styling the page
+1. styling the page **PENDING TEST**
+Gor: Restyled
 2. need to complete
 
 
@@ -105,6 +106,7 @@
 ************** NEW ***************
 /delivery/route/<id>
 1. page is fixed, cannot scroll up/down
+Gor: fixed, please test again.
 
 
 ------------------------------------------- Cook ---------------------------------------------
