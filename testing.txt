@@ -1,6 +1,7 @@
 ************** NEW ***************
-1. Show delivery men and cooks by store id
+1. Show delivery men and cooks by store id     * Fixed
    (paywage, warning, customize cake)
+   seng: weimin resolved, please test again 5/10
 
 2. session CANNOT GET address on safari (only works on chrome)     * Fixed
    seng: don't use safari during presentation. That's the solution
@@ -38,15 +39,17 @@
    seng: please test again
 
 ************** NEW ***************
-1. Main page show history even if not purchased      *Fixed
+1. Main page show history even if not purchased      * Fixed
    Now: show thing in cart
    seng: 5/10, please test again
 
-2. Show store id at profile                          *Fixed
+2. Show store id at profile                          * Fixed
    seng: 5/10, please test again
 
-3. Customize cake does not work
+3. Customize cake does not work                      * Fixed
    sqlalchemy.exc.IntegrityError: (pymysql.err.IntegrityError) (1048, "Column 'is_cake_drop' cannot be null")
+    seng: resolved, please test again 5/10
+
 ------------------------------------------- Manager ---------------------------------------------
 /manager/CustomerApplication
 1. approve application individually and add decline option
@@ -69,12 +72,12 @@
 
 ************** NEW ***************
 1. Manager did not receive application   *Fixed
-   seng: resolved, please test again
+   seng: resolved, please test again 5/10
 
 2. Cannot assign order           * Fixed
    manager1: when assign order 12
    flash: You need to assign exactly one deliver
-   seng: resolved, please test again
+   seng: resolved, please test again 5/10
    *Note : manager can assign one delivery to multiple deliver (one to many relation)
 
 ------------------------------------------- Delivery ---------------------------------------------
