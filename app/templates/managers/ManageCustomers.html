@@ -14,57 +14,55 @@
     ================================================== -->
 
     <!--body-->
-    <div class="pageTitle">
-        <div class="container">
-            <h2 style="text-align:center;">Registered Customers</h2>
+    <div class="container" style="min-height: 70vh">
+        <h2>Registered Customers</h2>
+
+        <p style="text-align: center; color:red;"><strong>{{ message }}</strong></p>
+
+        <div class="bodyInner">
+            <a href="{{ url_for('managecustomers') }}" style="color: deepskyblue; font-weight: bold">Back</a>
+
+            <form action="{{ url_for('managecustomers') }}" method="POST">
+                <div style="float: right">
+                    <label><input type="search" class="form-control" id="name" name="customer_name"
+                                  placeholder="First_name Last_name"></label>
+                    <input type="submit" class="btn btn-info" value="Search">
+                </div>
+            </form>
+            <br>
         </div>
-    </div>
 
-    <p style="text-align: center; color:red;"><strong>{{ message }}</strong></p>
-
-    <div class="container">
-    <a href="{{ url_for('managecustomers') }}" style="color: deepskyblue; font-weight: bold">Back</a>
-
-        <form action="{{ url_for('managecustomers') }}" method="POST">
-            <div style="float: right">
-                <label><input type="search" class="form-control" id="name" name="customer_name"
-                              placeholder="First_name Last_name"></label>
-                <input type="submit" class="btn btn-info" value="Search">
-            </div>
-        </form>
-        <br>
-    </div>
-
-    <!--Registered customers table-->
-    <div class="container" style="min-height: 35vh">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th class="col-sm-2">Customer ID</th>
-                    <th class="col-sm-2">Customer Name</th>
-                    <th class="col-sm-1">Photo ID</th>
-                    <th class="col-sm-3">Email</th>
-                    <th class="col-sm-1">Address</th>
-                    <th class="col-sm-2">Store ID (VIP)</th>
-                    <th class="col-sm-1">Blacklist</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for customer in customers %}
+        <!--Registered customers table-->
+        <div class="container" style="min-height: 35vh">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
                     <tr>
-                        <td>{{ customer.id }}</td>
-                        <td>{{ customer.first_name }} {{ customer.last_name }}</td>
-                        <td><a style="color: black" target="_blank"
-                               href={{ url_for('uploaded_file', filename=customer.email+'.png') }}>ID</a></td>
-                        <td>{{ customer.email }}</td>
-                        <td>{{ customer.address }}</td>
-                        <td>{{ customer.vip_store_id }}</td>
-                        <td>{{ customer.blacklist }}</td>
+                        <th class="col-sm-2">Customer ID</th>
+                        <th class="col-sm-2">Customer Name</th>
+                        <th class="col-sm-1">Photo ID</th>
+                        <th class="col-sm-3">Email</th>
+                        <th class="col-sm-1">Address</th>
+                        <th class="col-sm-2">Store ID (VIP)</th>
+                        <th class="col-sm-1">Blacklist</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer.id }}</td>
+                            <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                            <td><a style="color: black" target="_blank"
+                                   href={{ url_for('uploaded_file', filename=customer.email+'.png') }}>ID</a></td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.address }}</td>
+                            <td>{{ customer.vip_store_id }}</td>
+                            <td>{{ customer.blacklist }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <!-- FOOTER -->
