@@ -667,6 +667,8 @@ def rating(id):
         cart.store_comments = store_comments
         cart.cake_rating = cake_rating
         cart.cake_comments = cake_comments
+        if cart.cake.order_made is None:
+            cart.cake.order_made = 0
         cart.cake.order_made += 1
         if cart.cake.order_made == 1:
             cart.cake.rating = cake_rating
@@ -692,6 +694,8 @@ def rating(id):
 
         cart.deliver_rating = deliver_rating
         cart.deliver_comments = deliver_comments
+        if cart.deliver.order_made is None:
+            cart.deliver.order_made = 0
         cart.deliver.order_made += 1
         if cart.deliver.order_made == 1:
             cart.deliver.rating = deliver_rating
@@ -739,8 +743,10 @@ def deliver_rating(id):
             i.user_rating = rating
             i.user_comments = comments
             i.status = "Closed"
+        if user.order_made is None:
+            user.order_made = 0
         user.order_made += 1
-        user.rating = (user.rating + int(rating)) / Decimal(user.order_made)
+        user.rating = ((user.rating * 2) + int(rating)) / Decimal(user.order_made)
         if user.order_made > 3 and user.rating > 4.0 and user.role_id == 3:
             user.vip_store_id = cart.checkout_store
             user.role_id = 4  # VIP
