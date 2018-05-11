@@ -31,6 +31,16 @@
                                 </div>
 
                             </div>
+                            <div class="col-xs-8">
+                                <label style="font-weight: normal">Select cook:</label>
+
+                                <select name="cook{{ i.cake.id }}">
+                                    {% for cook in cooks %}
+                                        <option value="{{ cook.id }}">{{ cook.last_name }},
+                                            {{ cook.first_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -46,8 +56,17 @@
                                         Drop
                                     </button>
                                 </div>
-
                             </div>
+{#                            <div class="col-xs-8">#}
+{#                                <label style="font-weight: normal">Select cook:</label>#}
+{##}
+{#                                <select name="cook{{ i[0] }}">#}
+{#                                    {% for cook in cooks %}#}
+{#                                        <option value="{{ cook.id }}">{{ cook.last_name }},#}
+{#                                            {{ cook.first_name }}</option>#}
+{#                                    {% endfor %}#}
+{#                                </select>#}
+{#                            </div>#}
                         </div>
                     {% endfor %}
                 {% endif %}

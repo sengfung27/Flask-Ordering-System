@@ -49,11 +49,12 @@
     seng: resolved, please test again 5/10
 
 ************** NEW ***************
-1. Cannot rate
+1. Cannot rate                      * Fixed
    File "/Users/caizhuoying/Documents/Flask-Ordering-System/app/routes.py", line 664, in rating
     cart.cake.order_made += 1
     TypeError: unsupported operand type(s) for +=: 'NoneType' and 'int'
-
+    seng: resolved, please test again
+    * note: when you insert cart tuple, make sure order_made is set to 0
 ------------------------------------------- Manager ---------------------------------------------
 /manager/CustomerApplication
 1. approve application individually and add decline option
