@@ -31,11 +31,10 @@
         <script type="text/javascript" src="../../static/js/panel.js"></script>
         <!-- <script type="text/javascript" src=".../static/js/main.js"></script> -->
     </head>
-    <body>
+    <body style="overflow: scroll">
     <div class="container; text-center">
-            <dt>Please comfirm your address and store</dt>
+        <dt style="font-size: 20px">Please comfirm your Address and Store</dt>
     </div>
-    <br>
     <script type="text/javascript">
         //by Zw, this can be the field that takes parameter from backend(address/axis)
         var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -223,14 +222,12 @@
         }
     </script>
 
-
     <div class="container">
-        <div id="draw_area" style="margin: auto; height: 570px; width: 990px;"></div>
-    </div>
-    <div id="img-out"></div>
-
-    <div class="text-center">
-        <a href="/login" id="confirm_address" class="btn btn-info" role="submit">Confirm your address</a>
+        <div id="draw_area" style="width: 80%; margin: auto"></div>
+        <br>
+        <div class="text-right">
+            <a href="/login" id="confirm_address" class="btn btn-info" role="submit">Confirm your address</a></div>
+        <div id="img-out"></div>
     </div>
 
     <!--

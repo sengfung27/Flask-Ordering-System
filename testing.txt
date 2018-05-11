@@ -1,4 +1,3 @@
-************** NEW ***************
 1. Show delivery men and cooks by store id     * Fixed
    (paywage, warning, customize cake)
    seng: weimin resolved, please test again 5/10
@@ -28,8 +27,8 @@
 2. styling the page (footer)
 
 /customize_cake
-1. styling the page
-2. need to complete
+1. styling the page *FIXED*
+2. need to complete *FIXED*
 
 
 /customize_cake (suggestion)        *Fixed
@@ -38,7 +37,6 @@
    IF put 1 cake into cart first, and put another 3, the amount should be 3??
    seng: please test again
 
-************** NEW ***************
 1. Main page show history even if not purchased      * Fixed
    Now: show thing in cart
    seng: 5/10, please test again
@@ -50,10 +48,25 @@
    sqlalchemy.exc.IntegrityError: (pymysql.err.IntegrityError) (1048, "Column 'is_cake_drop' cannot be null")
     seng: resolved, please test again 5/10
 
+************** NEW ***************
+1. Cannot rate
+   File "/Users/caizhuoying/Documents/Flask-Ordering-System/app/routes.py", line 664, in rating
+    cart.cake.order_made += 1
+    TypeError: unsupported operand type(s) for +=: 'NoneType' and 'int'
+
 ------------------------------------------- Manager ---------------------------------------------
 /manager/CustomerApplication
 1. approve application individually and add decline option
    ;seng: resolved, please test again
+
+************** NEW ***************
+2. need to delete/hide application once declined/approved * FIXED *
+   now: the application stays on the page even though its declined/approved.
+   page need to refresh
+
+/manager/ManageCustomers
+1. filter all customers, visitor, customer and vip *FIXED*
+   now: only filter visitor
 
 /manager/order
 1. user address did not show up *FIXED*
@@ -65,12 +78,11 @@
 3. start new salary sheet *FIXED*
 
 /manager/CustomerComplain
-1. need to complete
+1. need to complete *Complete*
 
 /manager/ManageCustomers
-1. need to complete
+1. need to complete *Complete*
 
-************** NEW ***************
 1. Manager did not receive application   *Fixed
    seng: resolved, please test again 5/10
 
@@ -80,6 +92,7 @@
    seng: resolved, please test again 5/10
    *Note : manager can assign one delivery to multiple deliver (one to many relation)
 
+
 ------------------------------------------- Delivery ---------------------------------------------
 /deliver_rating
 1. deliver_rating.html needs styling
@@ -87,11 +100,19 @@
    ;seng: resolved, please test again
 
 /deliver/notification
-1. need to complete
+1. need to complete *Complete*
+
+************** NEW ***************
+/delivery/route/<id>
+1. page is fixed, cannot scroll up/down
+Gor: fixed, please test again.
+
 
 ------------------------------------------- Cook ---------------------------------------------
 /cook/dropped_notification
-1. need to complete
+1. need to complete *Complete*
 
 /cook/warning_notification
-1. need to complete
+1. need to complete *Complete*
+
+1. don't display custom cakes  *Fixed*
